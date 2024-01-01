@@ -7,20 +7,29 @@ struct SettingsPage: View {
     private var modelContext
     
     @Query
-    private var blogPosts: [BlogPost]
+    private var posts: [BlogPost]
     @Query
-    private var userAccounts: [UserAccount]
+    private var comments: [BlogComment]
+    @Query
+    private var users: [UserAccount]
     
     private func onPressResetUsers() {
-        for account in userAccounts {
+        for account in users {
             modelContext.delete(account)
         }
         try? modelContext.save()
     }
     
     private func onPressResetPosts() {
-        for post in blogPosts {
+        for post in posts {
             modelContext.delete(post)
+        }
+        try? modelContext.save()
+    }
+    
+    private func onPressResetComments() {
+        for comment in comments {
+            modelContext.delete(comment)
         }
         try? modelContext.save()
     }
@@ -28,37 +37,47 @@ struct SettingsPage: View {
     var body: some View {
         NavigationStack {
             layerForeground
-            .navigationTitle("Settings")
+                .navigationTitle("Settings")
         }
     }
     
     private var layerForeground: some View {
-        VStack {
-            HStack {
-                Button("Reset Users") {
-                    onPressResetUsers()
-                }
-                Button("Reset Posts") {
-                    onPressResetPosts()
-                }
-                Spacer()
-            }
-            .padding(.horizontal)
-            .buttonStyle(.bordered)
-            .tint(.red)
-            
-            if userAccounts.isEmpty {
+        VStack(alignment: .leading) {
+            if users.isEmpty {
                 Text("No registered users")
             } else {
                 List {
-                    Section("Registered Users (\(userAccounts.count))") {
-                        ForEach(userAccounts) { account in
+                    Section("Registered Users (\(users.count))") {
+                        ForEach(users) { account in
                             VStack(alignment: .leading, spacing: 1) {
                                 Text("Username: \(account.username)")
                                 Text("Password: \(account.password)")
                             }
                         }
                     }
+                    Section("Developer Controls") {
+                        HStack {
+                            Button("Reset Users (\(users.count))", systemImage: "eraser") {
+                                onPressResetUsers()
+                            }
+                            .foregroundStyle(.red)
+                        }
+                        HStack {
+                            Button("Reset Posts (\(posts.count))", systemImage: "eraser") {
+                                onPressResetPosts()
+                            }
+                            .foregroundStyle(.red)
+                        }
+                        HStack {
+                            Button("Reset Replies (\(comments.count))", systemImage: "eraser") {
+                                onPressResetComments()
+                            }
+                            .foregroundStyle(.red)
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
+                    .listStyle(.plain)
                 }
             }
         }
