@@ -30,7 +30,7 @@ struct ContentView: View {
         TabView {
             HomePage()
                 .tabItem {
-                    Image(systemName: "house")
+                    Image(systemName: "list.bullet")
                     Text("Home")
                 }
             

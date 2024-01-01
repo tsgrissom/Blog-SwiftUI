@@ -60,7 +60,7 @@ struct HomePage: View {
                         VStack(alignment: .leading) {
                             HStack(spacing: 3) {
                                 Text("from")
-                                NavigationLink(destination: Text("User profile")) {
+                                NavigationLink(destination: DisplayPostPage(post)) {
                                     Text("@\(post.postedBy.username)")
                                         .foregroundStyle(.blue)
                                 }

@@ -11,6 +11,9 @@
 		2F187C752B3A52360043656F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F187C742B3A52360043656F /* ContentView.swift */; };
 		2F187C792B3A52390043656F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F187C782B3A52390043656F /* Assets.xcassets */; };
 		2F187C7C2B3A52390043656F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F187C7B2B3A52390043656F /* Preview Assets.xcassets */; };
+		2F4188E82B431A6200363C9E /* DisplayPostPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E72B431A6200363C9E /* DisplayPostPage.swift */; };
+		2F4188EA2B431EB000363C9E /* BlogComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E92B431EB000363C9E /* BlogComment.swift */; };
+		2F4188EC2B43206500363C9E /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188EB2B43206500363C9E /* PostManager.swift */; };
 		2F53CC762B41175D00802403 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC752B41175D00802403 /* UserAccount.swift */; };
 		2F53CC782B4118AE00802403 /* RegisterUserAccountPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC772B4118AE00802403 /* RegisterUserAccountPage.swift */; };
 		2F53CC7A2B411BA900802403 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC792B411BA900802403 /* HomePage.swift */; };
@@ -29,6 +32,9 @@
 		2F187C742B3A52360043656F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2F187C782B3A52390043656F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F187C7B2B3A52390043656F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2F4188E72B431A6200363C9E /* DisplayPostPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPostPage.swift; sourceTree = "<group>"; };
+		2F4188E92B431EB000363C9E /* BlogComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogComment.swift; sourceTree = "<group>"; };
+		2F4188EB2B43206500363C9E /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		2F53CC752B41175D00802403 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		2F53CC772B4118AE00802403 /* RegisterUserAccountPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserAccountPage.swift; sourceTree = "<group>"; };
 		2F53CC792B411BA900802403 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
@@ -76,6 +82,7 @@
 				2F53CC732B41171800802403 /* Page */,
 				2F53CC722B41171200802403 /* Model */,
 				2F187C722B3A52360043656F /* BlogApp.swift */,
+				2F4188EB2B43206500363C9E /* PostManager.swift */,
 				2F53CC822B41B90700802403 /* UserAccountManager.swift */,
 				2F187C782B3A52390043656F /* Assets.xcassets */,
 				2F187C7A2B3A52390043656F /* Preview Content */,
@@ -95,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				2F53CC752B41175D00802403 /* UserAccount.swift */,
+				2F4188E92B431EB000363C9E /* BlogComment.swift */,
 				2F53CC842B41DC3300802403 /* BlogPost.swift */,
 			);
 			path = Model;
@@ -109,6 +117,7 @@
 				2F53CC7B2B41A04E00802403 /* LoginUserAccountPage.swift */,
 				2F53CC772B4118AE00802403 /* RegisterUserAccountPage.swift */,
 				2F6D15EA2B42596100D72DEB /* SettingsPage.swift */,
+				2F4188E72B431A6200363C9E /* DisplayPostPage.swift */,
 			);
 			path = Page;
 			sourceTree = "<group>";
@@ -202,8 +211,11 @@
 				2F53CC7A2B411BA900802403 /* HomePage.swift in Sources */,
 				2F53CC7C2B41A04E00802403 /* LoginUserAccountPage.swift in Sources */,
 				2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */,
+				2F4188EC2B43206500363C9E /* PostManager.swift in Sources */,
+				2F4188EA2B431EB000363C9E /* BlogComment.swift in Sources */,
 				2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */,
 				2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */,
+				2F4188E82B431A6200363C9E /* DisplayPostPage.swift in Sources */,
 				2F53CC762B41175D00802403 /* UserAccount.swift in Sources */,
 				2F187C752B3A52360043656F /* ContentView.swift in Sources */,
 				2F53CC852B41DC3300802403 /* BlogPost.swift in Sources */,
