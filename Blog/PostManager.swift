@@ -10,4 +10,10 @@ final class PostManager: ObservableObject {
             post.postedBy.id == user.id
         }
     }
+    
+    public func getCommentsInResponseToPost(_ post: BlogPost, allComments: [BlogComment]) -> [BlogComment] {
+        return allComments.filter { comment in
+            comment.attachedTo.id == post.id
+        }
+    }
 }
