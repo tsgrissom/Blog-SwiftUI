@@ -9,18 +9,36 @@
 /* Begin PBXBuildFile section */
 		2F187C732B3A52360043656F /* BlogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F187C722B3A52360043656F /* BlogApp.swift */; };
 		2F187C752B3A52360043656F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F187C742B3A52360043656F /* ContentView.swift */; };
-		2F187C772B3A52360043656F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F187C762B3A52360043656F /* Item.swift */; };
 		2F187C792B3A52390043656F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F187C782B3A52390043656F /* Assets.xcassets */; };
 		2F187C7C2B3A52390043656F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F187C7B2B3A52390043656F /* Preview Assets.xcassets */; };
+		2F53CC762B41175D00802403 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC752B41175D00802403 /* UserAccount.swift */; };
+		2F53CC782B4118AE00802403 /* RegisterUserAccountPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC772B4118AE00802403 /* RegisterUserAccountPage.swift */; };
+		2F53CC7A2B411BA900802403 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC792B411BA900802403 /* HomePage.swift */; };
+		2F53CC7C2B41A04E00802403 /* LoginUserAccountPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC7B2B41A04E00802403 /* LoginUserAccountPage.swift */; };
+		2F53CC7F2B41A33A00802403 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC7E2B41A33A00802403 /* String.swift */; };
+		2F53CC812B41B72700802403 /* AccountManagementPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC802B41B72700802403 /* AccountManagementPage.swift */; };
+		2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC822B41B90700802403 /* UserAccountManager.swift */; };
+		2F53CC852B41DC3300802403 /* BlogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC842B41DC3300802403 /* BlogPost.swift */; };
+		2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */; };
+		2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D15EA2B42596100D72DEB /* SettingsPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2F187C6F2B3A52360043656F /* Blog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F187C722B3A52360043656F /* BlogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogApp.swift; sourceTree = "<group>"; };
 		2F187C742B3A52360043656F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2F187C762B3A52360043656F /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		2F187C782B3A52390043656F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F187C7B2B3A52390043656F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2F53CC752B41175D00802403 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
+		2F53CC772B4118AE00802403 /* RegisterUserAccountPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserAccountPage.swift; sourceTree = "<group>"; };
+		2F53CC792B411BA900802403 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
+		2F53CC7B2B41A04E00802403 /* LoginUserAccountPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUserAccountPage.swift; sourceTree = "<group>"; };
+		2F53CC7E2B41A33A00802403 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		2F53CC802B41B72700802403 /* AccountManagementPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManagementPage.swift; sourceTree = "<group>"; };
+		2F53CC822B41B90700802403 /* UserAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountManager.swift; sourceTree = "<group>"; };
+		2F53CC842B41DC3300802403 /* BlogPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogPost.swift; sourceTree = "<group>"; };
+		2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBlogPostPage.swift; sourceTree = "<group>"; };
+		2F6D15EA2B42596100D72DEB /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,9 +71,12 @@
 		2F187C712B3A52360043656F /* Blog */ = {
 			isa = PBXGroup;
 			children = (
+				2F53CC7D2B41A33100802403 /* Extension */,
+				2F53CC742B41171F00802403 /* View */,
+				2F53CC732B41171800802403 /* Page */,
+				2F53CC722B41171200802403 /* Model */,
 				2F187C722B3A52360043656F /* BlogApp.swift */,
-				2F187C742B3A52360043656F /* ContentView.swift */,
-				2F187C762B3A52360043656F /* Item.swift */,
+				2F53CC822B41B90700802403 /* UserAccountManager.swift */,
 				2F187C782B3A52390043656F /* Assets.xcassets */,
 				2F187C7A2B3A52390043656F /* Preview Content */,
 			);
@@ -68,6 +89,44 @@
 				2F187C7B2B3A52390043656F /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2F53CC722B41171200802403 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2F53CC752B41175D00802403 /* UserAccount.swift */,
+				2F53CC842B41DC3300802403 /* BlogPost.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		2F53CC732B41171800802403 /* Page */ = {
+			isa = PBXGroup;
+			children = (
+				2F53CC802B41B72700802403 /* AccountManagementPage.swift */,
+				2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */,
+				2F53CC792B411BA900802403 /* HomePage.swift */,
+				2F53CC7B2B41A04E00802403 /* LoginUserAccountPage.swift */,
+				2F53CC772B4118AE00802403 /* RegisterUserAccountPage.swift */,
+				2F6D15EA2B42596100D72DEB /* SettingsPage.swift */,
+			);
+			path = Page;
+			sourceTree = "<group>";
+		};
+		2F53CC742B41171F00802403 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2F187C742B3A52360043656F /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2F53CC7D2B41A33100802403 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				2F53CC7E2B41A33A00802403 /* String.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,8 +199,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F53CC7A2B411BA900802403 /* HomePage.swift in Sources */,
+				2F53CC7C2B41A04E00802403 /* LoginUserAccountPage.swift in Sources */,
+				2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */,
+				2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */,
+				2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */,
+				2F53CC762B41175D00802403 /* UserAccount.swift in Sources */,
 				2F187C752B3A52360043656F /* ContentView.swift in Sources */,
-				2F187C772B3A52360043656F /* Item.swift in Sources */,
+				2F53CC852B41DC3300802403 /* BlogPost.swift in Sources */,
+				2F53CC7F2B41A33A00802403 /* String.swift in Sources */,
+				2F53CC812B41B72700802403 /* AccountManagementPage.swift in Sources */,
+				2F53CC782B4118AE00802403 /* RegisterUserAccountPage.swift in Sources */,
 				2F187C732B3A52360043656F /* BlogApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
