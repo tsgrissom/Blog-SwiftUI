@@ -90,6 +90,22 @@ struct LoginUserAccountPage: View {
         }
     }
     
+    private var fieldUsername: some View {
+        let prompt = Text("Username")
+        let label  = Text("Enter your username")
+        return TextField(text: $fieldUsernameContents, prompt: prompt) {
+            label
+        }
+    }
+    
+    private var fieldPassword: some View {
+        let prompt = Text("Password")
+        let label  = Text("Enter your password")
+        return SecureField(text: $fieldPasswordContents, prompt: prompt) {
+            label
+        }
+    }
+    
     public var body: some View {
         NavigationStack {
             ScrollView {
@@ -98,29 +114,31 @@ struct LoginUserAccountPage: View {
                         sectionAlertBox
                     }
                     
-                    TextField(text: $fieldUsernameContents, prompt: Text("Username")) {
-                        Text("Enter your username")
-                    }
-                    TextField(text: $fieldPasswordContents, prompt: Text("Enter your password")) {
-                        Text("Password")
-                    }
+                    fieldUsername
+                    fieldPassword
                     
-                    HStack {
-                        Button("Submit") {
-                            onPressSubmit()
-                        }
-                        .buttonStyle(.bordered)
-                        .tint(isFormPreparedForSubmission ? .green : .gray)
-                        NavigationLink(destination: RegisterUserAccountPage()) {
-                            Text("Create account")
-                        }
-                        Spacer()
-                    }
+                    rowFormControls
                 }
                 .padding()
             }
             .textFieldStyle(.roundedBorder)
             .navigationTitle("Log In")
+        }
+    }
+    
+    private var rowFormControls: some View {
+        HStack {
+            Button("Submit") {
+                onPressSubmit()
+            }
+            .buttonStyle(.bordered)
+            .tint(isFormPreparedForSubmission ? .green : .gray)
+            
+            NavigationLink(destination: RegisterUserAccountPage()) {
+                Text("Create account")
+            }
+            
+            Spacer()
         }
     }
     

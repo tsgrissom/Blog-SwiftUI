@@ -19,4 +19,10 @@ final class BlogPost: Identifiable {
         self.postedBy = postedBy
         self.createdAt = Date().timeIntervalSince1970 
     }
+    
+    public func getChildComments(allComments: [BlogComment]) -> [BlogComment] {
+        return allComments.filter { comment in
+            comment.attachedTo.id == self.id
+        }
+    }
 }

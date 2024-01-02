@@ -101,13 +101,13 @@ struct RegisterUserAccountPage: View {
     }
     
     private var fieldPassword: some View {
-        TextField(text: $fieldPasswordContents, prompt: Text("Password")) {
+        SecureField(text: $fieldPasswordContents, prompt: Text("Password")) {
             Text("Enter your password")
         }
     }
     
     private var fieldConfirmPassword: some View {
-        TextField(text: $fieldConfirmPasswordContents, prompt: Text("Re-enter password")) {
+        SecureField(text: $fieldConfirmPasswordContents, prompt: Text("Re-enter password")) {
             Text("Re-enter your password")
         }
     }
