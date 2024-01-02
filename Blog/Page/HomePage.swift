@@ -22,8 +22,10 @@ struct HomePage: View {
                 if accountManager.loggedInUser == nil {
                     navLinkToAccountManagement
                 } else {
-                    Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
-                    .padding(.horizontal)
+                    if blogPosts.count > 0 {
+                        Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
+                            .padding(.horizontal)
+                    }
                     Button(action: onPressCreateButton) {
                         Image(systemName: "plus")
                         Text("New Post")
@@ -47,7 +49,7 @@ struct HomePage: View {
             Text("You are not logged in")
         }
         .tint(.red)
-        .padding(.top)
+        .padding([.top, .horizontal])
     }
     
     private var sectionRecentPosts: some View {

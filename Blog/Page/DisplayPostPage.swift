@@ -102,10 +102,10 @@ struct DisplayPostPage: View {
         let createdFmt = formatter.string(from: createdDate)
         
         return HStack(spacing: 3) {
-            NavigationLink(destination: Text("View for user @\(username)")) {
+            NavigationLink(destination: UserProfileView(user: post.postedBy)) {
                 HStack(spacing: 3) {
                     Circle()
-                        .fill(.blue)
+                        .fill(.blue.gradient)
                         .frame(width: 20, height: 20)
                     Text("@\(username)")
                         .foregroundStyle(.blue)
