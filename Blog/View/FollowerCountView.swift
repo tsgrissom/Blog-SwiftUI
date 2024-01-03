@@ -19,21 +19,22 @@ struct FollowerCountView: View {
     let following: Int
     
     var body: some View {
-        let bgColor = systemColorScheme == .dark ? Color.black : Color.white
         return ZStack {
             RoundedRectangle(cornerRadius: 8)
-                .fill(bgColor)
+                .fill(Material.ultraThin)
                 .frame(width: 180)
                 .frame(height: 50)
             HStack {
                 VStack {
                     Text("Followers")
+                        .fontWeight(.semibold)
                     Text("\(shortenFollowerCount(followers))")
                 }
                 Divider()
                     .frame(maxHeight: 35)
                 VStack {
                     Text("Following")
+                        .fontWeight(.semibold)
                     Text("\(shortenFollowerCount(following))")
                 }
             }

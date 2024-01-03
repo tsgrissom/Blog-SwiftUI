@@ -14,8 +14,31 @@ struct UserAccountAdminView: View {
         self.user = user
     }
     
+    @State
+    private var animateTextInternalIdCopied = false
+    
+    private func onPressTextInternalId() {
+        UIPasteboard.general.string = user.id
+        animateTextInternalIdCopied = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            animateTextInternalIdCopied = false
+        }
+    }
+    
     private var textInternalId: some View {
-        return Text("Internal ID: \(user.id)")
+        let blobId  = "Internal ID: \(user.id)"
+        let fgColor = animateTextInternalIdCopied ? Color.green : Color.primary
+        let text    = animateTextInternalIdCopied ? "Copied to clipboard" : blobId
+        return HStack {
+            ScrollView(.horizontal) {
+                Text(text)
+                    .foregroundStyle(fgColor)
+                    .padding(.vertical, 5)
+            }
+        }
+        .onTapGesture {
+            onPressTextInternalId()
+        }
     }
     
     private var textJoined: some View {
@@ -50,38 +73,61 @@ struct UserAccountAdminView: View {
     }
     
     public var body: some View {
-        ScrollView {
-            HStack {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("Fixed")
-                        .font(.title2)
-                        .bold()
+        VStack {
+            List {
+                Section("Fixed") {
                     textInternalId
                     textJoined
-                    
-                    Text("Statistics")
-                        .font(.title2)
-                        .bold()
-                        .padding(.top)
+                }
+                
+                Section("Statistics") {
                     textPostsCount
                     textCommentsCount
-                    
-                    Text("User-Configured")
-                        .font(.title2)
-                        .bold()
-                        .padding(.top)
+                }
+                
+                Section("User-Configured") {
                     textUsername
                     textDisplayName
                     textBiography
-                    
-                    Spacer()
                 }
-                Spacer()
             }
-            .padding(.horizontal, 22)
         }
         .navigationTitle("Admin View: User @\(user.username)")
         .navigationBarTitleDisplayMode(.inline)
+        
+//        ScrollView {
+//            HStack {
+//                VStack(alignment: .leading, spacing: 1) {
+//                    Text("Fixed")
+//                        .font(.title2)
+//                        .bold()
+//                    textInternalId
+//                    textJoined
+//                    
+//                    Text("Statistics")
+//                        .font(.title2)
+//                        .bold()
+//                        .padding(.top)
+//                    textPostsCount
+//                    textCommentsCount
+//                    
+//                    Text("User-Configured")
+//                        .font(.title2)
+//                        .bold()
+//                        .padding(.top)
+//                    textUsername
+//                    textDisplayName
+//                    textBiography
+//                    
+//                    Spacer()
+//                }
+//                Spacer()
+//            }
+//            .padding(.horizontal, 22)
+//            .padding(.top)
+//        }
+//        .navigationTitle("Admin View: User @\(user.username)")
+//        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
