@@ -12,7 +12,7 @@ struct RegisterUserAccountPage: View {
     private var accountManager: UserAccountManager
     
     @Query
-    private let userAccounts: [UserAccount]
+    private let users: [UserAccount]
     
     @State
     private var alertBoxDisplay = false
@@ -67,7 +67,7 @@ struct RegisterUserAccountPage: View {
             return
         }
         
-        let fetchAccount = userAccounts.first(where: { acc in
+        let fetchAccount = users.first(where: { acc in
             acc.username == fieldUsernameContents
         })
         
@@ -81,11 +81,16 @@ struct RegisterUserAccountPage: View {
             return
         }
         
-        let newAccount = UserAccount(username: fieldUsernameContents, password: fieldPasswordContents)
-        modelContext.insert(newAccount)
+        let permissionLevel = users.count<=0 ? 4 : 0 // If this is the first user registered, ->Superuser
+        let newUser = UserAccount(
+            username: fieldUsernameContents,
+            password: fieldPasswordContents,
+            permissionLevel: permissionLevel
+        )
+        modelContext.insert(newUser)
         try? modelContext.save()
         
-        accountManager.setUserForSession(newAccount)
+        accountManager.setUserForSession(newUser)
         
         flashAlert(text: "Registered account for user \"\(fieldUsernameContents)\"", bgColor: .green)
         

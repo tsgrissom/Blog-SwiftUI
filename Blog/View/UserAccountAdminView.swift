@@ -8,6 +8,9 @@ struct UserAccountAdminView: View {
     @Environment(\.modelContext)
     private var modelContext
     
+    @EnvironmentObject
+    private var accountManager: UserAccountManager
+    
     @Query
     private var comments: [BlogComment]
     @Query
@@ -55,6 +58,24 @@ struct UserAccountAdminView: View {
         let createdFmt = formatter.string(from: createdDate)
         
         return Text("Joined: \(createdFmt)")
+    }
+    
+    private var textPermissionLevel: some View {
+        let level = user.permissionLevel
+        let title = switch level {
+        case 1: "Subscriber"
+        case 2: "Moderator"
+        case 3: "Operator"
+        case 4: "Superuser"
+        default: "Default"
+        }
+        
+        return HStack {
+            Text("Rank: \(title) (\(level))")
+            Spacer()
+            buttonPromote
+            buttonDemote
+        }
     }
     
     private var textCommentsCount: some View {
@@ -105,23 +126,109 @@ struct UserAccountAdminView: View {
         })
     }
     
+    private var buttonPromote: some View {
+        func onPress() {
+            let thisUser = accountManager.loggedInUser
+            let thatUser = user
+            
+            if thisUser == nil { // Logged in user might be nil
+                return
+            }
+            
+            if !thisUser!.isRankSuperiorTo(thatUser) { // If promoting user is inferior to promoted user, cannot promote
+                // TODO Feedback
+                return
+            }
+            
+            if thatUser.permissionLevel >= 3 { // If the promoted user is already operator or superuser, cannot be promoted
+                return
+            }
+            
+            let current = thatUser.permissionLevel
+            
+            thatUser.permissionLevel = current + 1
+            try? modelContext.save()
+        }
+        
+        func isDisabled() -> Bool {
+            user.permissionLevel == 3 // Cannot promote past operator
+        }
+        
+        return Button(action: onPress) {
+            Image(systemName: "arrow.up")
+                .imageScale(.small)
+        }
+        .buttonStyle(.bordered)
+        .tint(.blue)
+        .disabled(isDisabled())
+    }
+    
+    private var buttonDemote: some View {
+        func onPress() {
+            let thisUser: UserAccount?  = accountManager.loggedInUser
+            let thatUser: UserAccount   = user
+                
+            if thisUser == nil {
+                return
+            }
+            
+            let thisLevel = thisUser!.permissionLevel
+            let thatLevel = thatUser.permissionLevel
+            
+            // TODO Feedback
+            if thatLevel == 4 {  // Superuser cannot be demoted
+                return
+            }
+            
+            if thatLevel == 3 && thisLevel < 4 { // Operators can only be demoted by superuser, not by other operators
+                return
+            }
+            
+            if !thisUser!.isRankSuperiorTo(thatUser) {
+                return
+            }
+            
+            if thatLevel == 0 { // Cannot demote lower than default
+                return
+            }
+            
+            let current = thatUser.permissionLevel
+            
+            thatUser.permissionLevel = current - 1
+            try? modelContext.save()
+        }
+        
+        func isDisabled() -> Bool {
+            user.permissionLevel == 0 // Cannot demote past default
+        }
+        
+        return Button(action: onPress) {
+            Image(systemName: "arrow.down")
+                .imageScale(.small)
+        }
+        .buttonStyle(.bordered)
+        .tint(.blue)
+        .disabled(isDisabled())
+    }
+    
     public var body: some View {
         VStack {
             List {
-                Section("Fixed") {
+                Section("Data") {
                     textInternalId
                     textJoined
-                }
-                
-                Section("Statistics") {
-                    textPostsCount
-                    textCommentsCount
+                    textPermissionLevel
                 }
                 
                 Section("User-Configured") {
                     textUsername
                     textDisplayName
                     textBiography
+                }
+                
+                Section("Statistics") {
+                    textPostsCount
+                    textCommentsCount
                 }
                 
                 Section("Controls") {
@@ -150,4 +257,5 @@ private var mockUser: UserAccount {
     NavigationStack {
         UserAccountAdminView(mockUser)
     }
+    .environmentObject(UserAccountManager())
 }

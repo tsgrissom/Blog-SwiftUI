@@ -6,6 +6,9 @@ struct SettingsPage: View {
     @Environment(\.modelContext)
     private var modelContext
     
+    @EnvironmentObject
+    private var accountManager: UserAccountManager
+    
     @Query
     private var posts: [BlogPost]
     @Query
@@ -129,45 +132,65 @@ struct SettingsPage: View {
     }
     
     private var layerForeground: some View {
-        VStack(alignment: .leading) {
+        let permissionLevel = accountManager.loggedInUser?.permissionLevel ?? 0
+        
+        return VStack(alignment: .leading) {
             if users.isEmpty {
                 Text("No registered users")
+            } else if !accountManager.isLoggedIn {
+                Text("You are not logged in")
             } else {
                 List {
-                    Section("Registered Users (\(users.count))") {
-                        ForEach(users) { user in
-                            NavigationLink(destination: UserAccountAdminView(user)) {
-                                Text("@\(user.username)")
-                                    .foregroundStyle(.blue)
-                            }
-                        }
+                    // TODO User settings
+                    Section("User Settings") {
+                        Text("Options")
+                        Text("Go here")
                     }
-                    Section("Developer Controls") {
-                        ScrollView(.horizontal) {
-                            HStack {
-                                buttonResetUsers
-                                buttonCreateMockUsers
-                            }
-                        }
-                        
-                        ScrollView(.horizontal) {
-                            HStack {
-                                buttonResetPosts
-                            }
-                        }
-                        
-                        ScrollView(.horizontal) {
-                            HStack {
-                                buttonResetComments
-                            }
-                        }
+                    
+                    if permissionLevel >= 3 {
+                        sectionRegisteredUsers
+                        sectionDeveloperControls
                     }
-                    .buttonStyle(.bordered)
-                    .tint(.red)
-                    .listStyle(.plain)
                 }
             }
         }
+    }
+    
+    private var sectionRegisteredUsers: some View {
+        Section("Registered Users (\(users.count))") {
+            ForEach(users) { user in
+                NavigationLink(destination: UserAccountAdminView(user)) {
+                    Text("@\(user.username)")
+                        .foregroundStyle(.blue)
+                }
+            }
+        }
+    }
+    
+    private var sectionDeveloperControls: some View {
+        Section("Developer Controls") {
+            ScrollView(.horizontal) {
+                HStack {
+                    buttonResetUsers
+                    buttonCreateMockUsers
+                }
+            }
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    buttonResetPosts
+                }
+            }
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    buttonResetComments
+                }
+            }
+        }
+        .buttonStyle(.bordered)
+        .tint(.red)
+        .listStyle(.plain)
     }
 }
 
