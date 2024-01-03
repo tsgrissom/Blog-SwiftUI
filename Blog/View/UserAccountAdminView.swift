@@ -3,6 +3,11 @@ import SwiftData
 
 struct UserAccountAdminView: View {
     
+    @Environment(\.dismiss)
+    private var dismiss
+    @Environment(\.modelContext)
+    private var modelContext
+    
     @Query
     private var comments: [BlogComment]
     @Query
@@ -16,6 +21,8 @@ struct UserAccountAdminView: View {
     
     @State
     private var animateTextInternalIdCopied = false
+    @State
+    private var isConfirmDeletePresented = false
     
     private func onPressTextInternalId() {
         UIPasteboard.general.string = user.id
@@ -72,6 +79,32 @@ struct UserAccountAdminView: View {
         return Text("Biography: \"\(user.biography)\"")
     }
     
+    private var buttonDelete: some View {
+        func onPress() {
+            isConfirmDeletePresented = true
+        }
+        
+        func onConfirm() {
+            isConfirmDeletePresented = false
+            modelContext.delete(user)
+            try? modelContext.save()
+            dismiss()
+        }
+        
+        return Button("Delete", systemImage: "trash") {
+            onPress()
+        }
+        .buttonStyle(.bordered)
+        .tint(.red)
+        .foregroundStyle(.red)
+        .confirmationDialog("Delete user \"\(user.username)\"? (Cannot be undone)", isPresented: $isConfirmDeletePresented, titleVisibility: .visible, actions: {
+            Button("Confirm", role: .destructive, action: onConfirm)
+            Button("Cancel", role: .cancel) {
+                isConfirmDeletePresented = false
+            }
+        })
+    }
+    
     public var body: some View {
         VStack {
             List {
@@ -90,44 +123,19 @@ struct UserAccountAdminView: View {
                     textDisplayName
                     textBiography
                 }
+                
+                Section("Controls") {
+                    HStack {
+                        buttonDelete
+                        // TODO Force rename
+                        // TODO Force clear bio
+                        
+                    }
+                }
             }
         }
         .navigationTitle("Admin View: User @\(user.username)")
         .navigationBarTitleDisplayMode(.inline)
-        
-//        ScrollView {
-//            HStack {
-//                VStack(alignment: .leading, spacing: 1) {
-//                    Text("Fixed")
-//                        .font(.title2)
-//                        .bold()
-//                    textInternalId
-//                    textJoined
-//                    
-//                    Text("Statistics")
-//                        .font(.title2)
-//                        .bold()
-//                        .padding(.top)
-//                    textPostsCount
-//                    textCommentsCount
-//                    
-//                    Text("User-Configured")
-//                        .font(.title2)
-//                        .bold()
-//                        .padding(.top)
-//                    textUsername
-//                    textDisplayName
-//                    textBiography
-//                    
-//                    Spacer()
-//                }
-//                Spacer()
-//            }
-//            .padding(.horizontal, 22)
-//            .padding(.top)
-//        }
-//        .navigationTitle("Admin View: User @\(user.username)")
-//        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

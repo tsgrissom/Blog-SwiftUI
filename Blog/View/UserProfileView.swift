@@ -26,9 +26,9 @@ struct UserProfileView: View {
         GeometryReader { metrics in
             ZStack {
                 ZStack {
-                    Color.blue.ignoresSafeArea()
-                    FollowerCountView(followers: 0, following: 0)
-                        .offset(x: 90, y: -(metrics.size.height*0.55))
+                    layerPageBackground
+                    NewFollowerCountView(user: user, followers: 0, following: 0)
+                        .offset(x: 75, y: -(metrics.size.height*0.56))
                 }
                 
                 ScrollView {
@@ -41,6 +41,14 @@ struct UserProfileView: View {
             }
         }
         .navigationTitle("Profile")
+    }
+    
+    private var layerPageBackground: some View {
+        let systemPageBackground = systemColorScheme == .dark ? Color.black : Color.white
+        return VStack(spacing: 0) {
+            Color.blue.ignoresSafeArea()
+            systemPageBackground.ignoresSafeArea()
+        }
     }
     
     private var layerCardBackground: some View {
