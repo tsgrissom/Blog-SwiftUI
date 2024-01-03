@@ -13,51 +13,118 @@ struct SettingsPage: View {
     @Query
     private var users: [UserAccount]
     
-    private func onPressResetUsers() {
-        for account in users {
-            modelContext.delete(account)
+    @State
+    private var isPresentingConfirmResetComments = false
+    @State
+    private var isPresentingConfirmResetPosts = false
+    @State
+    private var isPresentingConfirmResetUsers = false
+    
+    private var buttonResetComments: some View {
+        func onPress() {
+            isPresentingConfirmResetComments = true
         }
-        try? modelContext.save()
+        
+        func onConfirm() {
+            for comment in comments {
+                modelContext.delete(comment)
+            }
+            try? modelContext.save()
+        }
+        
+        let count = comments.count
+        
+        return Button("Reset Replies (\(count))", systemImage: "eraser") {
+            onPress()
+        }
+        .foregroundStyle(.red)
+        .confirmationDialog("Erase \(count) replies? (Cannot be undone)", isPresented: $isPresentingConfirmResetComments) {
+            Button("Confirm", role: .destructive, action: onConfirm)
+            Button("Cancel", role: .cancel, action: {})
+        }
     }
     
-    private func onPressResetPosts() {
-        for post in posts {
-            modelContext.delete(post)
+    private var buttonResetPosts: some View {
+        func onPress() {
+            isPresentingConfirmResetPosts = true
         }
-        try? modelContext.save()
+        
+        func onConfirm() {
+            for post in posts {
+                modelContext.delete(post)
+            }
+            try? modelContext.save()
+        }
+        
+        let count = posts.count
+        
+        return Button("Reset Posts (\(count))", systemImage: "eraser") {
+            onPress()
+        }
+        .foregroundStyle(.red)
+        .confirmationDialog("Erase \(count) posts? (Cannot be undone)", isPresented: $isPresentingConfirmResetPosts) {
+            Button("Confirm", role: .destructive, action: onConfirm)
+            Button("Cancel", role: .cancel, action: {})
+        }
     }
     
-    private func onPressResetComments() {
-        for comment in comments {
-            modelContext.delete(comment)
+    private var buttonResetUsers: some View {
+        func onPress() {
+            isPresentingConfirmResetUsers = true
         }
-        try? modelContext.save()
+        
+        func onConfirm() {
+            for account in users {
+                modelContext.delete(account)
+            }
+            try? modelContext.save()
+        }
+        
+        let count = users.count
+        
+        return Button("Reset Users (\(users.count))", systemImage: "eraser") {
+            onPress()
+        }
+        .foregroundStyle(.red)
+        .confirmationDialog("Erase \(count) users? (Cannot be undone)", isPresented: $isPresentingConfirmResetUsers) {
+            Button("Confirm", role: .destructive, action: onConfirm)
+            Button("Cancel", role: .cancel, action: {})
+        }
+    }
+    
+    private func randomMockUsername() -> String {
+        let firstNames = ["George", "James", "Bill", "Jimmy", "Richard", "John", "Dwight", "Harry", "Franklin", "Calvin"]
+        var name = firstNames.randomElement() ?? "George"
+        
+        for _ in 1...4 {
+            let random = Int.random(in: 0...9)
+            name += "\(random)"
+        }
+        
+        return name
+    }
+    
+    private var buttonCreateMockUsers: some View {
+        func onPress() {
+            for _ in 1...3 {
+                let randomName = randomMockUsername()
+                let new = UserAccount(username: randomName, password: "Password")
+                modelContext.insert(new)
+            }
+            try? modelContext.save()
+        }
+        
+        return Button("Create Mock Users", systemImage: "list.bullet") {
+            onPress()
+        }
+        .foregroundStyle(.blue)
+        .tint(.blue)
     }
     
     var body: some View {
         NavigationStack {
             layerForeground
                 .navigationTitle("Settings")
-        }
-    }
-    
-    private func getViewForRegisteredUser(_ user: UserAccount) -> some View {
-        let createdDate = Date(timeIntervalSince1970: user.createdAt)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
-        let createdFmt = formatter.string(from: createdDate)
-        
-        let associatedPosts = user.getAssociatedPosts(allPosts: posts)
-        let associatedComments = user.getAssociatedComments(allComments: comments)
-        
-        return HStack {
-            VStack(alignment: .leading, spacing: 1) {
-                Text("Username: \(user.username)")
-                Text("Joined: \(createdFmt)")
-                Text("Posts made: \(associatedPosts.count)")
-                Text("Comments made: \(associatedComments.count)")
-            }
-            Spacer()
         }
     }
     
@@ -69,27 +136,30 @@ struct SettingsPage: View {
                 List {
                     Section("Registered Users (\(users.count))") {
                         ForEach(users) { user in
-                            getViewForRegisteredUser(user)
+                            NavigationLink(destination: UserAccountAdminView(user)) {
+                                Text("@\(user.username)")
+                                    .foregroundStyle(.blue)
+                            }
                         }
                     }
                     Section("Developer Controls") {
-                        HStack {
-                            Button("Reset Users (\(users.count))", systemImage: "eraser") {
-                                onPressResetUsers()
+                        ScrollView(.horizontal) {
+                            HStack {
+                                buttonResetUsers
+                                buttonCreateMockUsers
                             }
-                            .foregroundStyle(.red)
                         }
-                        HStack {
-                            Button("Reset Posts (\(posts.count))", systemImage: "eraser") {
-                                onPressResetPosts()
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                buttonResetPosts
                             }
-                            .foregroundStyle(.red)
                         }
-                        HStack {
-                            Button("Reset Replies (\(comments.count))", systemImage: "eraser") {
-                                onPressResetComments()
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                buttonResetComments
                             }
-                            .foregroundStyle(.red)
                         }
                     }
                     .buttonStyle(.bordered)
