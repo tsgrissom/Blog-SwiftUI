@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct UserAccountAdminView: View {
+struct UserProfileAsAdminView: View {
     
     @Environment(\.dismiss)
     private var dismiss
@@ -324,7 +324,7 @@ private var mockUser: UserAccount {
 
 #Preview {
     NavigationStack {
-        UserAccountAdminView(mockUser)
+        UserProfileAsAdminView(mockUser)
     }
     .environmentObject(UserAccountManager())
 }

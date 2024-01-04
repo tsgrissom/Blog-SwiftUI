@@ -159,7 +159,7 @@ struct SettingsPage: View {
     private var sectionRegisteredUsers: some View {
         Section("Registered Users (\(users.count))") {
             ForEach(users) { user in
-                NavigationLink(destination: UserAccountAdminView(user)) {
+                NavigationLink(destination: UserProfileAsAdminView(user)) {
                     Text("@\(user.username)")
                         .foregroundStyle(.blue)
                 }
