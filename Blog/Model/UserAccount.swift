@@ -19,6 +19,7 @@ final class UserAccount: Identifiable {
     var username: String
     var password: String
     var permissionLevel: Int
+    // TODO Banning, suspension
     
     var displayName: String
     var biography: String
@@ -50,9 +51,9 @@ final class UserAccount: Identifiable {
         }
     }
     
-    public func isRankSuperiorTo(_ user: UserAccount) -> Bool {
+    public func isRankSuperiorTo(_ user: UserAccount?) -> Bool {
         let thisLevel = self.permissionLevel
-        let thatLevel = user.permissionLevel
+        let thatLevel = user==nil ? 0 : user!.permissionLevel
         
         if thisLevel == 4 {
             return true
@@ -61,5 +62,25 @@ final class UserAccount: Identifiable {
         }
         
         return thisLevel > thatLevel
+    }
+    
+    public func isRankInferiorTo(_ user: UserAccount?) -> Bool {
+        return !self.isRankSuperiorTo(user)
+    }
+    
+    public func isPublicUser() -> Bool {
+        return self.permissionLevel <= 1
+    }
+    
+    public func isModerator() -> Bool {
+        return self.permissionLevel >= 2
+    }
+    
+    public func isOperator() -> Bool {
+        return self.permissionLevel >= 3
+    }
+    
+    public func isSuperUser() -> Bool {
+        return self.permissionLevel == 4
     }
 }

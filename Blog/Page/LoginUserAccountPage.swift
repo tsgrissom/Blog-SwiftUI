@@ -1,3 +1,4 @@
+import CryptoKit
 import SwiftUI
 import SwiftData
 
@@ -76,8 +77,11 @@ struct LoginUserAccountPage: View {
         }
         
         let passwordToMatch = account?.password
+        let data = Data(fieldPasswordContents.utf8)
+        let sha256 = SHA256.hash(data: data)
+        let hashString = sha256.compactMap { String(format: "%02x", $0) }.joined()
         
-        if fieldPasswordContents != passwordToMatch {
+        if hashString != passwordToMatch {
             flashAlert(text: "Invalid username/password combination")
             return
         }
@@ -110,14 +114,16 @@ struct LoginUserAccountPage: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    if alertBoxDisplay {
-                        sectionAlertBox
-                    }
-                    
                     fieldUsername
                     fieldPassword
                     
                     rowFormControls
+                    
+                    if alertBoxDisplay {
+                        sectionAlertBox
+                    }
+                    
+                    Spacer()
                 }
                 .padding()
             }

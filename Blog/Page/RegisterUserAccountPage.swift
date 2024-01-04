@@ -1,3 +1,4 @@
+import CryptoKit
 import SwiftUI
 import SwiftData
 
@@ -81,10 +82,14 @@ struct RegisterUserAccountPage: View {
             return
         }
         
+        let data = Data(fieldPasswordContents.utf8)
+        let sha256 = SHA256.hash(data: data)
+        let hashString = sha256.compactMap { String(format: "%02x", $0) }.joined()
+        
         let permissionLevel = users.count<=0 ? 4 : 0 // If this is the first user registered, ->Superuser
         let newUser = UserAccount(
             username: fieldUsernameContents,
-            password: fieldPasswordContents,
+            password: hashString,
             permissionLevel: permissionLevel
         )
         modelContext.insert(newUser)
@@ -121,15 +126,15 @@ struct RegisterUserAccountPage: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    if alertBoxDisplay {
-                        sectionAlertBox
-                    }
-                    
                     fieldUsername
                     fieldPassword
                     fieldConfirmPassword
                     
                     rowFormControls
+                    
+                    if alertBoxDisplay {
+                        sectionAlertBox
+                    }
                     
                     Spacer()
                 }
