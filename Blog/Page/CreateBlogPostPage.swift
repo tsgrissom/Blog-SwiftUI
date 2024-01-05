@@ -12,62 +12,155 @@ struct CreateBlogPostPage: View {
     private var accountManager: UserAccountManager
     
     @State
-    private var alertBoxDisplay = false
+    private var alertBoxVisible = false
     @State
-    private var alertBoxBgColor = Color.red
+    private var alertBoxColor = Color.red
+    @State
+    private var alertBoxDebounce = false
     @State
     private var alertBoxText = "Not prepared for submission"
+    
+    @State
+    private var buttonSubmitAnimate = 0
     
     @State
     private var fieldBodyContents = ""
     
     private func flashAlert(
-        text: String,
-        bgColor: Color = .red
+        _ text: String,
+        color: Color = .red
     ) {
-        alertBoxBgColor = bgColor
+        // TODO Haptics
+        if alertBoxDebounce {
+            return
+        }
+        
+        alertBoxDebounce = true
         alertBoxText = text
-        alertBoxDisplay = true
+        alertBoxColor = color
+        withAnimation {
+            alertBoxVisible = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation {
+                alertBoxVisible = false
+            }
+            alertBoxText = "Alert Box"
+            alertBoxColor = .red
+            alertBoxDebounce = false
+        }
     }
     
+    // MARK: Button Handlers
     private func onPressSubmit() {
         let trimmedBody = fieldBodyContents.trimmed
         
         if trimmedBody.isEmpty {
-            flashAlert(text: "Your new post cannot be empty")
+            flashAlert("Your new post cannot be empty")
+            buttonSubmitAnimate = 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                buttonSubmitAnimate = 0
+            }
             return
         }
         
         if accountManager.loggedInUser == nil {
-            flashAlert(text: "You must be logged in to post")
-            // TODO Alert
+            flashAlert("You must be logged in to post")
+            buttonSubmitAnimate = 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                buttonSubmitAnimate = 0
+            }
             return
         }
         
         let newPost = BlogPost(body: trimmedBody, postedBy: accountManager.loggedInUser!)
         modelContext.insert(newPost)
         
-        flashAlert(text: "Your new post has been submitted", bgColor: .green)
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        flashAlert("Your new post has been submitted", color: .green)
+        buttonSubmitAnimate = 2
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            buttonSubmitAnimate = 0
             dismiss()
+        }
+    }
+    
+    private func onPressErase() {
+        if fieldBodyContents.isEmpty {
+            flashAlert("You must enter something to erase")
+            return
+        }
+        
+        fieldBodyContents = ""
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+    }
+    
+    private var buttonSubmit: some View {
+        let stateColor: Color = switch buttonSubmitAnimate {
+        case 1: .red
+        case 2: .green
+        default: .blue
+        }
+        let color: Color = fieldBodyContents.isEmpty ? .gray : stateColor
+        let symbol = buttonSubmitAnimate==1 ? "xmark" : "checkmark"
+        
+        return Button(action: onPressSubmit) {
+            Image(systemName: symbol)
+                .imageScale(.large)
+                .frame(height: 30)
+        }
+        .tint(color)
+    }
+    
+    private var buttonErase: some View {
+        return Button(action: onPressErase) {
+            Image(systemName: "eraser")
+                .imageScale(.large)
+                .frame(height: 30)
+        }
+        .tint(fieldBodyContents.isEmpty ? .gray : .red)
+    }
+    
+    private var fieldPostBody: some View {
+        return TextField(text: $fieldBodyContents, prompt: Text("Enter the body of your new post...")) {
+            Text("Enter the body of your new post")
         }
     }
     
     public var body: some View {
         NavigationStack {
-            ScrollView {
-                if alertBoxDisplay {
-                    sectionAlertBox
-                        .padding(.horizontal)
+            VStack {
+                if accountManager.isNotLoggedIn {
+                    NotLoggedInView()
+                } else {
+                    VStack { // Form container
+                        fieldPostBody
+                        
+                        HStack { // Controls row container
+                            buttonSubmit
+                            buttonErase
+                            Spacer()
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    .buttonStyle(.bordered)
+                    .textFieldStyle(.roundedBorder)
                 }
                 
-                if accountManager.isLoggedIn {
-                    sectionCreateNewPost
-                        .padding(.horizontal)
-                } else {
-                    sectionNotLoggedIn
+                if alertBoxVisible { // Alert box
+                    sectionAlertBox
+                        .transition(.move(edge: .leading))
+                        .padding(.top, 8)
+                        .onTapGesture {
+                            withAnimation {
+                                alertBoxVisible = false
+                            }
+                        }
                 }
+                
+                Spacer()
             }
             .navigationTitle("New Post")
         }
@@ -76,37 +169,20 @@ struct CreateBlogPostPage: View {
     private var sectionAlertBox: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(alertBoxBgColor)
-                .frame(minHeight: 35)
-            VStack(alignment: .leading, spacing: 1) {
+                .fill(alertBoxColor)
+                .frame(minHeight: 35, maxHeight: 55)
+                .padding(.horizontal)
+            VStack {
                 Text(alertBoxText)
-            }
-            .foregroundStyle(.white)
-            .padding()
-        }
-    }
-    
-    private var sectionCreateNewPost: some View {
-        VStack {
-            TextField(text: $fieldBodyContents, prompt: Text("Enter the body of your new post...")) {
-                Text("Enter the body of your new post")
-            }
-            .textFieldStyle(.roundedBorder)
-            
-            HStack {
-                Button(action: onPressSubmit) {
-                    Text("Submit")
-                }
-                .buttonStyle(.bordered)
-                .tint(.blue)
-                Spacer()
+                    .foregroundStyle(.white)
             }
         }
     }
-    
-    private var sectionNotLoggedIn: some View {
+}
+
+private struct NotLoggedInView: View {
+    public var body: some View {
         VStack {
-            Spacer()
             Text("You must be logged in to create a new post.")
                 .padding(.vertical)
             NavigationLink(destination: RegisterUserAccountPage()) {
@@ -120,7 +196,11 @@ struct CreateBlogPostPage: View {
     }
 }
 
-#Preview {
+#Preview("CreateBlogPostPage") {
     CreateBlogPostPage()
         .environmentObject(UserAccountManager())
+}
+
+#Preview("NotLoggedInView") {
+    NotLoggedInView()
 }

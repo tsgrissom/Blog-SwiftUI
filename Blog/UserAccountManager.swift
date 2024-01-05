@@ -19,7 +19,11 @@ final class UserAccountManager: ObservableObject {
     }
     
     public var isLoggedIn: Bool {
-        loggedInUser != nil
+        return loggedInUser != nil
+    }
+    
+    public var isNotLoggedIn: Bool {
+        return !isLoggedIn
     }
     
     public func clearUserForSession() {
