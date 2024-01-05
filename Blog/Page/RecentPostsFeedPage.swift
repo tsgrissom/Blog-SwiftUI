@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct HomePage: View {
+struct RecentPostsFeedPage: View {
     
     @EnvironmentObject
     private var accountManager: UserAccountManager
@@ -104,6 +104,6 @@ struct HomePage: View {
 }
 
 #Preview {
-    HomePage()
+    RecentPostsFeedPage()
         .environmentObject(UserAccountManager())
 }

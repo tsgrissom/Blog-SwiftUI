@@ -20,10 +20,10 @@ struct AccountManagementPage: View {
     
     private var rowNotLoggedIn: some View {
         HStack {
-            NavigationLink(destination: RegisterUserAccountPage()) {
+            NavigationLink(destination: CreateAccountPage()) {
                 Text("Register")
             }
-            NavigationLink(destination: LoginUserAccountPage()) {
+            NavigationLink(destination: LoginAccountPage()) {
                 Text("Login")
             }
         }

@@ -2,7 +2,7 @@ import CryptoKit
 import SwiftUI
 import SwiftData
 
-struct LoginUserAccountPage: View {
+struct LoginAccountPage: View {
     
     @Environment(\.dismiss)
     private var dismiss
@@ -123,7 +123,7 @@ struct LoginUserAccountPage: View {
                     
                     if alertBoxVisible {
                         sectionAlertBox
-                            .transition(.move(edge: .leading))
+                            .transition(.scale)
                             .onTapGesture {
                                 withAnimation {
                                     alertBoxVisible = false
@@ -148,7 +148,7 @@ struct LoginUserAccountPage: View {
             .buttonStyle(.bordered)
             .tint(isFormPreparedForSubmission ? .green : .gray)
             
-            NavigationLink(destination: RegisterUserAccountPage()) {
+            NavigationLink(destination: CreateAccountPage()) {
                 Text("Create account")
             }
             
@@ -180,6 +180,6 @@ struct LoginUserAccountPage: View {
 }
 
 #Preview {
-    LoginUserAccountPage()
+    LoginAccountPage()
         .environmentObject(UserAccountManager())
 }

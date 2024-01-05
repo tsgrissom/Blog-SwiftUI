@@ -151,7 +151,7 @@ struct CreateBlogPostPage: View {
                 
                 if alertBoxVisible { // Alert box
                     sectionAlertBox
-                        .transition(.move(edge: .leading))
+                        .transition(.scale)
                         .padding(.top, 8)
                         .onTapGesture {
                             withAnimation {
@@ -185,10 +185,10 @@ private struct NotLoggedInView: View {
         VStack {
             Text("You must be logged in to create a new post.")
                 .padding(.vertical)
-            NavigationLink(destination: RegisterUserAccountPage()) {
+            NavigationLink(destination: CreateAccountPage()) {
                 Text("Create new account")
             }
-            NavigationLink(destination: LoginUserAccountPage()) {
+            NavigationLink(destination: LoginAccountPage()) {
                 Text("Log in to existing account")
             }
             Spacer()

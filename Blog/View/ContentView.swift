@@ -28,7 +28,7 @@ struct ContentView: View {
     
     public var body: some View {
         TabView {
-            HomePage()
+            RecentPostsFeedPage()
                 .tabItem {
                     Image(systemName: "list.bullet")
                     Text("Home")
