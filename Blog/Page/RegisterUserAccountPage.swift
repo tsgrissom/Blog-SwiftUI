@@ -16,7 +16,7 @@ struct RegisterUserAccountPage: View {
     private let users: [UserAccount]
     
     @State
-    private var alertBoxDisplay = false
+    private var alertBoxVisible = false
     @State
     private var alertBoxDisplayUsernameText = false
     @State
@@ -42,7 +42,9 @@ struct RegisterUserAccountPage: View {
     private func flashAlert(text: String, bgColor: Color = .red) {
         alertBoxBgColor = bgColor
         alertBoxText = text
-        alertBoxDisplay = true
+        withAnimation {
+            alertBoxVisible = true
+        }
     }
     
     private func onPressSubmit() {
@@ -51,7 +53,7 @@ struct RegisterUserAccountPage: View {
         alertBoxDisplayConfirmPasswordText = fieldConfirmPasswordContents.trimmed.isEmpty
         
         if !isFormPreparedForSubmission {
-            if !alertBoxDisplay {
+            if !alertBoxVisible {
                 flashAlert(text: "Please fill out all fields")
             }
             
@@ -132,8 +134,14 @@ struct RegisterUserAccountPage: View {
                     
                     rowFormControls
                     
-                    if alertBoxDisplay {
+                    if alertBoxVisible {
                         sectionAlertBox
+                            .transition(.move(edge: .leading))
+                            .onTapGesture {
+                                withAnimation {
+                                    alertBoxVisible = false
+                                }
+                            }
                     }
                     
                     Spacer()
@@ -163,21 +171,24 @@ struct RegisterUserAccountPage: View {
     }
     
     private var sectionAlertBox: some View {
-        return ZStack {
+        ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(alertBoxBgColor)
                 .frame(minHeight: 35)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(alertBoxText)
-                if alertBoxDisplayUsernameText {
-                    Text("• Fill in the username field")
+            HStack {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(alertBoxText)
+                    if alertBoxDisplayUsernameText {
+                        Text("• Fill in the username field")
+                    }
+                    if alertBoxDisplayPasswordText {
+                        Text("• Fill in the password field")
+                    }
+                    if alertBoxDisplayConfirmPasswordText {
+                        Text("• Fill in the password confirmation field")
+                    }
                 }
-                if alertBoxDisplayPasswordText {
-                    Text("• Fill in the password field")
-                }
-                if alertBoxDisplayConfirmPasswordText {
-                    Text("• Fill in the password confirmation field")
-                }
+                Spacer()
             }
             .foregroundStyle(.white)
             .padding()

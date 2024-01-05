@@ -14,7 +14,7 @@ struct LoginUserAccountPage: View {
     private var userAccounts: [UserAccount]
     
     @State
-    private var alertBoxDisplay = false
+    private var alertBoxVisible = false
     @State
     private var alertBoxDisplayUsernameText = false
     @State
@@ -39,7 +39,9 @@ struct LoginUserAccountPage: View {
     ) {
         alertBoxBgColor = bgColor
         alertBoxText = text
-        alertBoxDisplay = true
+        withAnimation {
+            alertBoxVisible = true
+        }
     }
     
     private func onPressSubmit() {
@@ -47,7 +49,7 @@ struct LoginUserAccountPage: View {
         alertBoxDisplayPasswordText = fieldPasswordContents.trimmed.isEmpty
         
         if !isFormPreparedForSubmission {
-            if !alertBoxDisplay {
+            if !alertBoxVisible {
                 flashAlert(text: "Please fill out all fields")
             }
             
@@ -119,8 +121,14 @@ struct LoginUserAccountPage: View {
                     
                     rowFormControls
                     
-                    if alertBoxDisplay {
+                    if alertBoxVisible {
                         sectionAlertBox
+                            .transition(.move(edge: .leading))
+                            .onTapGesture {
+                                withAnimation {
+                                    alertBoxVisible = false
+                                }
+                            }
                     }
                     
                     Spacer()
@@ -153,14 +161,17 @@ struct LoginUserAccountPage: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(alertBoxBgColor)
                 .frame(minHeight: 35)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(alertBoxText)
-                if alertBoxDisplayUsernameText {
-                    Text("• Fill in the username field")
+            HStack {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(alertBoxText)
+                    if alertBoxDisplayUsernameText {
+                        Text("• Fill in the username field")
+                    }
+                    if alertBoxDisplayPasswordText {
+                        Text("• Fill in the password field")
+                    }
                 }
-                if alertBoxDisplayPasswordText {
-                    Text("• Fill in the password field")
-                }
+                Spacer()
             }
             .foregroundStyle(.white)
             .padding()
