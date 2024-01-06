@@ -12,9 +12,9 @@ struct UserProfileAsAdminView: View {
     private var accountManager: UserAccountManager
     
     @Query
-    private var comments: [BlogComment]
+    private var comments: [PostComment]
     @Query
-    private var posts: [BlogPost]
+    private var posts: [Post]
     
     private let user: UserAccount
     

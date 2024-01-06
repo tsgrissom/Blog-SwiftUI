@@ -2,22 +2,22 @@ import Foundation
 import SwiftData
 
 @Model
-final class BlogComment: Identifiable {
+final class PostComment: Identifiable {
 
     var id:   String
     var body: String
     var postedBy: UserAccount
     
-    var attachedTo: BlogPost
-    var parentComment: BlogComment?
+    var attachedTo: Post
+    var parentComment: PostComment?
     
     var createdAt: Double
     
     init(
         body: String,
         postedBy: UserAccount,
-        attachedTo: BlogPost,
-        parentComment: BlogComment? = nil
+        attachedTo: Post,
+        parentComment: PostComment? = nil
     ) {
         self.id = UUID().uuidString
         self.body = body

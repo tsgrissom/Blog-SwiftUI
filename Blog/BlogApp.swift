@@ -7,8 +7,8 @@ struct BlogApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             UserAccount.self,
-            BlogPost.self,
-            BlogComment.self
+            Post.self,
+            PostComment.self
         ])
         let modelConfiguration = ModelConfiguration(
             schema: schema,

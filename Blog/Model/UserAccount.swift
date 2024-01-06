@@ -39,13 +39,13 @@ final class UserAccount: Identifiable {
         self.permissionLevel = permissionLevel
     }
     
-    public func getAssociatedPosts(allPosts: [BlogPost]) -> [BlogPost] {
+    public func getAssociatedPosts(allPosts: [Post]) -> [Post] {
         return allPosts.filter { post in
             post.postedBy.id == self.id
         }
     }
     
-    public func getAssociatedComments(allComments: [BlogComment]) -> [BlogComment] {
+    public func getAssociatedComments(allComments: [PostComment]) -> [PostComment] {
         return allComments.filter { comment in
             comment.postedBy.id == self.id
         }

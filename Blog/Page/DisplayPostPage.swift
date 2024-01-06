@@ -14,11 +14,11 @@ struct DisplayPostPage: View {
     private var modelContext
     
     @Query
-    private var comments: [BlogComment]
+    private var comments: [PostComment]
     
-    private let post: BlogPost
+    private let post: Post
     
-    init(_ post: BlogPost) {
+    init(_ post: Post) {
         self.post = post
     }
     
@@ -30,7 +30,7 @@ struct DisplayPostPage: View {
     @State
     private var buttonSubmitReplyAnimate = 0
     
-    private var getCommentsInResponse: [BlogComment] {
+    private var getCommentsInResponse: [PostComment] {
         postManager.getCommentsInResponseToPost(post, allComments: comments)
     }
     
@@ -59,7 +59,7 @@ struct DisplayPostPage: View {
         }
         
         buttonSubmitReplyAnimate = 2
-        let new = BlogComment(body: fieldReplyContents, postedBy: accountManager.loggedInUser!, attachedTo: post)
+        let new = PostComment(body: fieldReplyContents, postedBy: accountManager.loggedInUser!, attachedTo: post)
         modelContext.insert(new)
         try? modelContext.save()
         
@@ -208,7 +208,7 @@ struct DisplayPostPage: View {
         }
     }
     
-    private func getViewForComment(_ comment: BlogComment) -> some View {
+    private func getViewForComment(_ comment: PostComment) -> some View {
         let formatter = DateFormatter()
         let createdDate = Date(timeIntervalSince1970: comment.createdAt)
         formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"

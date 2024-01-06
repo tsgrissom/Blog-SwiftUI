@@ -10,9 +10,9 @@ struct SettingsPage: View {
     private var accountManager: UserAccountManager
     
     @Query
-    private var posts: [BlogPost]
+    private var posts: [Post]
     @Query
-    private var comments: [BlogComment]
+    private var comments: [PostComment]
     @Query
     private var users: [UserAccount]
     

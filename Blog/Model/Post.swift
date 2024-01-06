@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class BlogPost: Identifiable {
+final class Post: Identifiable {
     
     var id: String
     var body: String
@@ -20,7 +20,7 @@ final class BlogPost: Identifiable {
         self.createdAt = Date().timeIntervalSince1970 
     }
     
-    public func getChildComments(allComments: [BlogComment]) -> [BlogComment] {
+    public func getChildComments(allComments: [PostComment]) -> [PostComment] {
         return allComments.filter { comment in
             comment.attachedTo.id == self.id
         }

@@ -12,7 +12,7 @@
 		2F187C792B3A52390043656F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F187C782B3A52390043656F /* Assets.xcassets */; };
 		2F187C7C2B3A52390043656F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F187C7B2B3A52390043656F /* Preview Assets.xcassets */; };
 		2F4188E82B431A6200363C9E /* DisplayPostPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E72B431A6200363C9E /* DisplayPostPage.swift */; };
-		2F4188EA2B431EB000363C9E /* BlogComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E92B431EB000363C9E /* BlogComment.swift */; };
+		2F4188EA2B431EB000363C9E /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E92B431EB000363C9E /* PostComment.swift */; };
 		2F4188EC2B43206500363C9E /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188EB2B43206500363C9E /* PostManager.swift */; };
 		2F4188EE2B436E1400363C9E /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188ED2B436E1400363C9E /* UserProfileView.swift */; };
 		2F4188F02B43A6AD00363C9E /* FollowerCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188EF2B43A6AD00363C9E /* FollowerCountView.swift */; };
@@ -24,7 +24,7 @@
 		2F53CC7F2B41A33A00802403 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC7E2B41A33A00802403 /* String.swift */; };
 		2F53CC812B41B72700802403 /* AccountManagementPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC802B41B72700802403 /* AccountManagementPage.swift */; };
 		2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC822B41B90700802403 /* UserAccountManager.swift */; };
-		2F53CC852B41DC3300802403 /* BlogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC842B41DC3300802403 /* BlogPost.swift */; };
+		2F53CC852B41DC3300802403 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC842B41DC3300802403 /* Post.swift */; };
 		2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */; };
 		2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D15EA2B42596100D72DEB /* SettingsPage.swift */; };
 		2FE2E1872B4632CF00913A81 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE2E1862B4632CF00913A81 /* LoremSwiftum */; };
@@ -37,7 +37,7 @@
 		2F187C782B3A52390043656F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F187C7B2B3A52390043656F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2F4188E72B431A6200363C9E /* DisplayPostPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPostPage.swift; sourceTree = "<group>"; };
-		2F4188E92B431EB000363C9E /* BlogComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogComment.swift; sourceTree = "<group>"; };
+		2F4188E92B431EB000363C9E /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
 		2F4188EB2B43206500363C9E /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		2F4188ED2B436E1400363C9E /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		2F4188EF2B43A6AD00363C9E /* FollowerCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerCountView.swift; sourceTree = "<group>"; };
@@ -49,7 +49,7 @@
 		2F53CC7E2B41A33A00802403 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		2F53CC802B41B72700802403 /* AccountManagementPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManagementPage.swift; sourceTree = "<group>"; };
 		2F53CC822B41B90700802403 /* UserAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccountManager.swift; sourceTree = "<group>"; };
-		2F53CC842B41DC3300802403 /* BlogPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogPost.swift; sourceTree = "<group>"; };
+		2F53CC842B41DC3300802403 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBlogPostPage.swift; sourceTree = "<group>"; };
 		2F6D15EA2B42596100D72DEB /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,8 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				2F53CC752B41175D00802403 /* UserAccount.swift */,
-				2F4188E92B431EB000363C9E /* BlogComment.swift */,
-				2F53CC842B41DC3300802403 /* BlogPost.swift */,
+				2F4188E92B431EB000363C9E /* PostComment.swift */,
+				2F53CC842B41DC3300802403 /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -229,7 +229,7 @@
 				2F53CC7C2B41A04E00802403 /* LoginAccountPage.swift in Sources */,
 				2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */,
 				2F4188EC2B43206500363C9E /* PostManager.swift in Sources */,
-				2F4188EA2B431EB000363C9E /* BlogComment.swift in Sources */,
+				2F4188EA2B431EB000363C9E /* PostComment.swift in Sources */,
 				2F4188F02B43A6AD00363C9E /* FollowerCountView.swift in Sources */,
 				2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */,
 				2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */,
@@ -237,7 +237,7 @@
 				2F53CC762B41175D00802403 /* UserAccount.swift in Sources */,
 				2F187C752B3A52360043656F /* ContentView.swift in Sources */,
 				2F4188F22B450B6500363C9E /* UserProfileAsAdminView.swift in Sources */,
-				2F53CC852B41DC3300802403 /* BlogPost.swift in Sources */,
+				2F53CC852B41DC3300802403 /* Post.swift in Sources */,
 				2F4188EE2B436E1400363C9E /* UserProfileView.swift in Sources */,
 				2F53CC7F2B41A33A00802403 /* String.swift in Sources */,
 				2F53CC812B41B72700802403 /* AccountManagementPage.swift in Sources */,

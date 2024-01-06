@@ -73,7 +73,7 @@ struct CreateBlogPostPage: View {
             return
         }
         
-        let newPost = BlogPost(body: trimmedBody, postedBy: accountManager.loggedInUser!)
+        let newPost = Post(body: trimmedBody, postedBy: accountManager.loggedInUser!)
         modelContext.insert(newPost)
         
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()

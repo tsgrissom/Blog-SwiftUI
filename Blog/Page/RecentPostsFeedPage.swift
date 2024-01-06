@@ -7,9 +7,9 @@ struct RecentPostsFeedPage: View {
     private var accountManager: UserAccountManager
     
     @Query
-    private var posts: [BlogPost]
+    private var posts: [Post]
     @Query
-    private var comments: [BlogComment]
+    private var comments: [PostComment]
     
     @State
     private var displaySheetCreatePost = false
@@ -54,7 +54,7 @@ struct RecentPostsFeedPage: View {
         .padding([.top, .horizontal])
     }
     
-    private func getPostAsListRow(_ post: BlogPost) -> some View {
+    private func getPostAsListRow(_ post: Post) -> some View {
         let createdDate = Date(timeIntervalSince1970: post.createdAt)
         let formatter = DateFormatter()
         formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
