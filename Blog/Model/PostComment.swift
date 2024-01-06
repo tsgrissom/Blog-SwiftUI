@@ -26,4 +26,10 @@ final class PostComment: Identifiable {
         self.parentComment = parentComment
         self.createdAt = Date().timeIntervalSince1970
     }
+    
+    public func getChildComments(allComments: [PostComment]) -> [PostComment] {
+        return allComments.filter { that in
+            that.parentComment?.id == self.id
+        }
+    }
 }

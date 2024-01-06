@@ -130,12 +130,12 @@ struct UserProfileAsAdminView: View {
     }
     
     private var textCommentsCount: some View {
-        let associatedComments = user.getAssociatedComments(allComments: comments)
+        let associatedComments = user.getAllComments(allComments: comments)
         return Text("Comments made: \(associatedComments.count)")
     }
     
     private var textPostsCount: some View {
-        let associatedPosts = user.getAssociatedPosts(allPosts: posts)
+        let associatedPosts = user.getAllPosts(allPosts: posts)
         return Text("Posts made: \(associatedPosts.count)")
     }
     

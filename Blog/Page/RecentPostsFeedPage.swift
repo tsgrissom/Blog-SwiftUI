@@ -60,7 +60,7 @@ struct RecentPostsFeedPage: View {
         formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
         let createdFmt = formatter.string(from: createdDate)
         
-        let commentsCount = post.getChildComments(allComments: comments).count
+        let commentsCount = post.getAttachedComments(allComments: comments).count
         let countStr = if commentsCount == 1 {
             "\(commentsCount) reply"
         } else {

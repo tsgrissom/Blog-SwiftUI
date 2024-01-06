@@ -20,7 +20,7 @@ final class Post: Identifiable {
         self.createdAt = Date().timeIntervalSince1970 
     }
     
-    public func getChildComments(allComments: [PostComment]) -> [PostComment] {
+    public func getAttachedComments(allComments: [PostComment]) -> [PostComment] {
         return allComments.filter { comment in
             comment.attachedTo.id == self.id
         }
