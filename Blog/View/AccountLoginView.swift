@@ -2,18 +2,16 @@ import CryptoKit
 import SwiftUI
 import SwiftData
 
-struct CreateAccountPage: View {
+struct AccountLoginView: View {
     
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
     private var modelContext
-    
     @EnvironmentObject
     private var accountManager: UserAccountManager
-    
     @Query
-    private let users: [UserAccount]
+    private var userAccounts: [UserAccount]
     
     @State
     private var alertBoxVisible = false
@@ -21,8 +19,6 @@ struct CreateAccountPage: View {
     private var alertBoxDisplayUsernameText = false
     @State
     private var alertBoxDisplayPasswordText = false
-    @State
-    private var alertBoxDisplayConfirmPasswordText = false
     @State
     private var alertBoxBgColor = Color.red
     @State
@@ -32,14 +28,15 @@ struct CreateAccountPage: View {
     private var fieldUsernameContents = ""
     @State
     private var fieldPasswordContents = ""
-    @State
-    private var fieldConfirmPasswordContents = ""
     
     private var isFormPreparedForSubmission: Bool {
-        fieldUsernameContents.trimmed.isNotEmpty && fieldPasswordContents.trimmed.isNotEmpty && fieldConfirmPasswordContents.trimmed.isNotEmpty
+        fieldUsernameContents.trimmed.isNotEmpty && fieldPasswordContents.trimmed.isNotEmpty
     }
     
-    private func flashAlert(text: String, bgColor: Color = .red) {
+    private func flashAlert(
+        text: String,
+        bgColor: Color = .red
+    ) {
         alertBoxBgColor = bgColor
         alertBoxText = text
         withAnimation {
@@ -50,7 +47,6 @@ struct CreateAccountPage: View {
     private func onPressSubmit() {
         alertBoxDisplayUsernameText = fieldUsernameContents.trimmed.isEmpty
         alertBoxDisplayPasswordText = fieldPasswordContents.trimmed.isEmpty
-        alertBoxDisplayConfirmPasswordText = fieldConfirmPasswordContents.trimmed.isEmpty
         
         if !isFormPreparedForSubmission {
             if !alertBoxVisible {
@@ -59,6 +55,9 @@ struct CreateAccountPage: View {
             
             return
         }
+        
+        print("Submit login success")
+        // TODO
         
         if fieldUsernameContents.contains(" ") {
             flashAlert(text: "Your username cannot contain spaces")
@@ -70,36 +69,27 @@ struct CreateAccountPage: View {
             return
         }
         
-        let fetchAccount = users.first(where: { acc in
+        let account = userAccounts.first { acc in
             acc.username == fieldUsernameContents
-        })
+        }
         
-        if fetchAccount != nil {
-            flashAlert(text: "User \"\(fieldUsernameContents)\" already exists")
+        if account == nil {
+            flashAlert(text: "User \"\(fieldUsernameContents)\" does not exist")
             return
         }
         
-        if fieldPasswordContents != fieldConfirmPasswordContents {
-            flashAlert(text: "Your passwords do not match")
-            return
-        }
-        
+        let passwordToMatch = account?.password
         let data = Data(fieldPasswordContents.utf8)
         let sha256 = SHA256.hash(data: data)
         let hashString = sha256.compactMap { String(format: "%02x", $0) }.joined()
         
-        let permissionLevel = users.count<=0 ? 4 : 0 // If this is the first user registered, ->Superuser
-        let newUser = UserAccount(
-            username: fieldUsernameContents,
-            password: hashString,
-            permissionLevel: permissionLevel
-        )
-        modelContext.insert(newUser)
-        try? modelContext.save()
+        if hashString != passwordToMatch {
+            flashAlert(text: "Invalid username/password combination")
+            return
+        }
         
-        accountManager.setUserForSession(newUser)
-        
-        flashAlert(text: "Registered account for user \"\(fieldUsernameContents)\"", bgColor: .green)
+        accountManager.setUserForSession(account!)
+        flashAlert(text: "Logged in as \"\(fieldUsernameContents)\"", bgColor: .green)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             dismiss()
@@ -107,20 +97,18 @@ struct CreateAccountPage: View {
     }
     
     private var fieldUsername: some View {
-        TextField(text: $fieldUsernameContents, prompt: Text("Username")) {
-            Text("Enter your username")
+        let prompt = Text("Username")
+        let label  = Text("Enter your username")
+        return TextField(text: $fieldUsernameContents, prompt: prompt) {
+            label
         }
     }
     
     private var fieldPassword: some View {
-        SecureField(text: $fieldPasswordContents, prompt: Text("Password")) {
-            Text("Enter your password")
-        }
-    }
-    
-    private var fieldConfirmPassword: some View {
-        SecureField(text: $fieldConfirmPasswordContents, prompt: Text("Re-enter password")) {
-            Text("Re-enter your password")
+        let prompt = Text("Password")
+        let label  = Text("Enter your password")
+        return SecureField(text: $fieldPasswordContents, prompt: prompt) {
+            label
         }
     }
     
@@ -130,7 +118,6 @@ struct CreateAccountPage: View {
                 VStack {
                     fieldUsername
                     fieldPassword
-                    fieldConfirmPassword
                     
                     rowFormControls
                     
@@ -149,21 +136,20 @@ struct CreateAccountPage: View {
                 .padding()
             }
             .textFieldStyle(.roundedBorder)
-            .navigationTitle("Register Account")
+            .navigationTitle("Log In")
         }
     }
     
     private var rowFormControls: some View {
-        let tintColor = isFormPreparedForSubmission ? Color.green : Color.gray
-        return HStack {
+        HStack {
             Button("Submit") {
                 onPressSubmit()
             }
             .buttonStyle(.bordered)
-            .tint(tintColor)
+            .tint(isFormPreparedForSubmission ? .green : .gray)
             
-            NavigationLink(destination: LoginAccountPage()) {
-                Text("Already have an account?")
+            NavigationLink(destination: AccountRegistrationView()) {
+                Text("Create account")
             }
             
             Spacer()
@@ -184,9 +170,6 @@ struct CreateAccountPage: View {
                     if alertBoxDisplayPasswordText {
                         Text("• Fill in the password field")
                     }
-                    if alertBoxDisplayConfirmPasswordText {
-                        Text("• Fill in the password confirmation field")
-                    }
                 }
                 Spacer()
             }
@@ -197,6 +180,6 @@ struct CreateAccountPage: View {
 }
 
 #Preview {
-    CreateAccountPage()
+    AccountLoginView()
         .environmentObject(UserAccountManager())
 }

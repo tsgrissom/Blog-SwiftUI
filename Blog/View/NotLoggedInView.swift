@@ -39,7 +39,7 @@ struct NotLoggedInView: View {
             Text("Register")
         }
         .sheet(isPresented: $isPresentingRegisterSheet) {
-            CreateAccountPage()
+            AccountRegistrationView()
         }
     }
     
@@ -55,7 +55,7 @@ struct NotLoggedInView: View {
             Text("Log In")
         }
         .sheet(isPresented: $isPresentingLoginSheet) {
-            LoginAccountPage()
+            AccountLoginView()
         }
     }
     
