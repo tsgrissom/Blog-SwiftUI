@@ -121,11 +121,11 @@
 			children = (
 				2F53CC802B41B72700802403 /* AccountManagementPage.swift */,
 				2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */,
+				2F4188E72B431A6200363C9E /* DisplayPostPage.swift */,
 				2F53CC792B411BA900802403 /* RecentPostsFeedPage.swift */,
 				2F53CC7B2B41A04E00802403 /* LoginAccountPage.swift */,
 				2F53CC772B4118AE00802403 /* CreateAccountPage.swift */,
 				2F6D15EA2B42596100D72DEB /* SettingsPage.swift */,
-				2F4188E72B431A6200363C9E /* DisplayPostPage.swift */,
 			);
 			path = Page;
 			sourceTree = "<group>";

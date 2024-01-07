@@ -6,10 +6,10 @@ final class PostComment: Identifiable {
 
     var id:   String
     var body: String
-    var postedBy: UserAccount
+    var postedBy: String // UUID of a UserAccount
     
-    var attachedTo: Post
-    var parentComment: PostComment?
+    var attachedTo: String // UUID of a Post
+    var parentComment: String? // UUID of another PostComment
     
     var createdAt: Double
     
@@ -21,15 +21,15 @@ final class PostComment: Identifiable {
     ) {
         self.id = UUID().uuidString
         self.body = body
-        self.postedBy = postedBy
-        self.attachedTo = attachedTo
-        self.parentComment = parentComment
+        self.postedBy = postedBy.id
+        self.attachedTo = attachedTo.id
+        self.parentComment = parentComment?.id
         self.createdAt = Date().timeIntervalSince1970
     }
     
     public func getChildComments(allComments: [PostComment]) -> [PostComment] {
         return allComments.filter { that in
-            that.parentComment?.id == self.id
+            that.parentComment == self.id
         }
     }
 }

@@ -7,13 +7,13 @@ final class PostManager: ObservableObject {
     
     public func getPostsForUser(_ user: UserAccount, allPosts: [Post]) -> [Post] {
         return allPosts.filter { post in
-            post.postedBy.id == user.id
+            post.postedBy == user.id
         }
     }
     
     public func getCommentsInResponseToPost(_ post: Post, allComments: [PostComment]) -> [PostComment] {
         return allComments.filter { comment in
-            comment.attachedTo.id == post.id
+            comment.attachedTo == post.id
         }
     }
 }

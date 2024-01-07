@@ -10,6 +10,8 @@ struct RecentPostsFeedPage: View {
     private var posts: [Post]
     @Query
     private var comments: [PostComment]
+    @Query
+    private var users: [UserAccount]
     
     @State
     private var displaySheetCreatePost = false
@@ -20,38 +22,60 @@ struct RecentPostsFeedPage: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
+            VStack {
+                if posts.isEmpty {
+                    Text("There are no recent posts")
+                        .padding(.top)
+                }
+                
                 if accountManager.loggedInUser == nil {
-                    navLinkToAccountManagement
+                    NavigationLink(destination: LoginAccountPage()) {
+                        Text("Log In")
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    
+                    NavigationLink(destination: CreateAccountPage()) {
+                        Text("Create Account")
+                    }
+                    .padding(.horizontal)
                 } else {
                     if posts.count > 0 {
                         Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
+                            .font(.headline)
                             .padding(.horizontal)
                     }
+                    
                     Button(action: onPressCreateButton) {
                         Image(systemName: "plus")
+                            .imageScale(.large)
                         Text("New Post")
+                            .font(.title3)
+                            .frame(height: 25)
                     }
-                    .padding(.horizontal)
-                    .padding(.vertical, 3)
+                    .buttonStyle(.bordered)
                     .tint(.blue)
+                    .padding(.horizontal)
+                    .padding(.top, 5)
+                    .padding(.bottom, 8)
                 }
                 
-                sectionRecentPosts
+                if !posts.isEmpty {
+                    List {
+                        ForEach(posts) { post in
+                            getPostAsListRow(post)
+                        }
+                    }
+                }
+                
+                Spacer()
             }
+            .padding(.top)
             .navigationTitle("Feed")
         }
         .sheet(isPresented: $displaySheetCreatePost, content: {
             CreateBlogPostPage()
         })
-    }
-    
-    private var navLinkToAccountManagement: some View {
-        NavigationLink(destination: AccountManagementPage()) {
-            Text("You are not logged in")
-        }
-        .tint(.red)
-        .padding([.top, .horizontal])
     }
     
     private func getPostAsListRow(_ post: Post) -> some View {
@@ -67,10 +91,15 @@ struct RecentPostsFeedPage: View {
             "\(commentsCount) replies"
         }
         
+        let user: UserAccount? = users.first { that in
+            that.id == post.postedBy
+        }
+        let username = user?.username ?? "Unknown"
+        
         return VStack(alignment: .leading) {
             HStack(spacing: 3) {
                 NavigationLink(destination: DisplayPostPage(post)) {
-                    Text("@\(post.postedBy.username)")
+                    Text("@\(username)")
                         .foregroundStyle(.blue)
                 }
             }
@@ -84,20 +113,6 @@ struct RecentPostsFeedPage: View {
             if commentsCount > 0 {
                 Text(countStr)
                     .font(.caption)
-            }
-        }
-    }
-    
-    private var sectionRecentPosts: some View {
-        VStack {
-            if posts.isEmpty {
-                Text("There are no recent posts")
-            } else {
-                List {
-                    ForEach(posts) { post in
-                        getPostAsListRow(post)
-                    }
-                }
             }
         }
     }

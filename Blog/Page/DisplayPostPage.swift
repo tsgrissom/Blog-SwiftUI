@@ -14,7 +14,11 @@ struct DisplayPostPage: View {
     private var modelContext
     
     @Query
+    private var posts: [Post]
+    @Query
     private var comments: [PostComment]
+    @Query
+    private var users: [UserAccount]
     
     private let post: Post
     
@@ -35,7 +39,7 @@ struct DisplayPostPage: View {
     }
     
     private var isSelfOwned: Bool {
-        accountManager.loggedInUser?.id == post.postedBy.id
+        accountManager.loggedInUser?.id == post.postedBy
     }
     
     private func onPressReplyButton() {
@@ -71,7 +75,12 @@ struct DisplayPostPage: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
+        let user = users.first { that in
+            that.id == post.postedBy
+        }
+        let username = user?.username ?? "Unknown"
+        
+        return VStack(spacing: 0) {
             sectionPostBody
                 .padding(.top, 8)
                 .padding(.horizontal)
@@ -89,11 +98,10 @@ struct DisplayPostPage: View {
             
             Spacer()
         }
-        .navigationTitle("Post by @\(post.postedBy.username)")
+        .navigationTitle("Post by @\(username)")
     }
     
     private var rowPostedBy: some View {
-        let username = post.postedBy.username
         let formatter = DateFormatter()
         let createdDate = Date(timeIntervalSince1970: post.createdAt)
 //      formatter.dateFormat = "MMMM dd'th', yyyy 'at' h:mm a"  // Old
@@ -101,16 +109,26 @@ struct DisplayPostPage: View {
 //      formatter.dateFormat = "yyyy'-'MM'-'dd 'at' h:mm a" // International
         let createdFmt = formatter.string(from: createdDate)
         
+        let user = users.first { that in
+            that.id == post.postedBy
+        }
+        
         return HStack(spacing: 3) {
-            NavigationLink(destination: UserProfileView(user: post.postedBy)) {
-                HStack(spacing: 3) {
-                    Circle()
-                        .fill(.blue.gradient)
-                        .frame(width: 20, height: 20)
-                    Text("@\(username)")
-                        .foregroundStyle(.blue)
+            if user != nil {
+                NavigationLink(destination: UserProfileView(user: user!)) {
+                    HStack(spacing: 3) {
+                        Circle()
+                            .fill(.blue.gradient)
+                            .frame(width: 20, height: 20)
+                        Text("@\(user!.username)")
+                            .foregroundStyle(.blue)
+                    }
                 }
+            } else {
+                Text("@Unknown")
+                    .foregroundStyle(.blue)
             }
+            
             Text("at \(createdFmt)")
             Spacer()
         }
@@ -140,7 +158,13 @@ struct DisplayPostPage: View {
     }
     
     private var buttonDelete: some View {
-        return Button(action: {}) {
+        func onPress() {
+            modelContext.delete(post)
+            try? modelContext.save()
+            dismiss()
+        }
+        
+        return Button(action: onPress) {
             Text("Delete")
         }
         .tint(.red)
@@ -197,8 +221,13 @@ struct DisplayPostPage: View {
     }
     
     private var sectionNewReply: some View {
-        HStack {
-            TextField(text: $fieldReplyContents, prompt: Text("Your reply to \(post.postedBy.username)")) {
+        let user = users.first {
+            $0.id == post.postedBy
+        }
+        let username = user?.username ?? "Unknown"
+        
+        return HStack {
+            TextField(text: $fieldReplyContents, prompt: Text("Your reply to \(username)")) {
                 Text("Enter your new reply")
             }
             .textFieldStyle(.roundedBorder)
@@ -214,10 +243,15 @@ struct DisplayPostPage: View {
         formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
         let createdFmt = formatter.string(from: createdDate)
         
+        let user = users.first {
+            $0.id == post.postedBy
+        }
+        let username = user?.username ?? "Unknown"
+        
         return HStack {
             VStack(alignment: .leading) {
                 HStack(spacing: 3) {
-                    Text("@\(comment.postedBy.username)")
+                    Text("@\(username)")
                         .foregroundStyle(.blue)
                     Text("at \(createdFmt)")
                     Spacer()

@@ -41,13 +41,13 @@ final class UserAccount: Identifiable {
     
     public func getAllPosts(allPosts: [Post]) -> [Post] {
         return allPosts.filter { post in
-            post.postedBy.id == self.id
+            post.postedBy == self.id
         }
     }
     
     public func getAllComments(allComments: [PostComment]) -> [PostComment] {
         return allComments.filter { comment in
-            comment.postedBy.id == self.id
+            comment.postedBy == self.id
         }
     }
     
