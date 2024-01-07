@@ -115,7 +115,7 @@ struct DisplayPostPage: View {
         
         return HStack(spacing: 3) {
             if user != nil {
-                NavigationLink(destination: UserProfileView(user: user!)) {
+                NavigationLink(destination: DisplayUserProfilePage(user: user!)) {
                     HStack(spacing: 3) {
                         Circle()
                             .fill(.blue.gradient)
@@ -237,33 +237,6 @@ struct DisplayPostPage: View {
         }
     }
     
-    private func getViewForComment(_ comment: PostComment) -> some View {
-        let formatter = DateFormatter()
-        let createdDate = Date(timeIntervalSince1970: comment.createdAt)
-        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
-        let createdFmt = formatter.string(from: createdDate)
-        
-        let user = users.first {
-            $0.id == post.postedBy
-        }
-        let username = user?.username ?? "Unknown"
-        
-        return HStack {
-            VStack(alignment: .leading) {
-                HStack(spacing: 3) {
-                    Text("@\(username)")
-                        .foregroundStyle(.blue)
-                    Text("at \(createdFmt)")
-                    Spacer()
-                }
-                .font(.caption)
-                
-                Text("\"\(comment.body)\"")
-            }
-            Spacer()
-        }
-    }
-    
     private var sectionDisplayReplies: some View {
         let comments   = getCommentsInResponse
         let replyCount = comments.count
@@ -275,7 +248,7 @@ struct DisplayPostPage: View {
                 .padding(.horizontal)
             List {
                 ForEach(comments) { comment in
-                    getViewForComment(comment)
+                    DisplayCommentView(comment)
                 }
             }
             .listStyle(.plain)

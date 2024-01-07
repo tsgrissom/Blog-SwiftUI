@@ -1,6 +1,7 @@
+import LoremSwiftum
 import SwiftUI
 
-struct UserProfileView: View {
+struct DisplayUserProfilePage: View {
     
     @EnvironmentObject
     private var accountManager: UserAccountManager
@@ -22,7 +23,7 @@ struct UserProfileView: View {
         
     }
     
-    var body: some View {
+    public var body: some View {
         GeometryReader { metrics in
             ZStack {
                 ZStack {
@@ -36,6 +37,7 @@ struct UserProfileView: View {
                         layerCardBackground
                         layerCardForeground
                             .padding(.horizontal)
+                            .padding(.top)
                     }
                 }
             }
@@ -59,30 +61,12 @@ struct UserProfileView: View {
     
     private var layerCardForeground: some View {
         VStack {
-            sectionHeader
-                .padding(.top)
-            Spacer()
-        }
-    }
-    
-    private var sectionHeader: some View {
-        VStack(alignment: .leading, spacing: 0) {
-
-            HStack {
-                Text(user.displayName)
-                    .font(.title)
-                    .bold()
-                Text("@\(user.username)")
-                    .font(.title2)
-            }
-            
-            HStack {
-                userBiography
-                Spacer()
-            }
-            
+            UserProfileHeaderView(user)
             sectionControls
                 .padding(.top)
+                .padding(.horizontal)
+            
+            Spacer()
         }
     }
     
@@ -106,33 +90,22 @@ struct UserProfileView: View {
         }
         .buttonStyle(.bordered)
     }
-    
-    @ViewBuilder
-    private var userBiography: some View {
-        let biography = user.biography
-        
-        if biography.isEmpty {
-            Text("This user has not set a biography.")
-                .italic()
-        } else {
-            Text(biography)
-        }
-    }
-}
-
-private var mockUser: UserAccount {
-    let user = UserAccount(
-        username: "Tyler",
-        password: "Password",
-        biography: "Lorem ipsum dolor. This is a dummy profile page of which you are reading the bio."
-    )
-    user.displayName = "A Display Name"
-    return user
 }
 
 #Preview {
-    NavigationStack {
-        UserProfileView(user: mockUser)
+    let firstName = LoremSwiftum.Lorem.firstName
+    let lastName  = LoremSwiftum.Lorem.lastName
+    let biography = LoremSwiftum.Lorem.shortTweet
+    let mockUser = UserAccount(
+        username: firstName,
+        password: "Password",
+        biography: biography
+    )
+    
+    mockUser.displayName = "\(firstName)\(lastName)"
+    
+    return NavigationStack {
+        DisplayUserProfilePage(user: mockUser)
     }
     .environmentObject(UserAccountManager())
 }

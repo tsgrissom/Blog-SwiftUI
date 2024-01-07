@@ -180,27 +180,7 @@ struct CreateBlogPostPage: View {
     }
 }
 
-private struct NotLoggedInView: View {
-    public var body: some View {
-        VStack {
-            Text("You must be logged in to create a new post.")
-                .padding(.vertical)
-            NavigationLink(destination: CreateAccountPage()) {
-                Text("Create new account")
-            }
-            NavigationLink(destination: LoginAccountPage()) {
-                Text("Log in to existing account")
-            }
-            Spacer()
-        }
-    }
-}
-
 #Preview("CreateBlogPostPage") {
     CreateBlogPostPage()
         .environmentObject(UserAccountManager())
-}
-
-#Preview("NotLoggedInView") {
-    NotLoggedInView()
 }

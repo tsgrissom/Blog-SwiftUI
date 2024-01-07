@@ -20,25 +20,11 @@ struct RecentPostsFeedPage: View {
         displaySheetCreatePost = true
     }
     
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             VStack {
-                if posts.isEmpty {
-                    Text("There are no recent posts")
-                        .padding(.top)
-                }
-                
                 if accountManager.loggedInUser == nil {
-                    NavigationLink(destination: LoginAccountPage()) {
-                        Text("Log In")
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 8)
-                    
-                    NavigationLink(destination: CreateAccountPage()) {
-                        Text("Create Account")
-                    }
-                    .padding(.horizontal)
+                    NotLoggedInView()
                 } else {
                     if posts.count > 0 {
                         Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
@@ -46,21 +32,16 @@ struct RecentPostsFeedPage: View {
                             .padding(.horizontal)
                     }
                     
-                    Button(action: onPressCreateButton) {
-                        Image(systemName: "plus")
-                            .imageScale(.large)
-                        Text("New Post")
-                            .font(.title3)
-                            .frame(height: 25)
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.blue)
+                    buttonCreate
                     .padding(.horizontal)
                     .padding(.top, 5)
                     .padding(.bottom, 8)
                 }
                 
-                if !posts.isEmpty {
+                if posts.isEmpty {
+                    Text("There are no recent posts")
+                        .padding(.top, 10)
+                } else {
                     List {
                         ForEach(posts) { post in
                             getPostAsListRow(post)
@@ -76,6 +57,18 @@ struct RecentPostsFeedPage: View {
         .sheet(isPresented: $displaySheetCreatePost, content: {
             CreateBlogPostPage()
         })
+    }
+    
+    private var buttonCreate: some View {
+        Button(action: onPressCreateButton) {
+            Image(systemName: "plus")
+                .imageScale(.large)
+            Text("New Post")
+                .font(.title3)
+                .frame(height: 25)
+        }
+        .buttonStyle(.bordered)
+        .tint(.blue)
     }
     
     private func getPostAsListRow(_ post: Post) -> some View {

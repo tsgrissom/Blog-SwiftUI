@@ -10,12 +10,12 @@ struct ContentView: View {
     private var modelContext
     
     @Query
-    private var userAccounts: [UserAccount]
+    private var users: [UserAccount]
 
     private func handleAutomaticLogin() {
         let savedUser = UserDefaults.standard.string(forKey: "LoggedInUser") ?? "None"
         if savedUser != "None" {
-            let fetchUser = userAccounts.first(where: { acc in
+            let fetchUser = users.first(where: { acc in
                 acc.username == savedUser
             })
             
