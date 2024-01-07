@@ -51,46 +51,19 @@ final class UserAccount: Identifiable {
         }
     }
     
-    public func getRankTitle() -> String {
-        return switch self.permissionLevel {
-            case 1:  "Subscriber"
-            case 2:  "Moderator"
-            case 3:  "Operator"
-            case 4:  "Superuser"
-            default: "Default"
-        }
+    public func getPermissionLevel() -> PermissionLevel {
+        return PermissionLevel.valueOf(self.permissionLevel)
     }
     
-    public func isRankSuperiorTo(_ user: UserAccount?) -> Bool {
-        let thisLevel = self.permissionLevel
-        let thatLevel = user==nil ? 0 : user!.permissionLevel
+    public func isRankedSuperiorTo(_ user: UserAccount?) -> Bool {
+        let thisLevel = self.getPermissionLevel()
+        let thatPermissionLevel = user==nil ? 0 : user!.permissionLevel
+        let thatLevel = PermissionLevel.valueOf(thatPermissionLevel)
         
-        if thisLevel == 4 {
-            return true
-        } else if thisLevel == 3 && thatLevel < 4 {
-            return false
-        }
-        
-        return thisLevel > thatLevel
+        return thisLevel.isSuperiorTo(thatLevel)
     }
     
-    public func isRankInferiorTo(_ user: UserAccount?) -> Bool {
-        return !self.isRankSuperiorTo(user)
-    }
-    
-    public func isPublicUser() -> Bool {
-        return self.permissionLevel <= 1
-    }
-    
-    public func isModerator() -> Bool {
-        return self.permissionLevel >= 2
-    }
-    
-    public func isOperator() -> Bool {
-        return self.permissionLevel >= 3
-    }
-    
-    public func isSuperUser() -> Bool {
-        return self.permissionLevel == 4
+    public func isRankedInferiorTo(_ user: UserAccount?) -> Bool {
+        return !self.isRankedSuperiorTo(user)
     }
 }

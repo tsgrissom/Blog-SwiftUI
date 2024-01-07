@@ -103,7 +103,7 @@ struct UserProfileAsAdminView: View {
     
     private var textPermissionLevel: some View {
         let level = user.permissionLevel
-        let title = user.getRankTitle()
+        let title = user.getPermissionLevel().getRank()
         let selfId = accountManager.loggedInUser?.id
         let shouldPresent = level != 4 && user.id != selfId
         
@@ -118,13 +118,13 @@ struct UserProfileAsAdminView: View {
     }
     
     private var textInferiorRank: some View {
-        let bool = user.isRankInferiorTo(accountManager.loggedInUser)
+        let bool = user.isRankedInferiorTo(accountManager.loggedInUser)
         let binaryWord = bool ? "Yes" : "No"
         return Text("Inferior Rank: \(binaryWord)")
     }
     
     private var textSuperiorRank: some View {
-        let bool = user.isRankSuperiorTo(accountManager.loggedInUser)
+        let bool = user.isRankedSuperiorTo(accountManager.loggedInUser)
         let binaryWord = bool ? "Yes" : "No"
         return Text("Superior Rank: \(binaryWord)")
     }
@@ -171,7 +171,7 @@ struct UserProfileAsAdminView: View {
         }
         
         func onConfirm() {
-            if user.isSuperUser() {
+            if user.getPermissionLevel().isSuperUser() {
                 return
             }
             
@@ -185,7 +185,7 @@ struct UserProfileAsAdminView: View {
             onPress()
         }
         .buttonStyle(.bordered)
-        .disabled(user.isSuperUser())
+        .disabled(user.getPermissionLevel().isSuperUser())
         .tint(.red)
         .confirmationDialog("Delete user \"\(user.username)\"? (Cannot be undone)", isPresented: $isConfirmDeletePresented, titleVisibility: .visible, actions: {
             Button("Confirm", role: .destructive, action: onConfirm)
@@ -205,7 +205,7 @@ struct UserProfileAsAdminView: View {
                 return
             }
             
-            if thisUser!.isRankInferiorTo(thatUser) { // If promoting user is inferior to promoted user, cannot promote
+            if thisUser!.isRankedInferiorTo(thatUser) { // If promoting user is inferior to promoted user, cannot promote
                 // TODO Feedback
                 flashAlert("You cannot promote a user of higher rank than you")
                 return
@@ -223,7 +223,7 @@ struct UserProfileAsAdminView: View {
         }
         
         func isDisabled() -> Bool {
-            user.isRankSuperiorTo(accountManager.loggedInUser) || // Cannot promote a superior user
+            user.isRankedSuperiorTo(accountManager.loggedInUser) || // Cannot promote a superior user
             user.permissionLevel == accountManager.loggedInUser?.permissionLevel || // Cannot promote an equal user
             user.permissionLevel >= 3 // Cannot promote past operator
         }
@@ -260,7 +260,7 @@ struct UserProfileAsAdminView: View {
                 return
             }
             
-            if thisUser!.isRankInferiorTo(thatUser) {
+            if thisUser!.isRankedInferiorTo(thatUser) {
                 flashAlert("\(thisUser!.username) is of lesser rank than \(thatUser.username)")
                 return
             }
@@ -277,7 +277,7 @@ struct UserProfileAsAdminView: View {
         }
         
         func isDisabled() -> Bool {
-            thatUser.isRankSuperiorTo(thisUser) || // Cannot demote a superior user
+            thatUser.isRankedSuperiorTo(thisUser) || // Cannot demote a superior user
             thatUser.permissionLevel == 0 || // Cannot demote lower than default
             thatUser.permissionLevel == 4    // Cannot demote a superuser
         }
@@ -292,7 +292,7 @@ struct UserProfileAsAdminView: View {
     
     @ViewBuilder
     private var buttonDisplaySecrets: some View {
-        let isSuperUser = accountManager.loggedInUser?.isSuperUser() ?? false
+        let isSuperUser = accountManager.loggedInUser?.getPermissionLevel().isSuperUser() ?? false
         
         if isSuperUser {
             Button("Display Secrets") {
