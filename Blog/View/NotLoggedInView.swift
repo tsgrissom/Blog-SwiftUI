@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct NotLoggedInView: View {
-    
+
     private let withText: Bool
     private let verticalNavLinks: Bool
     
@@ -9,6 +9,11 @@ struct NotLoggedInView: View {
         self.withText = withText
         self.verticalNavLinks = verticalNavLinks
     }
+    
+    @State
+    private var isPresentingRegisterSheet = false
+    @State
+    private var isPresentingLoginSheet = false
     
     public var body: some View {
         VStack {
@@ -22,14 +27,35 @@ struct NotLoggedInView: View {
     }
     
     private var navLinkRegister: some View {
-        NavigationLink(destination: CreateAccountPage()) {
+//        NavigationLink(destination: CreateAccountPage()) {
+//            Text("Register")
+//        }
+        
+        func onPress() {
+            isPresentingRegisterSheet.toggle()
+        }
+        
+        return Button(action: onPress) {
             Text("Register")
+        }
+        .sheet(isPresented: $isPresentingRegisterSheet) {
+            CreateAccountPage()
         }
     }
     
     private var navLinkLogin: some View {
-        NavigationLink(destination: LoginAccountPage()) {
+//        NavigationLink(destination: LoginAccountPage()) {
+//            Text("Log In")
+//        }
+        func onPress() {
+            isPresentingLoginSheet.toggle()
+        }
+        
+        return Button(action: onPress) {
             Text("Log In")
+        }
+        .sheet(isPresented: $isPresentingLoginSheet) {
+            LoginAccountPage()
         }
     }
     
