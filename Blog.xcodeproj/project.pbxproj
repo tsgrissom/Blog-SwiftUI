@@ -14,7 +14,7 @@
 		2F2B94042B4AEE0000031EEF /* PermissionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2B94032B4AEE0000031EEF /* PermissionLevel.swift */; };
 		2F2B94062B4AF9D700031EEF /* UserProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2B94052B4AF9D700031EEF /* UserProfileHeaderView.swift */; };
 		2F2B94082B4B00DF00031EEF /* NotLoggedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2B94072B4B00DF00031EEF /* NotLoggedInView.swift */; };
-		2F2B940A2B4B117400031EEF /* DisplayCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2B94092B4B117400031EEF /* DisplayCommentView.swift */; };
+		2F2B940A2B4B117400031EEF /* PostCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2B94092B4B117400031EEF /* PostCommentView.swift */; };
 		2F4188E82B431A6200363C9E /* DisplayPostPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E72B431A6200363C9E /* DisplayPostPage.swift */; };
 		2F4188EA2B431EB000363C9E /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188E92B431EB000363C9E /* PostComment.swift */; };
 		2F4188EC2B43206500363C9E /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4188EB2B43206500363C9E /* PostManager.swift */; };
@@ -31,6 +31,7 @@
 		2F53CC852B41DC3300802403 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC842B41DC3300802403 /* Post.swift */; };
 		2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */; };
 		2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D15EA2B42596100D72DEB /* SettingsPage.swift */; };
+		2F81035B2B4B23F700AF0D45 /* UserAtTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F81035A2B4B23F700AF0D45 /* UserAtTimeView.swift */; };
 		2FE2E1872B4632CF00913A81 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE2E1862B4632CF00913A81 /* LoremSwiftum */; };
 /* End PBXBuildFile section */
 
@@ -43,7 +44,7 @@
 		2F2B94032B4AEE0000031EEF /* PermissionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLevel.swift; sourceTree = "<group>"; };
 		2F2B94052B4AF9D700031EEF /* UserProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeaderView.swift; sourceTree = "<group>"; };
 		2F2B94072B4B00DF00031EEF /* NotLoggedInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotLoggedInView.swift; sourceTree = "<group>"; };
-		2F2B94092B4B117400031EEF /* DisplayCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayCommentView.swift; sourceTree = "<group>"; };
+		2F2B94092B4B117400031EEF /* PostCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentView.swift; sourceTree = "<group>"; };
 		2F4188E72B431A6200363C9E /* DisplayPostPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPostPage.swift; sourceTree = "<group>"; };
 		2F4188E92B431EB000363C9E /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
 		2F4188EB2B43206500363C9E /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 		2F53CC842B41DC3300802403 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		2F53CC862B41ECEA00802403 /* CreateBlogPostPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBlogPostPage.swift; sourceTree = "<group>"; };
 		2F6D15EA2B42596100D72DEB /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		2F81035A2B4B23F700AF0D45 /* UserAtTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAtTimeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,10 +155,11 @@
 		2F53CC742B41171F00802403 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				2F2B94092B4B117400031EEF /* DisplayCommentView.swift */,
+				2F2B94092B4B117400031EEF /* PostCommentView.swift */,
 				2F4188EF2B43A6AD00363C9E /* FollowerCountView.swift */,
 				2F2B94072B4B00DF00031EEF /* NotLoggedInView.swift */,
 				2F2B94052B4AF9D700031EEF /* UserProfileHeaderView.swift */,
+				2F81035A2B4B23F700AF0D45 /* UserAtTimeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -246,7 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F2B94082B4B00DF00031EEF /* NotLoggedInView.swift in Sources */,
-				2F2B940A2B4B117400031EEF /* DisplayCommentView.swift in Sources */,
+				2F2B940A2B4B117400031EEF /* PostCommentView.swift in Sources */,
 				2F53CC7A2B411BA900802403 /* RecentPostsFeedPage.swift in Sources */,
 				2F53CC7C2B41A04E00802403 /* LoginAccountPage.swift in Sources */,
 				2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */,
@@ -257,6 +260,7 @@
 				2F2B94042B4AEE0000031EEF /* PermissionLevel.swift in Sources */,
 				2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */,
 				2F53CC872B41ECEA00802403 /* CreateBlogPostPage.swift in Sources */,
+				2F81035B2B4B23F700AF0D45 /* UserAtTimeView.swift in Sources */,
 				2F4188E82B431A6200363C9E /* DisplayPostPage.swift in Sources */,
 				2F53CC762B41175D00802403 /* UserAccount.swift in Sources */,
 				2F187C752B3A52360043656F /* ContentView.swift in Sources */,

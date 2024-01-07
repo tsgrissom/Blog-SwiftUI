@@ -1,3 +1,4 @@
+import LoremSwiftum
 import SwiftUI
 import SwiftData
 
@@ -101,34 +102,29 @@ struct DisplayPostPage: View {
         .navigationTitle("Post by @\(username)")
     }
     
+    @ViewBuilder
     private var rowPostedBy: some View {
-        let formatter = DateFormatter()
         let createdDate = Date(timeIntervalSince1970: post.createdAt)
-//      formatter.dateFormat = "MMMM dd'th', yyyy 'at' h:mm a"  // Old
-        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"     // American
-//      formatter.dateFormat = "yyyy'-'MM'-'dd 'at' h:mm a" // International
-        let createdFmt = formatter.string(from: createdDate)
-        
-        let user = users.first { that in
-            that.id == post.postedBy
+        let user = users.first {
+            $0.id == post.postedBy
         }
         
+        if user != nil {
+            UserAtTimeView(user: user!, at: createdDate)
+        } else {
+            rowPostedByUnknown
+        }
+    }
+    
+    private var rowPostedByUnknown: some View {
+        let formatter = DateFormatter()
+        let createdDate = Date(timeIntervalSince1970: post.createdAt)
+        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"    // American
+        let createdFmt = formatter.string(from: createdDate)
+        
         return HStack(spacing: 3) {
-            if user != nil {
-                NavigationLink(destination: DisplayUserProfilePage(user: user!)) {
-                    HStack(spacing: 3) {
-                        Circle()
-                            .fill(.blue.gradient)
-                            .frame(width: 20, height: 20)
-                        Text("@\(user!.username)")
-                            .foregroundStyle(.blue)
-                    }
-                }
-            } else {
-                Text("@Unknown")
-                    .foregroundStyle(.blue)
-            }
-            
+            Text("@Unknown")
+                .foregroundStyle(.blue)
             Text("at \(createdFmt)")
             Spacer()
         }
@@ -248,7 +244,7 @@ struct DisplayPostPage: View {
                 .padding(.horizontal)
             List {
                 ForEach(comments) { comment in
-                    DisplayCommentView(comment)
+                    PostCommentView(comment)
                 }
             }
             .listStyle(.plain)
@@ -256,9 +252,13 @@ struct DisplayPostPage: View {
     }
 }
 
-//#Preview {
-//    let user = UserAccount(username: "Tyler", password: "Password")
-//    let mockPost = BlogPost(body: "Lorem ipsum dolor this is my fake blog post", postedBy: user)
-//    return DisplayPostPage(mockPost)
-//        .environmentObject(UserAccountManager())
-//}
+#Preview {
+    let firstName = LoremSwiftum.Lorem.firstName
+    let tweet     = LoremSwiftum.Lorem.tweet
+    let mockUser = UserAccount(username: firstName, password: "Password")
+    let mockPost = Post(body: tweet, postedBy: mockUser)
+    
+    return DisplayPostPage(mockPost)
+        .environmentObject(UserAccountManager())
+        .environmentObject(PostManager())
+}

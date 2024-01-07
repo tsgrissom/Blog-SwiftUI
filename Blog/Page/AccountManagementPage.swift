@@ -8,7 +8,7 @@ struct AccountManagementPage: View {
     public var body: some View {
         NavigationStack {
             if accountManager.isLoggedIn {
-                DisplayUserProfilePage(user: accountManager.loggedInUser!)
+                DisplayUserProfilePage(accountManager.loggedInUser!)
             } else {
                 NotLoggedInView()
                     .padding(.top)

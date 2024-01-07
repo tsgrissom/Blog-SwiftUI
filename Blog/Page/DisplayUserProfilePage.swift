@@ -11,7 +11,7 @@ struct DisplayUserProfilePage: View {
     
     private let user: UserAccount
     
-    init(user: UserAccount) {
+    init(_ user: UserAccount) {
         self.user = user
     }
     
@@ -105,7 +105,7 @@ struct DisplayUserProfilePage: View {
     mockUser.displayName = "\(firstName)\(lastName)"
     
     return NavigationStack {
-        DisplayUserProfilePage(user: mockUser)
+        DisplayUserProfilePage(mockUser)
     }
     .environmentObject(UserAccountManager())
 }
