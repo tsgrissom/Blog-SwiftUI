@@ -10,7 +10,7 @@ struct AccountManagementPage: View {
             if accountManager.isLoggedIn {
                 DisplayUserProfilePage(accountManager.loggedInUser!)
             } else {
-                NotLoggedInView()
+                NotLoggedInView(verticalNavLinks: true)
                     .padding(.top)
                     .navigationTitle("Your Profile")
             }

@@ -25,6 +25,7 @@ struct RecentPostsFeedPage: View {
             VStack {
                 if accountManager.loggedInUser == nil {
                     NotLoggedInView()
+                        .padding(.bottom, 5)
                 } else {
                     if posts.count > 0 {
                         Text("Welcome, \(accountManager.loggedInUsernameOrNone)")

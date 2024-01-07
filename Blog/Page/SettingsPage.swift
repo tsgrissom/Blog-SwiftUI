@@ -138,7 +138,7 @@ struct SettingsPage: View {
             if users.isEmpty {
                 Text("No registered users")
             } else if !accountManager.isLoggedIn {
-                Text("You are not logged in")
+                NotLoggedInView(verticalNavLinks: true)
             } else {
                 List {
                     // TODO User settings

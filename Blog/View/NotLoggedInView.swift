@@ -27,16 +27,19 @@ struct NotLoggedInView: View {
     }
     
     private var navLinkRegister: some View {
-//        NavigationLink(destination: CreateAccountPage()) {
-//            Text("Register")
-//        }
-        
         func onPress() {
             isPresentingRegisterSheet.toggle()
         }
         
+        let text = Text("Register")
+        
         return Button(action: onPress) {
-            Text("Register")
+            if verticalNavLinks {
+                text
+                    .frame(width: 75)
+            } else {
+                text
+            }
         }
         .sheet(isPresented: $isPresentingRegisterSheet) {
             AccountRegistrationView()
@@ -44,15 +47,19 @@ struct NotLoggedInView: View {
     }
     
     private var navLinkLogin: some View {
-//        NavigationLink(destination: LoginAccountPage()) {
-//            Text("Log In")
-//        }
         func onPress() {
             isPresentingLoginSheet.toggle()
         }
         
+        let text = Text("Log In")
+        
         return Button(action: onPress) {
-            Text("Log In")
+            if verticalNavLinks {
+                text
+                    .frame(width: 75)
+            } else {
+                text
+            }
         }
         .sheet(isPresented: $isPresentingLoginSheet) {
             AccountLoginView()
