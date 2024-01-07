@@ -55,7 +55,7 @@ struct RecentPostsFeedPage: View {
             .navigationTitle("Feed")
         }
         .sheet(isPresented: $displaySheetCreatePost, content: {
-            CreateBlogPostPage()
+            CreatePostView()
         })
     }
     

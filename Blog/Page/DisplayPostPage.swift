@@ -244,7 +244,7 @@ struct DisplayPostPage: View {
                 .padding(.horizontal)
             List {
                 ForEach(comments) { comment in
-                    PostCommentView(comment)
+                    CreateCommentView(comment)
                 }
             }
             .listStyle(.plain)

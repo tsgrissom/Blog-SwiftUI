@@ -2,7 +2,7 @@ import LoremSwiftum
 import SwiftUI
 import SwiftData
 
-struct PostCommentView: View {
+struct CreateCommentView: View {
     
     @Query
     private var comments: [PostComment]
@@ -69,7 +69,7 @@ struct PostCommentView: View {
         let mockPost = Post(body: tweet, postedBy: mockUser)
         let mockComment = PostComment(body: "String", postedBy: mockUser, attachedTo: mockPost)
         
-        return PostCommentView(mockComment)
+        return CreateCommentView(mockComment)
     }
     
     return VStack {

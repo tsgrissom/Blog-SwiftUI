@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct CreateBlogPostPage: View {
+struct CreatePostView: View {
     
     @Environment(\.dismiss)
     private var dismiss
@@ -181,6 +181,6 @@ struct CreateBlogPostPage: View {
 }
 
 #Preview("CreateBlogPostPage") {
-    CreateBlogPostPage()
+    CreatePostView()
         .environmentObject(UserAccountManager())
 }
