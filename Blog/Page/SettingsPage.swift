@@ -41,7 +41,7 @@ struct SettingsPage: View {
             onPress()
         }
         .foregroundStyle(.red)
-        .confirmationDialog("Erase \(count) replies? (Cannot be undone)", isPresented: $isPresentingConfirmResetComments) {
+        .confirmationDialog("Erase \(count) replies? (Cannot be undone)", isPresented: $isPresentingConfirmResetComments, titleVisibility: .visible) {
             Button("Confirm", role: .destructive, action: onConfirm)
             Button("Cancel", role: .cancel, action: {})
         }
@@ -65,7 +65,7 @@ struct SettingsPage: View {
             onPress()
         }
         .foregroundStyle(.red)
-        .confirmationDialog("Erase \(count) posts? (Cannot be undone)", isPresented: $isPresentingConfirmResetPosts) {
+        .confirmationDialog("Erase \(count) posts? (Cannot be undone)", isPresented: $isPresentingConfirmResetPosts, titleVisibility: .visible) {
             Button("Confirm", role: .destructive, action: onConfirm)
             Button("Cancel", role: .cancel, action: {})
         }
@@ -89,7 +89,7 @@ struct SettingsPage: View {
             onPress()
         }
         .foregroundStyle(.red)
-        .confirmationDialog("Erase \(count) users? (Cannot be undone)", isPresented: $isPresentingConfirmResetUsers) {
+        .confirmationDialog("Erase \(count) users? (Cannot be undone)", isPresented: $isPresentingConfirmResetUsers, titleVisibility: .visible) {
             Button("Confirm", role: .destructive, action: onConfirm)
             Button("Cancel", role: .cancel, action: {})
         }

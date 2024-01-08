@@ -27,20 +27,18 @@ struct RecentPostsFeedPage: View {
                     NotLoggedInView()
                         .padding(.bottom, 5)
                 } else {
-                    if posts.count > 0 {
-                        Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
-                            .font(.headline)
-                            .padding(.horizontal)
-                    }
-                    
+                    Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
+                        .padding(.horizontal)
+
                     buttonCreate
-                    .padding(.horizontal)
-                    .padding(.top, 5)
-                    .padding(.bottom, 8)
+                        .padding(.horizontal)
+                        .padding(.top, 5)
+                        .padding(.bottom, 8)
                 }
                 
                 if posts.isEmpty {
-                    Text("There are no recent posts")
+                    Text("No recent posts")
+                        .font(.headline)
                         .padding(.top, 10)
                 } else {
                     List {
@@ -49,10 +47,7 @@ struct RecentPostsFeedPage: View {
                         }
                     }
                 }
-                
-                Spacer()
             }
-            .padding(.top)
             .navigationTitle("Feed")
         }
         .sheet(isPresented: $displaySheetCreatePost, content: {
