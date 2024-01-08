@@ -1,5 +1,6 @@
 import LoremSwiftum
 import SwiftUI
+import SwiftData
 
 struct DisplayUserProfilePage: View {
     
@@ -8,6 +9,11 @@ struct DisplayUserProfilePage: View {
     
     @Environment(\.colorScheme)
     private var systemColorScheme
+    
+    @Query(sort: \Post.createdAt, order: .reverse)
+    private var posts: [Post]
+    @Query
+    private var comments: [PostComment]
     
     private let user: UserAccount
     
@@ -36,7 +42,6 @@ struct DisplayUserProfilePage: View {
                     ZStack {
                         layerCardBackground
                         layerCardForeground
-                            .padding(.horizontal)
                             .padding(.top)
                     }
                 }
@@ -62,12 +67,28 @@ struct DisplayUserProfilePage: View {
     private var layerCardForeground: some View {
         VStack {
             UserProfileHeaderView(user)
+                .padding(.horizontal)
             sectionControls
                 .padding(.top)
                 .padding(.horizontal)
             
+            listRecentPosts
+            
             Spacer()
         }
+    }
+    
+    private var listRecentPosts: some View {
+        let recentPosts = user.getAllPosts(allPosts: posts)
+        
+        return List {
+            ForEach(recentPosts) { post in
+                NavigationLink(destination: DisplayPostPage(post)) {
+                    PostPreviewView(post)
+                }
+            }
+        }
+        .listStyle(.plain)
     }
     
     private var sectionControls: some View {

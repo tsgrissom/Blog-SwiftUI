@@ -32,6 +32,7 @@
 		2F53CC872B41ECEA00802403 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53CC862B41ECEA00802403 /* CreatePostView.swift */; };
 		2F6D15EB2B42596100D72DEB /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D15EA2B42596100D72DEB /* SettingsPage.swift */; };
 		2F81035B2B4B23F700AF0D45 /* UserAtTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F81035A2B4B23F700AF0D45 /* UserAtTimeView.swift */; };
+		2F8FD11A2B4B861C00552385 /* PostPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FD1192B4B861C00552385 /* PostPreviewView.swift */; };
 		2FE2E1872B4632CF00913A81 /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE2E1862B4632CF00913A81 /* LoremSwiftum */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		2F53CC862B41ECEA00802403 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
 		2F6D15EA2B42596100D72DEB /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		2F81035A2B4B23F700AF0D45 /* UserAtTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAtTimeView.swift; sourceTree = "<group>"; };
+		2F8FD1192B4B861C00552385 /* PostPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				2F2B94072B4B00DF00031EEF /* NotLoggedInView.swift */,
 				2F2B94052B4AF9D700031EEF /* UserProfileHeaderView.swift */,
 				2F81035A2B4B23F700AF0D45 /* UserAtTimeView.swift */,
+				2F8FD1192B4B861C00552385 /* PostPreviewView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				2F2B94082B4B00DF00031EEF /* NotLoggedInView.swift in Sources */,
 				2F2B940A2B4B117400031EEF /* CreateCommentView.swift in Sources */,
 				2F53CC7A2B411BA900802403 /* RecentPostsFeedPage.swift in Sources */,
+				2F8FD11A2B4B861C00552385 /* PostPreviewView.swift in Sources */,
 				2F53CC7C2B41A04E00802403 /* AccountLoginView.swift in Sources */,
 				2F53CC832B41B90700802403 /* UserAccountManager.swift in Sources */,
 				2F4188EC2B43206500363C9E /* PostManager.swift in Sources */,

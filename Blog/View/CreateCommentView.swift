@@ -62,7 +62,6 @@ struct CreateCommentView: View {
         let firstName  = LoremSwiftum.Lorem.firstName
         let lastName   = LoremSwiftum.Lorem.lastName
         let tweet      = LoremSwiftum.Lorem.tweet
-        let shortTweet = LoremSwiftum.Lorem.shortTweet
         
         let mockUser = UserAccount(username: firstName, password: "Password")
         mockUser.displayName = "\(firstName)\(lastName)"
