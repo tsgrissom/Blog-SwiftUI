@@ -22,6 +22,8 @@ struct SettingsPage: View {
     private var isPresentingConfirmResetPosts = false
     @State
     private var isPresentingConfirmResetUsers = false
+    @State
+    private var isPresentingConfirmCreateMockUsers = false
     
     private var buttonResetComments: some View {
         func onPress() {
@@ -109,6 +111,10 @@ struct SettingsPage: View {
     
     private var buttonCreateMockUsers: some View {
         func onPress() {
+            isPresentingConfirmCreateMockUsers = true
+        }
+        
+        func onConfirm() {
             for _ in 1...3 {
                 let randomName = randomMockUsername()
                 let new = UserAccount(username: randomName, password: "Password")
@@ -122,9 +128,13 @@ struct SettingsPage: View {
         }
         .foregroundStyle(.blue)
         .tint(.blue)
+        .confirmationDialog("Create three mock users?", isPresented: $isPresentingConfirmCreateMockUsers, titleVisibility: .visible) {
+            Button("Confirm", role: .destructive, action: onConfirm)
+            Button("Cancel", role: .cancel, action: {})
+        }
     }
     
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             layerForeground
                 .navigationTitle("Settings")
@@ -156,13 +166,32 @@ struct SettingsPage: View {
         }
     }
     
+    private func getViewForRegisteredUser(_ user: UserAccount) -> some View {
+        let thisUser = accountManager.loggedInUser
+        
+        @ViewBuilder
+        var tag: some View {
+            if thisUser != nil {
+                if thisUser!.id == user.id {
+                    Text("(You)")
+                }
+            }
+            
+            EmptyView()
+        }
+        
+        return NavigationLink(destination: DisplayUserAsAdminPage(user)) {
+            Text("@\(user.username)")
+                .foregroundStyle(.blue)
+            tag
+        }
+        .tint(.primary)
+    }
+    
     private var sectionRegisteredUsers: some View {
         Section("Registered Users (\(users.count))") {
             ForEach(users) { user in
-                NavigationLink(destination: DisplayUserAsAdminPage(user)) {
-                    Text("@\(user.username)")
-                        .foregroundStyle(.blue)
-                }
+                getViewForRegisteredUser(user)
             }
         }
     }
