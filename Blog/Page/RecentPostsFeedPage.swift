@@ -14,11 +14,7 @@ struct RecentPostsFeedPage: View {
     private var users: [UserAccount]
     
     @State
-    private var displaySheetCreatePost = false
-    
-    private func onPressCreateButton() {
-        displaySheetCreatePost = true
-    }
+    private var isPresentingSheetCreatePost = false
     
     public var body: some View {
         NavigationStack {
@@ -43,20 +39,24 @@ struct RecentPostsFeedPage: View {
                 } else {
                     List {
                         ForEach(posts) { post in
-                            getPostAsListRow(post)
+                            NavigationLink(destination: DisplayPostPage(post)) {
+                                PostPreviewView(post, displayUser: true)
+                            }
                         }
                     }
                 }
             }
             .navigationTitle("Feed")
         }
-        .sheet(isPresented: $displaySheetCreatePost, content: {
+        .sheet(isPresented: $isPresentingSheetCreatePost, content: {
             CreatePostView()
         })
     }
     
     private var buttonCreate: some View {
-        Button(action: onPressCreateButton) {
+        Button(action: {
+            isPresentingSheetCreatePost = true
+        }) {
             Image(systemName: "plus")
                 .imageScale(.large)
             Text("New Post")
@@ -65,45 +65,6 @@ struct RecentPostsFeedPage: View {
         }
         .buttonStyle(.bordered)
         .tint(.blue)
-    }
-    
-    private func getPostAsListRow(_ post: Post) -> some View {
-        let createdDate = Date(timeIntervalSince1970: post.createdAt)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
-        let createdFmt = formatter.string(from: createdDate)
-        
-        let commentsCount = post.getAttachedComments(allComments: comments).count
-        let countStr = if commentsCount == 1 {
-            "\(commentsCount) reply"
-        } else {
-            "\(commentsCount) replies"
-        }
-        
-        let user: UserAccount? = users.first { that in
-            that.id == post.postedBy
-        }
-        let username = user?.username ?? "Unknown"
-        
-        return VStack(alignment: .leading) {
-            HStack(spacing: 3) {
-                NavigationLink(destination: DisplayPostPage(post)) {
-                    Text("@\(username)")
-                        .foregroundStyle(.blue)
-                }
-            }
-            .font(.caption)
-            
-            Text("at \(createdFmt)")
-                .font(.caption)
-            
-            Text(post.body)
-            
-            if commentsCount > 0 {
-                Text(countStr)
-                    .font(.caption)
-            }
-        }
     }
 }
 

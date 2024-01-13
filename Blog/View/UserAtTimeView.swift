@@ -31,17 +31,15 @@ struct UserAtTimeView: View {
     }
     
     private var navLinkUser: some View {
-        NavigationLink(destination: DisplayUserProfilePage(user)) {
-            HStack(spacing: 3) {
-                if withProfilePicture {
-                    Circle()
-                        .fill(.blue.gradient)
-                        .frame(width: profilePictureLength, height: profilePictureLength)
-                }
-                
-                Text("@\(user.username)")
-                    .foregroundStyle(Color.accentColor)
+        HStack(spacing: 3) {
+            if withProfilePicture {
+                Circle()
+                    .fill(.blue.gradient)
+                    .frame(width: profilePictureLength, height: profilePictureLength)
             }
+            
+            Text("@\(user.username)")
+                .foregroundStyle(Color.accentColor)
         }
     }
     

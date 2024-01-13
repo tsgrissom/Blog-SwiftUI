@@ -11,19 +11,22 @@ struct PostPreviewView: View {
     
     private let post: Post
     private let displayUser: Bool
+    private let displayReplyCount: Bool
     
-    init(_ post: Post, displayUser: Bool = false) {
+    init(_ post: Post, displayUser: Bool = false, displayReplyCount: Bool = true) {
         self.post = post
         self.displayUser = displayUser
+        self.displayReplyCount = displayReplyCount
     }
     
-    var body: some View {
+    public var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 Text("\(post.body)")
                     .truncationMode(.tail)
                     .lineLimit(2)
                 rowUserAtTime
+                    .font(.caption)
                 rowReplyCount
             }
             
@@ -39,7 +42,7 @@ struct PostPreviewView: View {
         }
         
         if user != nil && displayUser {
-            UserAtTimeView(user: user!, at: createdDate, withProfilePicture: true)
+            UserAtTimeView(user: user!, at: createdDate, withProfilePicture: false)
         } else {
             rowUserAtTimeNull
         }
@@ -51,7 +54,7 @@ struct PostPreviewView: View {
         let count = replies.count
         let countStr = count==1 ? "reply" : "replies"
         
-        if count > 0 {
+        if count > 0 && displayReplyCount {
             Text("\(count) \(countStr)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -69,7 +72,6 @@ struct PostPreviewView: View {
         
         return HStack(spacing: 3) {
             Text(createdFmt)
-                .font(.caption)
             Spacer()
         }
     }
