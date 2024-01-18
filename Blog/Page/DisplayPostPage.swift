@@ -59,20 +59,19 @@ struct DisplayPostPage: View {
         let loggedInUser = accountManager.loggedInUser
         
         if loggedInUser == nil {
-            
             return
         }
         
         buttonSubmitReplyAnimate = 2
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
+            buttonSubmitReplyAnimate = 0
+        }
+        
         let new = PostComment(body: fieldReplyContents, postedBy: accountManager.loggedInUser!, attachedTo: post)
         modelContext.insert(new)
         try? modelContext.save()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
-            buttonSubmitReplyAnimate = 0
-            fieldReplyContents = ""
-        }
-        // TODO Submit the new model
+        fieldReplyContents = ""
     }
     
     var body: some View {
@@ -223,7 +222,10 @@ struct DisplayPostPage: View {
         let username = user?.username ?? "Unknown"
         
         return HStack {
-            TextField(text: $fieldReplyContents, prompt: Text("Your reply to \(username)")) {
+            TextField(
+                text: $fieldReplyContents,
+                prompt: Text("Your reply to \(username)")
+            ) {
                 Text("Enter your new reply")
             }
             .textFieldStyle(.roundedBorder)

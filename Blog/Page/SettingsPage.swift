@@ -5,6 +5,8 @@ struct SettingsPage: View {
     
     @Environment(\.modelContext)
     private var modelContext
+    @Environment(\.dismiss)
+    private var dismiss
     
     @EnvironmentObject
     private var accountManager: UserAccountManager
@@ -24,6 +26,8 @@ struct SettingsPage: View {
     private var isPresentingConfirmResetUsers = false
     @State
     private var isPresentingConfirmCreateMockUsers = false
+    @State
+    private var isPresentingConfirmLogOut = false
     
     private var buttonResetComments: some View {
         func onPress() {
@@ -134,33 +138,83 @@ struct SettingsPage: View {
         }
     }
     
+    private var buttonLogOut: some View {
+        func onPress() {
+            isPresentingConfirmLogOut = true
+        }
+        
+        func onConfirm() {
+            accountManager.loggedInUser = nil
+            dismiss()
+        }
+        
+        let username = accountManager.loggedInUser?.username ?? "Unknown"
+        
+        return Button(action: onPress) {
+            Text("Log Out")
+        }
+        .tint(.red)
+        .confirmationDialog("Log out of your account? (\(username))", isPresented: $isPresentingConfirmLogOut, titleVisibility: .visible) {
+            Button("Confirm", role: .destructive, action: onConfirm)
+            Button("Cancel", role: .cancel, action: {})
+        }
+    }
+    
     public var body: some View {
-        NavigationStack {
+        return NavigationStack {
             layerForeground
                 .navigationTitle("Settings")
         }
     }
     
     private var layerForeground: some View {
-        let permissionLevel = accountManager.loggedInUser?.permissionLevel ?? 0
-        
         return VStack(alignment: .leading) {
             if users.isEmpty {
                 Text("No registered users")
             } else if !accountManager.isLoggedIn {
                 NotLoggedInView(verticalNavLinks: true)
             } else {
-                List {
-                    // TODO User settings
-                    Section("User Settings") {
-                        Text("Options")
-                        Text("Go here")
+                sectionUserSettings
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var sectionUserSettings: some View {
+        let user = accountManager.loggedInUser
+        
+        if user == nil {
+            EmptyView()
+        } else {
+            let displayName = user!.displayName
+            let username = user!.username
+            let permissionLevel = user!.permissionLevel
+            
+            List {
+                // TODO User settings
+                Section("User Settings") {
+                    NavigationLink(destination: Text("Change your username")) {
+                        Text("Username: \(username)")
                     }
                     
-                    if permissionLevel >= 3 {
-                        sectionRegisteredUsers
-                        sectionDeveloperControls
+                    NavigationLink(destination: Text("Change your display name")) {
+                        Text("Display Name: \(displayName)")
                     }
+                    
+                    NavigationLink(destination: Text("Change your user biography")) {
+                        Text("User Biography")
+                    }
+                    
+                    
+                    
+                    HStack {
+                        buttonLogOut
+                    }
+                }
+                
+                if permissionLevel >= 3 {
+                    sectionRegisteredUsers
+                    sectionDeveloperControls
                 }
             }
         }
@@ -181,9 +235,11 @@ struct SettingsPage: View {
         }
         
         return NavigationLink(destination: DisplayUserAsAdminPage(user)) {
-            Text("@\(user.username)")
-                .foregroundStyle(.blue)
-            tag
+            HStack(spacing: 3) {
+                Text("@\(user.username)")
+                    .foregroundStyle(.blue)
+                tag
+            }
         }
         .tint(.primary)
     }
