@@ -235,6 +235,13 @@ struct DisplayPostPage: View {
         }
     }
     
+    private func getCommentTreeView(_ comment: PostComment) -> some View {
+        let children = comment.getChildComments(allComments: comments)
+        return NavigationLink(destination: DisplayCommentPage(comment)) {
+            CommentTreeView(comment, children: children, mode: .collapsedAfterOne)
+        }
+    }
+    
     private var sectionDisplayReplies: some View {
         let comments   = getCommentsInResponse
         let replyCount = comments.count
@@ -246,7 +253,7 @@ struct DisplayPostPage: View {
                 .padding(.horizontal)
             List {
                 ForEach(comments) { comment in
-                    CreateCommentView(comment)
+                    getCommentTreeView(comment)
                 }
             }
             .listStyle(.plain)

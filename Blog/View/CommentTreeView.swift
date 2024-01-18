@@ -10,7 +10,9 @@ struct CommentTreeView: View {
     
     private let parentComment: PostComment
     private let childComments: [PostComment]
-    private let mode: CommentTreeDisplayMode
+    
+    @State
+    private var mode: CommentTreeDisplayMode
     
     init(
         _ parent: PostComment,
@@ -22,24 +24,48 @@ struct CommentTreeView: View {
         self.mode = mode
     }
     
-    private func getViewForChild(text: String) -> some View {
+    private func getViewForChild(text: String, action: @escaping () -> Void) -> some View {
         return HStack {
-            Image(systemName: "arrow.turn.down.right")
+            Button(action: {
+                action()
+            }) {
+                Image(systemName: "arrow.turn.down.right")
+            }
+            .buttonStyle(.plain)
+            
             Text(text)
             Spacer()
         }
     }
     
-    private func getViewForChildComment(_ child: PostComment) -> some View {
-        return getViewForChild(text: child.body)
+    private func getViewForChildComment(_ comment: PostComment, action: @escaping () -> Void) -> some View {
+        return HStack {
+            Button(action: {
+                action()
+            }) {
+                Image(systemName: "arrow.turn.down.right")
+            }
+            .buttonStyle(.plain)
+            
+            CommentView(comment)
+                .font(.caption)
+            Spacer()
+        }
+    }
+    
+    private func cycleMode() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        switch mode {
+        case .all:
+            self.mode = .collapsedAfterOne
+        case .collapsedAfterOne:
+            self.mode = .all
+        }
     }
     
     public var body: some View {
         VStack {
-            HStack {
-                Text(parentComment.body) // Display parent comment
-                Spacer()
-            }
+            CommentView(parentComment)
             
             switch mode {
                 case .all: childrenDisplayModeAll
@@ -50,18 +76,18 @@ struct CommentTreeView: View {
     
     private var childrenDisplayModeAll: some View {
         ForEach(childComments) { child in
-            getViewForChildComment(child)
+            getViewForChildComment(child, action: cycleMode)
         }
     }
     
     @ViewBuilder
     private var childrenDisplayModeCollapsedAfterOne: some View {
         if childComments.count > 0 {
-            getViewForChildComment(childComments[0])
+            getViewForChildComment(childComments[0], action: cycleMode)
         }
         
         if childComments.count > 1 {
-            getViewForChild(text: "...")
+            getViewForChild(text: "...", action: cycleMode)
         }
     }
 }
