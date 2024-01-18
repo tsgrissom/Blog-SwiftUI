@@ -20,7 +20,7 @@ struct RecentPostsFeedPage: View {
         NavigationStack {
             VStack {
                 if accountManager.loggedInUser == nil {
-                    NotLoggedInView()
+                    AccountNotLoggedInView()
                         .padding(.bottom, 5)
                 } else {
                     Text("Welcome, \(accountManager.loggedInUsernameOrNone)")

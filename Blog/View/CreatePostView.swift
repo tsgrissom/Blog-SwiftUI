@@ -132,7 +132,7 @@ struct CreatePostView: View {
         NavigationStack {
             VStack {
                 if accountManager.isNotLoggedIn {
-                    NotLoggedInView()
+                    AccountNotLoggedInView()
                 } else {
                     VStack { // Form container
                         fieldPostBody

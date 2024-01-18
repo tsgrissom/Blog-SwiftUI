@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NotLoggedInView: View {
+struct AccountNotLoggedInView: View {
 
     private let withText: Bool
     private let verticalNavLinks: Bool
@@ -90,28 +90,28 @@ struct NotLoggedInView: View {
                 .bold()
             Divider()
                 .frame(width: 250)
-            NotLoggedInView(withText: true, verticalNavLinks: true)
+            AccountNotLoggedInView(withText: true, verticalNavLinks: true)
             
             Text("Vertical Buttons w/o Text")
                 .font(.title3)
                 .bold()
             Divider()
                 .frame(width: 250)
-            NotLoggedInView(withText: false, verticalNavLinks: true)
+            AccountNotLoggedInView(withText: false, verticalNavLinks: true)
             
             Text("Horizontal Buttons w/ Text")
                 .font(.title3)
                 .bold()
             Divider()
                 .frame(width: 250)
-            NotLoggedInView(withText: true, verticalNavLinks: false)
+            AccountNotLoggedInView(withText: true, verticalNavLinks: false)
             
             Text("Vertical Buttons w/o Text")
                 .font(.title3)
                 .bold()
             Divider()
                 .frame(width: 250)
-            NotLoggedInView(withText: false, verticalNavLinks: false)
+            AccountNotLoggedInView(withText: false, verticalNavLinks: false)
         }
     }
 }
