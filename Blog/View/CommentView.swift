@@ -108,9 +108,8 @@ struct CommentView: View {
     
     private var textUsername: some View {
         let user = users.first { $0.id == comment.postedBy }
-        let username = user?.username ?? "Unknown"
         
-        return Text("@\(username)")
+        return Text("@\(user.getUsername())")
             .foregroundStyle(.blue)
     }
 }

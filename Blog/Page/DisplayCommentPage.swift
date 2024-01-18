@@ -56,8 +56,7 @@ struct DisplayCommentPage: View {
     
     private var navTitle: String {
         let postedBy = users.first { $0.id == comment.postedBy }
-        let username = postedBy?.username ?? "Unknown"
-        return "Comment by \(username)"
+        return "Comment by \(postedBy.getUsername())"
     }
     
     public var body: some View {
@@ -97,11 +96,10 @@ struct DisplayCommentPage: View {
     
     private var sectionAddReply: some View {
         let replyingTo = users.first { $0.id == self.comment.postedBy }
-        let replyingToUsername = replyingTo?.username ?? "Unknown"
         
         return HStack {
-            TextField(text: $fieldNewReplyContents, prompt: Text("Your reply to \(replyingToUsername)'s comment")) {
-                Text("Reply to \(replyingToUsername)'s comment")
+            TextField(text: $fieldNewReplyContents, prompt: Text("Your reply to \(replyingTo.getUsername())'s comment")) {
+                Text("Reply to \(replyingTo.getUsername())'s comment")
             }
             .textFieldStyle(.roundedBorder)
             

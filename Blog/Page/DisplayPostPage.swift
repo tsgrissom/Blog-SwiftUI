@@ -76,7 +76,6 @@ struct DisplayPostPage: View {
     
     var body: some View {
         let user = users.first { $0.id == post.postedBy }
-        let username = user?.username ?? "Unknown"
         
         return VStack(spacing: 0) {
             sectionPostBody
@@ -96,7 +95,7 @@ struct DisplayPostPage: View {
             
             Spacer()
         }
-        .navigationTitle("Post by @\(username)")
+        .navigationTitle("Post by @\(user.getUsername())")
     }
     
     @ViewBuilder
@@ -215,12 +214,11 @@ struct DisplayPostPage: View {
     
     private var sectionNewReply: some View {
         let user = users.first { $0.id == post.postedBy }
-        let username = user?.username ?? "Unknown"
         
         return HStack {
             TextField(
                 text: $fieldReplyContents,
-                prompt: Text("Your reply to \(username)")
+                prompt: Text("Your reply to \(user.getUsername())")
             ) {
                 Text("Enter your new reply")
             }

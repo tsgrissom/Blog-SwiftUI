@@ -148,7 +148,7 @@ struct SettingsPage: View {
             dismiss()
         }
         
-        let username = accountManager.loggedInUser?.username ?? "Unknown"
+        let username = accountManager.loggedInUser.getUsername()
         
         return Button(action: onPress) {
             Text("Log Out")

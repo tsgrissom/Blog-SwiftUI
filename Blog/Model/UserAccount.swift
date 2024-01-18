@@ -67,3 +67,10 @@ final class UserAccount: Identifiable {
         return !self.isRankedSuperiorTo(user)
     }
 }
+
+extension UserAccount? {
+    
+    public func getUsername() -> String {
+        return self?.username ?? "Unknown"
+    }
+}
