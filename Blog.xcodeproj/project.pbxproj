@@ -146,7 +146,6 @@
 			isa = PBXGroup;
 			children = (
 				2F53CC802B41B72700802403 /* AccountManagementPage.swift */,
-				2F53CC772B4118AE00802403 /* AccountRegistrationView.swift */,
 				2F4188E72B431A6200363C9E /* DisplayPostPage.swift */,
 				2FCEC7162B59C55C0004E15A /* DisplayCommentPage.swift */,
 				2F4188F12B450B6500363C9E /* DisplayUserAsAdminPage.swift */,
@@ -161,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				2F53CC7B2B41A04E00802403 /* AccountLoginView.swift */,
+				2F53CC772B4118AE00802403 /* AccountRegistrationView.swift */,
 				2F53CC862B41ECEA00802403 /* CreatePostView.swift */,
 				2F4188EF2B43A6AD00363C9E /* FollowerCountView.swift */,
 				2F2B94072B4B00DF00031EEF /* NotLoggedInView.swift */,

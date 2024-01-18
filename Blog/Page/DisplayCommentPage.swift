@@ -26,9 +26,37 @@ struct DisplayCommentPage: View {
     @State
     private var fieldNewReplyContents = ""
     
+    private func onSubmitNewReply() {
+        let body = fieldNewReplyContents.trimmed
+        
+        if body.isEmpty {
+            return
+        }
+        
+        let postedBy = accountManager.loggedInUser
+        
+        if accountManager.loggedInUser == nil {
+            return
+        }
+        
+        let attachedTo = posts.first { $0.id == comment.attachedTo }
+        
+        if attachedTo == nil {
+            return
+        }
+        
+        let parentComment = comments.first { $0.id == comment.id }
+        
+        fieldNewReplyContents = ""
+        let reply = PostComment(body: body, postedBy: postedBy!, attachedTo: attachedTo!, parentComment: parentComment)
+        
+        modelContext.insert(reply)
+        try? modelContext.save()
+    }
+    
     private var navTitle: String {
         let postedBy = users.first { $0.id == comment.postedBy }
-        let username = postedBy != nil ? postedBy!.username : "Unknown"
+        let username = postedBy?.username ?? "Unknown"
         return "Comment by \(username)"
     }
     
@@ -48,9 +76,7 @@ struct DisplayCommentPage: View {
     }
     
     private var buttonReturnToPost: some View {
-        let attachedTo = posts.first {
-            $0.id == self.comment.postedBy
-        }
+        let attachedTo = posts.first { $0.id == self.comment.postedBy }
         
         return NavigationLink(destination: {
             if attachedTo != nil {
@@ -71,35 +97,7 @@ struct DisplayCommentPage: View {
     
     private var sectionAddReply: some View {
         let replyingTo = users.first { $0.id == self.comment.postedBy }
-        let replyingToUsername = replyingTo != nil ? replyingTo!.username : "Unknown"
-        
-        func onSubmit() {
-            let body = fieldNewReplyContents.trimmed
-            
-            if body.isEmpty {
-                return
-            }
-            
-            let postedBy = accountManager.loggedInUser
-            
-            if accountManager.loggedInUser == nil {
-                return
-            }
-            
-            let attachedTo = posts.first { $0.id == comment.attachedTo }
-            
-            if attachedTo == nil {
-                return
-            }
-            
-            let parentComment = comments.first { $0.id == comment.id }
-            
-            fieldNewReplyContents = ""
-            let reply = PostComment(body: body, postedBy: postedBy!, attachedTo: attachedTo!, parentComment: parentComment)
-            
-            modelContext.insert(reply)
-            try? modelContext.save()
-        }
+        let replyingToUsername = replyingTo?.username ?? "Unknown"
         
         return HStack {
             TextField(text: $fieldNewReplyContents, prompt: Text("Your reply to \(replyingToUsername)'s comment")) {
@@ -107,9 +105,7 @@ struct DisplayCommentPage: View {
             }
             .textFieldStyle(.roundedBorder)
             
-            Button(action: onSubmit, label: {
-                Text("Reply")
-            })
+            Button("Reply", action: onSubmitNewReply)
         }
     }
 }

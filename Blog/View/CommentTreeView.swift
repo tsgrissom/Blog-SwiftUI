@@ -8,8 +8,8 @@ enum CommentTreeDisplayMode: CaseIterable {
 
 struct CommentTreeView: View {
     
-    private let parentComment: PostComment
-    private let childComments: [PostComment]
+    private let parent: PostComment
+    private let children: [PostComment]
     
     @State
     private var mode: CommentTreeDisplayMode
@@ -19,8 +19,8 @@ struct CommentTreeView: View {
         children: [PostComment],
         mode: CommentTreeDisplayMode = .all
     ) {
-        self.parentComment = parent
-        self.childComments = children
+        self.parent = parent
+        self.children = children
         self.mode = mode
     }
     
@@ -65,7 +65,7 @@ struct CommentTreeView: View {
     
     public var body: some View {
         VStack {
-            CommentView(parentComment)
+            CommentView(parent)
             
             switch mode {
                 case .all: childrenDisplayModeAll
@@ -75,19 +75,19 @@ struct CommentTreeView: View {
     }
     
     private var childrenDisplayModeAll: some View {
-        ForEach(childComments) { child in
+        ForEach(children) { child in
             getViewForChildComment(child, action: cycleMode)
         }
     }
     
     @ViewBuilder
     private var childrenDisplayModeCollapsedAfterOne: some View {
-        if childComments.count > 0 {
-            getViewForChildComment(childComments[0], action: cycleMode)
+        if children.count > 0 {
+            getViewForChildComment(children[0], action: cycleMode)
         }
         
-        if childComments.count > 1 {
-            getViewForChild(text: "+\(childComments.count-1)", action: cycleMode)
+        if children.count > 1 {
+            getViewForChild(text: "+\(children.count-1)", action: cycleMode)
                 .foregroundStyle(Color.accentColor)
         }
     }

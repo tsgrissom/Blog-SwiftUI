@@ -37,9 +37,7 @@ struct PostPreviewView: View {
     @ViewBuilder
     private var rowUserAtTime: some View {
         let createdDate = Date(timeIntervalSince1970: post.createdAt)
-        let user = users.first {
-            $0.id == post.postedBy
-        }
+        let user = users.first { $0.id == post.postedBy }
         
         if user != nil && displayUser {
             UserAtTimeView(user: user!, at: createdDate, withProfilePicture: false)

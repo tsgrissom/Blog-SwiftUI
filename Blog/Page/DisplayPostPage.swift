@@ -75,9 +75,7 @@ struct DisplayPostPage: View {
     }
     
     var body: some View {
-        let user = users.first { that in
-            that.id == post.postedBy
-        }
+        let user = users.first { $0.id == post.postedBy }
         let username = user?.username ?? "Unknown"
         
         return VStack(spacing: 0) {
@@ -216,9 +214,7 @@ struct DisplayPostPage: View {
     }
     
     private var sectionNewReply: some View {
-        let user = users.first {
-            $0.id == post.postedBy
-        }
+        let user = users.first { $0.id == post.postedBy }
         let username = user?.username ?? "Unknown"
         
         return HStack {

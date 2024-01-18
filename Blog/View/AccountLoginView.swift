@@ -10,8 +10,9 @@ struct AccountLoginView: View {
     private var modelContext
     @EnvironmentObject
     private var accountManager: UserAccountManager
+    
     @Query
-    private var userAccounts: [UserAccount]
+    private var users: [UserAccount]
     
     @State
     private var alertBoxVisible = false
@@ -69,8 +70,8 @@ struct AccountLoginView: View {
             return
         }
         
-        let account = userAccounts.first { acc in
-            acc.username == fieldUsernameContents
+        let account = users.first {
+            $0.username == fieldUsernameContents
         }
         
         if account == nil {
