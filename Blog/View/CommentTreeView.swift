@@ -87,7 +87,8 @@ struct CommentTreeView: View {
         }
         
         if childComments.count > 1 {
-            getViewForChild(text: "...", action: cycleMode)
+            getViewForChild(text: "+\(childComments.count-1)", action: cycleMode)
+                .foregroundStyle(Color.accentColor)
         }
     }
 }

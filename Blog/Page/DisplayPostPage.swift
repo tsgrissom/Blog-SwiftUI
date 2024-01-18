@@ -267,7 +267,9 @@ struct DisplayPostPage: View {
     let mockUser = UserAccount(username: firstName, password: "Password")
     let mockPost = Post(body: tweet, postedBy: mockUser)
     
-    return DisplayPostPage(mockPost)
-        .environmentObject(UserAccountManager())
-        .environmentObject(PostManager())
+    return NavigationStack {
+        DisplayPostPage(mockPost)
+    }
+    .environmentObject(UserAccountManager())
+    .environmentObject(PostManager())
 }

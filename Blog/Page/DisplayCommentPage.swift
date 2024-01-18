@@ -26,20 +26,25 @@ struct DisplayCommentPage: View {
     @State
     private var fieldNewReplyContents = ""
     
+    private var navTitle: String {
+        let postedBy = users.first { $0.id == comment.postedBy }
+        let username = postedBy != nil ? postedBy!.username : "Unknown"
+        return "Comment by \(username)"
+    }
+    
     public var body: some View {
         HStack {
             VStack {
-                HStack {
-                    buttonReturnToPost
-                    Spacer()
-                }
                 sectionCommentTree
                 sectionAddReply
+                Spacer()
             }
             .buttonStyle(.bordered)
+            .padding(.horizontal)
             
             Spacer()
         }
+        .navigationTitle(navTitle)
     }
     
     private var buttonReturnToPost: some View {
@@ -54,7 +59,7 @@ struct DisplayCommentPage: View {
                 Text("Could not load post")
             }
         }) {
-            Text("Return to Post")
+            Text("View Post")
                 .font(.subheadline)
         }
     }
@@ -69,25 +74,28 @@ struct DisplayCommentPage: View {
         let replyingToUsername = replyingTo != nil ? replyingTo!.username : "Unknown"
         
         func onSubmit() {
-            let text = fieldNewReplyContents.trimmed
+            let body = fieldNewReplyContents.trimmed
             
-            if text.isEmpty {
+            if body.isEmpty {
                 return
             }
+            
+            let postedBy = accountManager.loggedInUser
             
             if accountManager.loggedInUser == nil {
                 return
             }
             
-            let post = posts.first { $0.id == comment.attachedTo }
+            let attachedTo = posts.first { $0.id == comment.attachedTo }
             
-            if post == nil {
+            if attachedTo == nil {
                 return
             }
             
-            let commentReplyingTo = comments.first { $0.id == comment.id }
+            let parentComment = comments.first { $0.id == comment.id }
             
-            let reply = PostComment(body: text, postedBy: accountManager.loggedInUser!, attachedTo: post!, parentComment: commentReplyingTo)
+            fieldNewReplyContents = ""
+            let reply = PostComment(body: body, postedBy: postedBy!, attachedTo: attachedTo!, parentComment: parentComment)
             
             modelContext.insert(reply)
             try? modelContext.save()
@@ -115,7 +123,9 @@ struct DisplayCommentPage: View {
     let mockPost = Post(body: tweet, postedBy: mockUser)
     let mockComment = PostComment(body: shortTweet, postedBy: mockUser, attachedTo: mockPost)
     
-    return DisplayCommentPage(mockComment)
-        .environmentObject(PostManager())
-        .environmentObject(UserAccountManager())
+    return NavigationStack {
+        DisplayCommentPage(mockComment)
+    }
+    .environmentObject(PostManager())
+    .environmentObject(UserAccountManager())
 }
