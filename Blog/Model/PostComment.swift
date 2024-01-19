@@ -32,4 +32,8 @@ final class PostComment: Identifiable {
             that.parentComment == self.id
         }
     }
+    
+    public func isOwnedBy(_ user: UserAccount?) -> Bool {
+        return self.postedBy == user?.id
+    }
 }

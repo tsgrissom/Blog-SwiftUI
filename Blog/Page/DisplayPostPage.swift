@@ -236,21 +236,43 @@ struct DisplayPostPage: View {
         }
     }
     
-    private var sectionDisplayReplies: some View {
-        let comments   = getCommentsInResponse
-        let replyCount = comments.count
+    private var textRepliesHeader: some View {
+        let comments = getCommentsInResponse
+        let count = comments.count
         
-        return VStack(alignment: .leading) {
-            Text("Replies (\(replyCount))")
-                .font(.title)
-                .bold()
-                .padding(.horizontal)
-            List {
-                ForEach(comments) { comment in
-                    getCommentTreeView(comment)
-                }
+        let text = count==0 ? "No Replies" : "Replies (\(count))"
+        
+        return Text(text)
+            .font(.title)
+            .bold()
+            .padding(.horizontal, 18)
+    }
+    
+    private var listPostReplies: some View {
+        let attached = getCommentsInResponse
+        
+        return List {
+            ForEach(attached) { comment in
+                getCommentTreeView(comment)
+                    .swipeActions(edge: .trailing) {
+                        if comment.isOwnedBy(accountManager.loggedInUser) {
+                            Button("Delete") {
+                                modelContext.delete(comment)
+                                try? modelContext.save()
+                            }
+                            .tint(.red)
+                        }
+                    }
             }
-            .listStyle(.plain)
+        }
+    }
+    
+    private var sectionDisplayReplies: some View {
+        return VStack(alignment: .leading) {
+            textRepliesHeader
+            
+            listPostReplies
+                .listStyle(.plain)
         }
     }
 }

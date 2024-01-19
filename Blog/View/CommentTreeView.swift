@@ -34,6 +34,7 @@ struct CommentTreeView: View {
             .buttonStyle(.plain)
             
             Text(text)
+                .font(.caption)
             Spacer()
         }
     }
@@ -87,7 +88,7 @@ struct CommentTreeView: View {
         }
         
         if children.count > 1 {
-            getViewForChild(text: "+\(children.count-1)", action: cycleMode)
+            getViewForChild(text: "... \(children.count-1) more", action: cycleMode)
                 .foregroundStyle(Color.accentColor)
         }
     }
