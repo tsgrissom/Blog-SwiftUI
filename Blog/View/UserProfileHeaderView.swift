@@ -3,30 +3,77 @@ import SwiftUI
 
 struct UserProfileHeaderView: View {
     
+    @EnvironmentObject
+    private var accountManager: UserAccountManager
+    
     private let user: UserAccount
     
     init(_ user: UserAccount) {
         self.user = user
     }
     
+    
+    @State
+    private var isPresentingConfirmModifyUsername = false
+    @State
+    private var isPresentingModifyBiographySheet = false
+    @State
+    private var isPresentingModifyDisplayNameSheet = false
+    @State
+    private var isPresentingModifyUsernameSheet = false
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(user.displayName)
                 .font(.title)
                 .bold()
+                .onTapGesture {
+                    isPresentingModifyDisplayNameSheet.toggle()
+                }
+                .sheet(isPresented: $isPresentingModifyDisplayNameSheet, content: {
+                    UserModifyProfileFieldView(mode: .displayName)
+                })
             Text("@\(user.username)")
                 .font(.title3)
+                .onTapGesture {
+                    isPresentingConfirmModifyUsername.toggle()
+                }
+                .confirmationDialog("Are you sure you want to change your username? (@username)", isPresented: $isPresentingConfirmModifyUsername, titleVisibility: .visible) {
+                    Button(role: .destructive, action: {
+                        isPresentingConfirmModifyUsername = false
+                        isPresentingModifyUsernameSheet = true
+                    }) {
+                        Text("Proceed")
+                    }
+                    Button(role: .cancel, action: {}) {
+                        Text("Cancel")
+                    }
+                }
+                .sheet(isPresented: $isPresentingModifyUsernameSheet, content: {
+                    UserModifyProfileFieldView(mode: .username)
+                })
             
             HStack {
-                if user.biography.isEmpty {
-                    Text("This user has not set a biography.")
-                        .italic()
-                } else {
-                    Text(user.biography)
-                }
+                textBiography
+                    .onTapGesture {
+                        isPresentingModifyBiographySheet.toggle()
+                    }
+                    .sheet(isPresented: $isPresentingModifyBiographySheet, content: {
+                        UserModifyProfileFieldView(mode: .biography)
+                    })
                 
                 Spacer()
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var textBiography: some View {
+        if user.biography.isEmpty {
+            Text("This user has not set a biography.")
+                .italic()
+        } else {
+            Text(user.biography)
         }
     }
 }
@@ -52,4 +99,5 @@ struct UserProfileHeaderView: View {
         }
         .padding(.horizontal)
     }
+    .environmentObject(UserAccountManager())
 }

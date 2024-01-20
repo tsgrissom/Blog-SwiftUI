@@ -3,6 +3,7 @@ import SwiftData
 
 struct SettingsPage: View {
     
+    // MARK: Environment
     @Environment(\.modelContext)
     private var modelContext
     @Environment(\.dismiss)
@@ -11,6 +12,7 @@ struct SettingsPage: View {
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var posts: [Post]
     @Query
@@ -18,6 +20,7 @@ struct SettingsPage: View {
     @Query
     private var users: [UserAccount]
     
+    // MARK: Confirmation Dialog State
     @State
     private var isPresentingConfirmResetComments = false
     @State
@@ -29,6 +32,15 @@ struct SettingsPage: View {
     @State
     private var isPresentingConfirmLogOut = false
     
+    // MARK: Sheet State
+    @State
+    private var isPresentingModifyBiographySheet = false
+    @State
+    private var isPresentingModifyDisplayNameSheet = false
+    @State
+    private var isPresentingModifyUsernameSheet = false
+    
+    // MARK: Mini-Views
     private var buttonResetComments: some View {
         func onPress() {
             isPresentingConfirmResetComments = true
@@ -160,6 +172,7 @@ struct SettingsPage: View {
         }
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         return NavigationStack {
             layerForeground
@@ -179,6 +192,7 @@ struct SettingsPage: View {
         }
     }
     
+    // MARK: Section Views
     @ViewBuilder
     private var sectionUserSettings: some View {
         let user = accountManager.loggedInUser
@@ -193,19 +207,35 @@ struct SettingsPage: View {
             List {
                 // TODO User settings
                 Section("User Settings") {
-                    NavigationLink(destination: Text("Change your username")) {
+                    Button(action: {
+                        isPresentingModifyUsernameSheet.toggle()
+                    }) {
                         Text("Username: \(username)")
                     }
+                    .foregroundStyle(.primary)
+                    .sheet(isPresented: $isPresentingModifyUsernameSheet, content: {
+                        UserModifyProfileFieldView(mode: .username)
+                    })
                     
-                    NavigationLink(destination: Text("Change your display name")) {
+                    Button(action: {
+                        isPresentingModifyDisplayNameSheet.toggle()
+                    }) {
                         Text("Display Name: \(displayName)")
                     }
+                    .foregroundStyle(.primary)
+                    .sheet(isPresented: $isPresentingModifyDisplayNameSheet, content: {
+                        UserModifyProfileFieldView(mode: .displayName)
+                    })
                     
-                    NavigationLink(destination: Text("Change your user biography")) {
+                    Button(action: {
+                        isPresentingModifyBiographySheet.toggle()
+                    }) {
                         Text("User Biography")
                     }
-                    
-                    
+                    .foregroundStyle(.primary)
+                    .sheet(isPresented: $isPresentingModifyBiographySheet, content: {
+                        UserModifyProfileFieldView(mode: .biography)
+                    })
                     
                     HStack {
                         buttonLogOut
@@ -279,6 +309,7 @@ struct SettingsPage: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     SettingsPage()
         .environmentObject(UserAccountManager())
