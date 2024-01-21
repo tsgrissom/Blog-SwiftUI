@@ -3,9 +3,11 @@ import SwiftData
 
 struct RecentPostsFeedPage: View {
     
+    // MARK: Environment
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var posts: [Post]
     @Query
@@ -13,9 +15,26 @@ struct RecentPostsFeedPage: View {
     @Query
     private var users: [UserAccount]
     
+    // MARK: State
     @State
     private var isPresentingSheetCreatePost = false
     
+    // MARK: Button Views
+    private var buttonCreate: some View {
+        Button(action: {
+            isPresentingSheetCreatePost = true
+        }) {
+            Image(systemName: "plus")
+                .imageScale(.large)
+            Text("New Post")
+                .font(.title3)
+                .frame(height: 25)
+        }
+        .buttonStyle(.bordered)
+        .tint(.blue)
+    }
+    
+    // MARK: Layout Declaration
     public var body: some View {
         NavigationStack {
             VStack {
@@ -52,22 +71,9 @@ struct RecentPostsFeedPage: View {
             CreatePostView()
         })
     }
-    
-    private var buttonCreate: some View {
-        Button(action: {
-            isPresentingSheetCreatePost = true
-        }) {
-            Image(systemName: "plus")
-                .imageScale(.large)
-            Text("New Post")
-                .font(.title3)
-                .frame(height: 25)
-        }
-        .buttonStyle(.bordered)
-        .tint(.blue)
-    }
 }
 
+// MARK: Previews
 #Preview {
     RecentPostsFeedPage()
         .environmentObject(UserAccountManager())

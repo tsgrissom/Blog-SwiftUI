@@ -4,12 +4,14 @@ import SwiftData
 
 struct DisplayCommentPage: View {
     
+    // MARK: Environment
     @Environment(\.modelContext)
     private var modelContext
     
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var comments: [PostComment]
     @Query
@@ -17,15 +19,18 @@ struct DisplayCommentPage: View {
     @Query
     private var users: [UserAccount]
     
+    // MARK: Initialization
     private let comment: PostComment
     
     init(_ comment: PostComment) {
         self.comment = comment
     }
     
+    // MARK: State
     @State
     private var fieldNewReplyContents = ""
     
+    // MARK: Button Handlers
     private func onSubmitNewReply() {
         let body = fieldNewReplyContents.trimmed
         
@@ -54,13 +59,12 @@ struct DisplayCommentPage: View {
         try? modelContext.save()
     }
     
-    private var navTitle: String {
-        let postedBy = users.first { $0.id == comment.postedBy }
-        return "Comment by \(postedBy.getUsername())"
-    }
-    
+    // MARK: Layout Declaration
     public var body: some View {
-        HStack {
+        let postedBy = users.first { $0.id == comment.postedBy }
+        let title = "Comment by \(postedBy.getUsername())"
+        
+        return HStack {
             VStack {
                 sectionCommentTree
                 sectionAddReply
@@ -71,24 +75,10 @@ struct DisplayCommentPage: View {
             
             Spacer()
         }
-        .navigationTitle(navTitle)
+        .navigationTitle(title)
     }
     
-    private var buttonReturnToPost: some View {
-        let attachedTo = posts.first { $0.id == self.comment.postedBy }
-        
-        return NavigationLink(destination: {
-            if attachedTo != nil {
-                DisplayPostPage(attachedTo!)
-            } else {
-                Text("Could not load post")
-            }
-        }) {
-            Text("View Post")
-                .font(.subheadline)
-        }
-    }
-    
+    // MARK: Section Views
     private var sectionCommentTree: some View {
         let children = self.comment.getChildComments(allComments: comments)
         return CommentTreeView(comment, children: children)
@@ -108,6 +98,7 @@ struct DisplayCommentPage: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     let tweet = LoremSwiftum.Lorem.tweet
     let shortTweet = LoremSwiftum.Lorem.shortTweet

@@ -4,6 +4,12 @@ import SwiftData
 
 struct PostPreviewView: View {
     
+    @Environment(\.modelContext)
+    private var modelContext
+    
+    @EnvironmentObject
+    private var accountManager: UserAccountManager
+    
     @Query
     private var users: [UserAccount]
     @Query
@@ -19,6 +25,10 @@ struct PostPreviewView: View {
         self.displayReplyCount = displayReplyCount
     }
     
+    private var isOwnedByCurrentUser: Bool {
+        return post.postedBy == accountManager.loggedInUser?.id
+    }
+    
     public var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -31,6 +41,17 @@ struct PostPreviewView: View {
             }
             
             Spacer()
+        }
+        .contextMenu {
+            Button("Reply", systemImage: "arrowshape.turn.up.forward", action: {})
+            Button("Share", systemImage: "square.and.arrow.up", action: {})
+            
+            if isOwnedByCurrentUser {
+                Button("Delete", systemImage: "trash", role: .destructive, action: {
+                    modelContext.delete(post)
+                    try? modelContext.save()
+                })
+            }
         }
     }
     
@@ -99,4 +120,5 @@ struct PostPreviewView: View {
         
         PostPreviewView(mockPost, displayUser: false)
     }
+    .environmentObject(UserAccountManager())
 }

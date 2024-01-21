@@ -4,31 +4,32 @@ import SwiftData
 
 struct DisplayUserProfilePage: View {
     
+    // MARK: Environment
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
     @Environment(\.colorScheme)
     private var systemColorScheme
     
+    // MARK: SwiftData Queries
     @Query(sort: \Post.createdAt, order: .reverse)
     private var posts: [Post]
     @Query
     private var comments: [PostComment]
     
+    // MARK: Initialization
     private let user: UserAccount
     
     init(_ user: UserAccount) {
         self.user = user
     }
     
+    // MARK: Helpers
     private var isOwnAccount: Bool {
         user.id == accountManager.loggedInUser?.id
     }
     
-    private func onPressEditButton() {
-        
-    }
-    
+    // MARK: Layout Declaration
     public var body: some View {
         GeometryReader { metrics in
             ZStack {
@@ -50,6 +51,7 @@ struct DisplayUserProfilePage: View {
         .navigationTitle("Profile")
     }
     
+    // MARK: Layer Views
     private var layerPageBackground: some View {
         let systemPageBackground = systemColorScheme == .dark ? Color.black : Color.white
         return VStack(spacing: 0) {
@@ -99,9 +101,6 @@ struct DisplayUserProfilePage: View {
                 Button("Logout") {
                     accountManager.clearUserForSession()
                 }
-                Button("Edit") {
-                    onPressEditButton()
-                }
             }
             
             Button(action: {}) {
@@ -113,6 +112,7 @@ struct DisplayUserProfilePage: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     let firstName = LoremSwiftum.Lorem.firstName
     let lastName  = LoremSwiftum.Lorem.lastName

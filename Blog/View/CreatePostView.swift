@@ -3,6 +3,7 @@ import SwiftData
 
 struct CreatePostView: View {
     
+    // MARK: Environment
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
@@ -11,6 +12,7 @@ struct CreatePostView: View {
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: Alert State
     @State
     private var alertBoxVisible = false
     @State
@@ -20,12 +22,17 @@ struct CreatePostView: View {
     @State
     private var alertBoxText = "Not prepared for submission"
     
+    // MARK: Button State
     @State
     private var buttonSubmitAnimate = 0
     
+    // MARK: Text Field State
     @State
-    private var fieldBodyContents = ""
+    private var fieldContents = ""
+    @FocusState
+    private var isFocusingField: Bool
     
+    // MARK: Helper Functions
     private func flashAlert(
         _ text: String,
         color: Color = .red
@@ -53,7 +60,7 @@ struct CreatePostView: View {
     
     // MARK: Button Handlers
     private func onPressSubmit() {
-        let trimmedBody = fieldBodyContents.trimmed
+        let trimmedBody = fieldContents.trimmed
         
         if trimmedBody.isEmpty {
             flashAlert("Your new post cannot be empty")
@@ -87,22 +94,23 @@ struct CreatePostView: View {
     }
     
     private func onPressErase() {
-        if fieldBodyContents.isEmpty {
+        if fieldContents.isEmpty {
             flashAlert("You must enter something to erase")
             return
         }
         
-        fieldBodyContents = ""
+        fieldContents = ""
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
     
+    // MARK: Mini-Views
     private var buttonSubmit: some View {
         let stateColor: Color = switch buttonSubmitAnimate {
         case 1: .red
         case 2: .green
         default: .blue
         }
-        let color: Color = fieldBodyContents.isEmpty ? .gray : stateColor
+        let color: Color = fieldContents.isEmpty ? .gray : stateColor
         let symbol = buttonSubmitAnimate==1 ? "xmark" : "checkmark"
         
         return Button(action: onPressSubmit) {
@@ -119,15 +127,17 @@ struct CreatePostView: View {
                 .imageScale(.large)
                 .frame(height: 30)
         }
-        .tint(fieldBodyContents.isEmpty ? .gray : .red)
+        .tint(fieldContents.isEmpty ? .gray : .red)
     }
     
     private var fieldPostBody: some View {
-        return TextField(text: $fieldBodyContents, prompt: Text("Enter the body of your new post...")) {
+        return TextField(text: $fieldContents, prompt: Text("Enter the body of your new post...")) {
             Text("Enter the body of your new post")
         }
+        .focused($isFocusingField)
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         NavigationStack {
             VStack {
@@ -163,9 +173,15 @@ struct CreatePostView: View {
                 Spacer()
             }
             .navigationTitle("New Post")
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    isFocusingField = true
+                }
+            }
         }
     }
     
+    // MARK: Section Views
     private var sectionAlertBox: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -180,6 +196,7 @@ struct CreatePostView: View {
     }
 }
 
+// MARK: Previews
 #Preview("CreateBlogPostPage") {
     CreatePostView()
         .environmentObject(UserAccountManager())

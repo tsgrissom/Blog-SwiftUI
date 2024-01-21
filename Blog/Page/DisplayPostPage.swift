@@ -4,6 +4,7 @@ import SwiftData
 
 struct DisplayPostPage: View {
     
+    // MARK: Environment
     @EnvironmentObject
     private var accountManager: UserAccountManager
     @EnvironmentObject
@@ -14,6 +15,7 @@ struct DisplayPostPage: View {
     @Environment(\.modelContext)
     private var modelContext
     
+    // MARK: SwiftData Queries
     @Query
     private var posts: [Post]
     @Query
@@ -21,12 +23,14 @@ struct DisplayPostPage: View {
     @Query
     private var users: [UserAccount]
     
+    // MARK: Initialization
     private let post: Post
     
     init(_ post: Post) {
         self.post = post
     }
     
+    // MARK: State
     @State
     private var fieldReplyContents = ""
     @FocusState
@@ -35,6 +39,7 @@ struct DisplayPostPage: View {
     @State
     private var buttonSubmitReplyAnimate = 0
     
+    // MARK: Helper Variables
     private var getCommentsInResponse: [PostComment] {
         postManager.getCommentsInResponseToPost(post, allComments: comments)
     }
@@ -43,6 +48,7 @@ struct DisplayPostPage: View {
         accountManager.loggedInUser?.id == post.postedBy
     }
     
+    // MARK: Button Handlers
     private func onPressReplyButton() {
         isFieldReplyFocused = true
     }
@@ -74,66 +80,7 @@ struct DisplayPostPage: View {
         fieldReplyContents = ""
     }
     
-    var body: some View {
-        let user = users.first { $0.id == post.postedBy }
-        
-        return VStack(spacing: 0) {
-            sectionPostBody
-                .padding(.top, 8)
-                .padding(.horizontal)
-            rowPostedBy
-                .padding(.top, 4)
-                .padding(.horizontal)
-            sectionUserDependentControls
-                .padding(.top)
-                .padding(.horizontal)
-            sectionNewReply
-                .padding(.top)
-                .padding(.horizontal)
-            sectionDisplayReplies
-                .padding(.top)
-            
-            Spacer()
-        }
-        .navigationTitle("Post by @\(user.getUsername())")
-    }
-    
-    @ViewBuilder
-    private var rowPostedBy: some View {
-        let createdDate = Date(timeIntervalSince1970: post.createdAt)
-        let user = users.first {
-            $0.id == post.postedBy
-        }
-        
-        if user != nil {
-            UserAtTimeView(user: user!, at: createdDate)
-        } else {
-            rowPostedByUnknown
-        }
-    }
-    
-    private var rowPostedByUnknown: some View {
-        let formatter = DateFormatter()
-        let createdDate = Date(timeIntervalSince1970: post.createdAt)
-        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"    // American
-        let createdFmt = formatter.string(from: createdDate)
-        
-        return HStack(spacing: 3) {
-            Text("@Unknown")
-                .foregroundStyle(.blue)
-            Text("at \(createdFmt)")
-            Spacer()
-        }
-        .font(.caption)
-    }
-    
-    private var sectionPostBody: some View {
-        HStack {
-            Text(post.body)
-            Spacer()
-        }
-    }
-    
+    // MARK: Mini-Views
     private var buttonReply: some View {
         let bgColor = accountManager.isLoggedIn ? Color.blue : Color.gray
         return Button(action: onPressReplyButton) {
@@ -191,6 +138,69 @@ struct DisplayPostPage: View {
         }
         .buttonStyle(.bordered)
         .tint(tintColor)
+    }
+    
+    // MARK: Layout Declaration
+    var body: some View {
+        let user = users.first { $0.id == post.postedBy }
+        
+        return VStack(spacing: 0) {
+            sectionPostBody
+                .padding(.top, 8)
+                .padding(.horizontal)
+            rowPostedBy
+                .padding(.top, 4)
+                .padding(.horizontal)
+            sectionUserDependentControls
+                .padding(.top)
+                .padding(.horizontal)
+            sectionNewReply
+                .padding(.top)
+                .padding(.horizontal)
+            sectionDisplayReplies
+                .padding(.top)
+            
+            Spacer()
+        }
+        .navigationTitle("Post by @\(user.getUsername())")
+    }
+    
+    // MARK: Row Views
+    @ViewBuilder
+    private var rowPostedBy: some View {
+        let createdDate = Date(timeIntervalSince1970: post.createdAt)
+        let user = users.first {
+            $0.id == post.postedBy
+        }
+        
+        if user != nil {
+            UserAtTimeView(user: user!, at: createdDate)
+        } else {
+            rowPostedByUnknown
+        }
+    }
+    
+    private var rowPostedByUnknown: some View {
+        let formatter = DateFormatter()
+        let createdDate = Date(timeIntervalSince1970: post.createdAt)
+        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"    // American
+        let createdFmt = formatter.string(from: createdDate)
+        
+        return HStack(spacing: 3) {
+            Text("@Unknown")
+                .foregroundStyle(.blue)
+            Text("at \(createdFmt)")
+            Spacer()
+        }
+        .font(.caption)
+    }
+    
+    // MARK: Section Views
+    private var sectionPostBody: some View {
+        HStack {
+            Text(post.body)
+            Spacer()
+        }
     }
     
     private var sectionUserDependentControls: some View {
@@ -277,6 +287,7 @@ struct DisplayPostPage: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     let firstName = LoremSwiftum.Lorem.firstName
     let tweet     = LoremSwiftum.Lorem.tweet

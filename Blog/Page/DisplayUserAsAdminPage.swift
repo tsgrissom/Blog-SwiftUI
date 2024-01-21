@@ -1,8 +1,10 @@
+import LoremSwiftum
 import SwiftUI
 import SwiftData
 
 struct DisplayUserAsAdminPage: View {
     
+    // MARK: Environment
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
@@ -11,17 +13,20 @@ struct DisplayUserAsAdminPage: View {
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var comments: [PostComment]
     @Query
     private var posts: [Post]
     
+    // MARK: Initialization
     private let user: UserAccount
     
     init(_ user: UserAccount) {
         self.user = user
     }
     
+    // MARK: State
     @State
     private var animateTextInternalIdCopied = false
     @State
@@ -29,6 +34,7 @@ struct DisplayUserAsAdminPage: View {
     @State
     private var displaySectionUserSecrets = false
     
+    // MARK: Alert State
     @State
     private var alertBoxColor = Color.red
     @State
@@ -38,6 +44,7 @@ struct DisplayUserAsAdminPage: View {
     @State
     private var alertBoxDebounce = false
     
+    // MARK: Helpers
     private var isOwnAccount: Bool {
         accountManager.loggedInUser?.id == user.id
     }
@@ -67,6 +74,7 @@ struct DisplayUserAsAdminPage: View {
         }
     }
     
+    // MARK: Text Views
     private var textInternalId: some View {
         func onPress() {
             UIPasteboard.general.string = user.id
@@ -165,6 +173,7 @@ struct DisplayUserAsAdminPage: View {
         }
     }
     
+    // MARK: Button Views
     private var buttonDelete: some View {
         func onPress() {
             isConfirmDeletePresented = true
@@ -305,6 +314,7 @@ struct DisplayUserAsAdminPage: View {
         }
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -326,6 +336,7 @@ struct DisplayUserAsAdminPage: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
+    // MARK: Section Views
     private var sectionAlertBox: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -383,15 +394,12 @@ struct DisplayUserAsAdminPage: View {
     }
 }
 
-private var mockUser: UserAccount {
-    UserAccount(
-        username: "Tyler",
-        password: "Password"
-    )
-}
-
+// MARK: Previews
 #Preview {
-    NavigationStack {
+    let firstName = LoremSwiftum.Lorem.firstName
+    let mockUser = UserAccount(username: firstName, password: "Password")
+    
+    return NavigationStack {
         DisplayUserAsAdminPage(mockUser)
     }
     .environmentObject(UserAccountManager())
