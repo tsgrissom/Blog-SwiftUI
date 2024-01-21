@@ -77,6 +77,9 @@ struct DisplayCommentPage: View {
         }
         .navigationTitle(title)
     }
+}
+
+extension DisplayCommentPage {
     
     // MARK: Section Views
     private var sectionCommentTree: some View {

@@ -40,7 +40,30 @@ struct SettingsPage: View {
     @State
     private var isPresentingModifyUsernameSheet = false
     
-    // MARK: Mini-Views
+    // MARK: Layout Declaration
+    public var body: some View {
+        return NavigationStack {
+            layerForeground
+                .navigationTitle("Settings")
+        }
+    }
+    
+    private var layerForeground: some View {
+        return VStack(alignment: .leading) {
+            if users.isEmpty {
+                Text("No registered users")
+            } else if !accountManager.isLoggedIn {
+                AccountNotLoggedInView(verticalNavLinks: true)
+            } else {
+                sectionUserSettings
+            }
+        }
+    }
+}
+
+extension SettingsPage {
+    
+    // MARK: Button Views
     private var buttonResetComments: some View {
         func onPress() {
             isPresentingConfirmResetComments = true
@@ -169,26 +192,6 @@ struct SettingsPage: View {
         .confirmationDialog("Log out of your account? (\(username))", isPresented: $isPresentingConfirmLogOut, titleVisibility: .visible) {
             Button("Confirm", role: .destructive, action: onConfirm)
             Button("Cancel", role: .cancel, action: {})
-        }
-    }
-    
-    // MARK: Layout Declaration
-    public var body: some View {
-        return NavigationStack {
-            layerForeground
-                .navigationTitle("Settings")
-        }
-    }
-    
-    private var layerForeground: some View {
-        return VStack(alignment: .leading) {
-            if users.isEmpty {
-                Text("No registered users")
-            } else if !accountManager.isLoggedIn {
-                AccountNotLoggedInView(verticalNavLinks: true)
-            } else {
-                sectionUserSettings
-            }
         }
     }
     

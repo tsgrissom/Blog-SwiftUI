@@ -19,6 +19,40 @@ struct RecentPostsFeedPage: View {
     @State
     private var isPresentingSheetCreatePost = false
     
+    // MARK: Layout Declaration
+    public var body: some View {
+        NavigationStack {
+            VStack {
+                if accountManager.loggedInUser == nil {
+                    AccountNotLoggedInView()
+                        .padding(.bottom, 5)
+                } else {
+                    textWelcome
+                        .padding(.horizontal)
+
+                    buttonCreate
+                        .padding(.horizontal)
+                        .padding(.top, 5)
+                        .padding(.bottom, 8)
+                }
+                
+                if posts.isEmpty {
+                    textNoPosts
+                        .padding(.top, 10)
+                } else {
+                    listRecentPosts
+                }
+            }
+            .navigationTitle("Feed")
+        }
+        .sheet(isPresented: $isPresentingSheetCreatePost, content: {
+            CreatePostView()
+        })
+    }
+}
+
+extension RecentPostsFeedPage {
+    
     // MARK: Button Views
     private var buttonCreate: some View {
         Button(action: {
@@ -34,42 +68,26 @@ struct RecentPostsFeedPage: View {
         .tint(.blue)
     }
     
-    // MARK: Layout Declaration
-    public var body: some View {
-        NavigationStack {
-            VStack {
-                if accountManager.loggedInUser == nil {
-                    AccountNotLoggedInView()
-                        .padding(.bottom, 5)
-                } else {
-                    Text("Welcome, \(accountManager.loggedInUsernameOrNone)")
-                        .padding(.horizontal)
-
-                    buttonCreate
-                        .padding(.horizontal)
-                        .padding(.top, 5)
-                        .padding(.bottom, 8)
-                }
-                
-                if posts.isEmpty {
-                    Text("No recent posts")
-                        .font(.headline)
-                        .padding(.top, 10)
-                } else {
-                    List {
-                        ForEach(posts) { post in
-                            NavigationLink(destination: DisplayPostPage(post)) {
-                                PostPreviewView(post, displayUser: true)
-                            }
-                        }
-                    }
+    // MARK: List Views
+    private var listRecentPosts: some View {
+        return List {
+            ForEach(posts) { post in
+                NavigationLink(destination: DisplayPostPage(post)) {
+                    PostPreviewView(post, displayUser: true)
                 }
             }
-            .navigationTitle("Feed")
         }
-        .sheet(isPresented: $isPresentingSheetCreatePost, content: {
-            CreatePostView()
-        })
+    }
+    
+    // MARK: Text Views
+    private var textWelcome: some View {
+        let username = accountManager.loggedInUsernameOrNone
+        return Text("Welcome, \(username)")
+    }
+    
+    private var textNoPosts: some View {
+        return Text("No recent posts")
+            .font(.headline)
     }
 }
 

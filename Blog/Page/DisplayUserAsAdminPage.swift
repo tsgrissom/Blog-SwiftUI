@@ -74,104 +74,30 @@ struct DisplayUserAsAdminPage: View {
         }
     }
     
-    // MARK: Text Views
-    private var textInternalId: some View {
-        func onPress() {
-            UIPasteboard.general.string = user.id
-            animateTextInternalIdCopied = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                animateTextInternalIdCopied = false
-            }
-        }
-        
-        let blobId  = "Internal ID: \(user.id)"
-        let fgColor = animateTextInternalIdCopied ? Color.green : Color.primary
-        let text    = animateTextInternalIdCopied ? "Copied to clipboard" : blobId
-        
-        return HStack {
-            ScrollView(.horizontal) {
-                Text(text)
-                    .foregroundStyle(fgColor)
-                    .padding(.vertical, 5)
-            }
-        }
-        .onTapGesture {
-            onPress()
-        }
-    }
-    
-    private var textJoined: some View {
-        let createdDate = Date(timeIntervalSince1970: user.createdAt)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
-        let createdFmt = formatter.string(from: createdDate)
-        
-        return Text("Joined: \(createdFmt)")
-    }
-    
-    private var textPermissionLevel: some View {
-        let level = user.permissionLevel
-        let title = user.getPermissionLevel().getRank()
-        let selfId = accountManager.loggedInUser?.id
-        let shouldPresent = level != 4 && user.id != selfId
-        
-        return HStack {
-            Text("Rank: \(title) (\(level))")
-            Spacer()
-            if shouldPresent {
-                buttonPromote
-                buttonDemote
-            }
-        }
-    }
-    
-    private var textInferiorRank: some View {
-        let bool = user.isRankedInferiorTo(accountManager.loggedInUser)
-        let binaryWord = bool ? "Yes" : "No"
-        return Text("Inferior Rank: \(binaryWord)")
-    }
-    
-    private var textSuperiorRank: some View {
-        let bool = user.isRankedSuperiorTo(accountManager.loggedInUser)
-        let binaryWord = bool ? "Yes" : "No"
-        return Text("Superior Rank: \(binaryWord)")
-    }
-    
-    private var textCommentsCount: some View {
-        let associatedComments = user.getAllComments(allComments: comments)
-        return Text("Comments made: \(associatedComments.count)")
-    }
-    
-    private var textPostsCount: some View {
-        let associatedPosts = user.getAllPosts(allPosts: posts)
-        return Text("Posts made: \(associatedPosts.count)")
-    }
-    
-    private var textUsername: some View {
-        return Text("Username: \"\(user.username)\"")
-    }
-    
-    private var textDisplayName: some View {
-        return Text("Display Name: \"\(user.displayName)\"")
-    }
-    
-    private var textBiography: some View {
-        return Text("Biography: \"\(user.biography)\"")
-    }
-    
-    private var textPassword: some View {
-        return HStack {
-            Text("Password: \(user.password)")
-            Spacer()
-            
-            if !isOwnAccount {
-                Button("Log In As") {
-                    accountManager.loggedInUser = user
-                    dismiss()
+    // MARK: Layout Declaration
+    public var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                sectionList
+                
+                if alertBoxVisible {
+                    sectionAlertBox
+                        .offset(x: 0, y: -(geometry.size.width*0.80))
+                        .transition(.move(edge: .top))
+                        .onTapGesture {
+                            withAnimation {
+                                alertBoxVisible = false
+                            }
+                        }
                 }
             }
         }
+        .navigationTitle("Admin View: User @\(user.username)")
+        .navigationBarTitleDisplayMode(.inline)
     }
+}
+
+extension DisplayUserAsAdminPage {
     
     // MARK: Button Views
     private var buttonDelete: some View {
@@ -314,26 +240,103 @@ struct DisplayUserAsAdminPage: View {
         }
     }
     
-    // MARK: Layout Declaration
-    public var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                sectionList
-                
-                if alertBoxVisible {
-                    sectionAlertBox
-                        .offset(x: 0, y: -(geometry.size.width*0.80))
-                        .transition(.move(edge: .top))
-                        .onTapGesture {
-                            withAnimation {
-                                alertBoxVisible = false
-                            }
-                        }
+    // MARK: Text Views
+    private var textInternalId: some View {
+        func onPress() {
+            UIPasteboard.general.string = user.id
+            animateTextInternalIdCopied = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                animateTextInternalIdCopied = false
+            }
+        }
+        
+        let blobId  = "Internal ID: \(user.id)"
+        let fgColor = animateTextInternalIdCopied ? Color.green : Color.primary
+        let text    = animateTextInternalIdCopied ? "Copied to clipboard" : blobId
+        
+        return HStack {
+            ScrollView(.horizontal) {
+                Text(text)
+                    .foregroundStyle(fgColor)
+                    .padding(.vertical, 5)
+            }
+        }
+        .onTapGesture {
+            onPress()
+        }
+    }
+    
+    private var textJoined: some View {
+        let createdDate = Date(timeIntervalSince1970: user.createdAt)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM'/'dd'/'yyyy 'at' h:mm a"
+        let createdFmt = formatter.string(from: createdDate)
+        
+        return Text("Joined: \(createdFmt)")
+    }
+    
+    private var textPermissionLevel: some View {
+        let level = user.permissionLevel
+        let title = user.getPermissionLevel().getRank()
+        let selfId = accountManager.loggedInUser?.id
+        let shouldPresent = level != 4 && user.id != selfId
+        
+        return HStack {
+            Text("Rank: \(title) (\(level))")
+            Spacer()
+            if shouldPresent {
+                buttonPromote
+                buttonDemote
+            }
+        }
+    }
+    
+    private var textInferiorRank: some View {
+        let bool = user.isRankedInferiorTo(accountManager.loggedInUser)
+        let binaryWord = bool ? "Yes" : "No"
+        return Text("Inferior Rank: \(binaryWord)")
+    }
+    
+    private var textSuperiorRank: some View {
+        let bool = user.isRankedSuperiorTo(accountManager.loggedInUser)
+        let binaryWord = bool ? "Yes" : "No"
+        return Text("Superior Rank: \(binaryWord)")
+    }
+    
+    private var textCommentsCount: some View {
+        let associatedComments = user.getAllComments(allComments: comments)
+        return Text("Comments made: \(associatedComments.count)")
+    }
+    
+    private var textPostsCount: some View {
+        let associatedPosts = user.getAllPosts(allPosts: posts)
+        return Text("Posts made: \(associatedPosts.count)")
+    }
+    
+    private var textUsername: some View {
+        return Text("Username: \"\(user.username)\"")
+    }
+    
+    private var textDisplayName: some View {
+        return Text("Display Name: \"\(user.displayName)\"")
+    }
+    
+    private var textBiography: some View {
+        return Text("Biography: \"\(user.biography)\"")
+    }
+    
+    private var textPassword: some View {
+        return HStack {
+            Text("Password: \(user.password)")
+            Spacer()
+            
+            if !isOwnAccount {
+                Button("Log In As") {
+                    accountManager.loggedInUser = user
+                    dismiss()
                 }
             }
         }
-        .navigationTitle("Admin View: User @\(user.username)")
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     // MARK: Section Views

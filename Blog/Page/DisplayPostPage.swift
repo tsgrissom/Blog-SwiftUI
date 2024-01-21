@@ -80,7 +80,35 @@ struct DisplayPostPage: View {
         fieldReplyContents = ""
     }
     
-    // MARK: Mini-Views
+    // MARK: Layout Declaration
+    var body: some View {
+        let user = users.first { $0.id == post.postedBy }
+        
+        return VStack(spacing: 0) {
+            sectionPostBody
+                .padding(.top, 8)
+                .padding(.horizontal)
+            rowPostedBy
+                .padding(.top, 4)
+                .padding(.horizontal)
+            sectionUserDependentControls
+                .padding(.top)
+                .padding(.horizontal)
+            sectionNewReply
+                .padding(.top)
+                .padding(.horizontal)
+            sectionDisplayReplies
+                .padding(.top)
+            
+            Spacer()
+        }
+        .navigationTitle("Post by @\(user.getUsername())")
+    }
+}
+
+extension DisplayPostPage {
+    
+    // MARK: Button Views
     private var buttonReply: some View {
         let bgColor = accountManager.isLoggedIn ? Color.blue : Color.gray
         return Button(action: onPressReplyButton) {
@@ -140,29 +168,37 @@ struct DisplayPostPage: View {
         .tint(tintColor)
     }
     
-    // MARK: Layout Declaration
-    var body: some View {
-        let user = users.first { $0.id == post.postedBy }
+    // MARK: List Views
+    private var listPostReplies: some View {
+        let attached = getCommentsInResponse
         
-        return VStack(spacing: 0) {
-            sectionPostBody
-                .padding(.top, 8)
-                .padding(.horizontal)
-            rowPostedBy
-                .padding(.top, 4)
-                .padding(.horizontal)
-            sectionUserDependentControls
-                .padding(.top)
-                .padding(.horizontal)
-            sectionNewReply
-                .padding(.top)
-                .padding(.horizontal)
-            sectionDisplayReplies
-                .padding(.top)
-            
-            Spacer()
+        return List {
+            ForEach(attached) { comment in
+                getCommentTreeView(comment)
+                    .swipeActions(edge: .trailing) {
+                        if comment.isOwnedBy(accountManager.loggedInUser) {
+                            Button("Delete") {
+                                modelContext.delete(comment)
+                                try? modelContext.save()
+                            }
+                            .tint(.red)
+                        }
+                    }
+            }
         }
-        .navigationTitle("Post by @\(user.getUsername())")
+    }
+    
+    // MARK: Text Views
+    private var textRepliesHeader: some View {
+        let comments = getCommentsInResponse
+        let count = comments.count
+        
+        let text = count==0 ? "No Replies" : "Replies (\(count))"
+        
+        return Text(text)
+            .font(.title)
+            .bold()
+            .padding(.horizontal, 18)
     }
     
     // MARK: Row Views
@@ -243,37 +279,6 @@ struct DisplayPostPage: View {
         let children = comment.getChildComments(allComments: comments)
         return NavigationLink(destination: DisplayCommentPage(comment)) {
             CommentTreeView(comment, children: children, mode: .collapsedAfterOne)
-        }
-    }
-    
-    private var textRepliesHeader: some View {
-        let comments = getCommentsInResponse
-        let count = comments.count
-        
-        let text = count==0 ? "No Replies" : "Replies (\(count))"
-        
-        return Text(text)
-            .font(.title)
-            .bold()
-            .padding(.horizontal, 18)
-    }
-    
-    private var listPostReplies: some View {
-        let attached = getCommentsInResponse
-        
-        return List {
-            ForEach(attached) { comment in
-                getCommentTreeView(comment)
-                    .swipeActions(edge: .trailing) {
-                        if comment.isOwnedBy(accountManager.loggedInUser) {
-                            Button("Delete") {
-                                modelContext.delete(comment)
-                                try? modelContext.save()
-                            }
-                            .tint(.red)
-                        }
-                    }
-            }
         }
     }
     

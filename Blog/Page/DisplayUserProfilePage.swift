@@ -79,6 +79,10 @@ struct DisplayUserProfilePage: View {
             Spacer()
         }
     }
+}
+
+// MARK: Smaller Views
+extension DisplayUserProfilePage {
     
     private var listRecentPosts: some View {
         let recentPosts = user.getAllPosts(allPosts: posts)
