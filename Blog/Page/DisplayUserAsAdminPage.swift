@@ -399,8 +399,7 @@ extension DisplayUserAsAdminPage {
 
 // MARK: Previews
 #Preview {
-    let firstName = LoremSwiftum.Lorem.firstName
-    let mockUser = UserAccount(username: firstName, password: "Password")
+    let mockUser = MockupUtilities.getMockUser()
     
     return NavigationStack {
         DisplayUserAsAdminPage(mockUser)

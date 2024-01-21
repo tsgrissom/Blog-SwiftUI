@@ -8,6 +8,7 @@ enum CommentTreeDisplayMode: CaseIterable {
 
 struct CommentTreeView: View {
     
+    // MARK: Initialization
     private let parent: PostComment
     private let children: [PostComment]
     
@@ -24,7 +25,11 @@ struct CommentTreeView: View {
         self.mode = mode
     }
     
-    private func getViewForChild(text: String, action: @escaping () -> Void) -> some View {
+    // MARK: Helpers
+    private func getViewForChild(
+        text: String,
+        action: @escaping () -> Void
+    ) -> some View {
         return HStack {
             Button(action: {
                 action()
@@ -39,7 +44,10 @@ struct CommentTreeView: View {
         }
     }
     
-    private func getViewForChildComment(_ comment: PostComment, action: @escaping () -> Void) -> some View {
+    private func getViewForChildComment(
+        _ comment: PostComment,
+        action: @escaping () -> Void
+    ) -> some View {
         return HStack {
             Button(action: {
                 action()
@@ -64,6 +72,7 @@ struct CommentTreeView: View {
         }
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         VStack {
             CommentView(parent)
@@ -74,7 +83,12 @@ struct CommentTreeView: View {
             }
         }
     }
+}
+
+// MARK: Views
+extension CommentTreeView {
     
+    // MARK: Children
     private var childrenDisplayModeAll: some View {
         ForEach(children) { child in
             getViewForChildComment(child, action: cycleMode)
@@ -94,28 +108,27 @@ struct CommentTreeView: View {
     }
 }
 
+// MARK: Previews
 #Preview("Display Mode All") {
-    let firstName = LoremSwiftum.Lorem.firstName
-    let tweet = LoremSwiftum.Lorem.tweet
-    let shortTweet = LoremSwiftum.Lorem.shortTweet
+    let lorem  = MockupUtilities.getShortLorem()
+    let lorem2 = MockupUtilities.getShortLorem()
     
-    let mockUser = UserAccount(username: firstName, password: "Password")
-    let mockPost = Post(body: tweet, postedBy: mockUser)
-    let mockComment = PostComment(body: "Parent: \(shortTweet)", postedBy: mockUser, attachedTo: mockPost)
-    let mockReplyToComment = PostComment(body: "Child: \(shortTweet)", postedBy: mockUser, attachedTo: mockPost, parentComment: mockComment)
+    let mockUser = MockupUtilities.getMockUser()
+    let mockPost = MockupUtilities.getMockPost(by: mockUser)
+    let mockComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost, with: "Parent: \(lorem)")
+    let mockReplyToComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost, under: mockComment, with: "Child: \(lorem2)")
     
     return CommentTreeView(mockComment, children: [mockReplyToComment, mockReplyToComment, mockReplyToComment], mode: .all)
 }
 
 #Preview("Display Mode Collapsed After One") {
-    let firstName = LoremSwiftum.Lorem.firstName
-    let tweet = LoremSwiftum.Lorem.tweet
-    let shortTweet = LoremSwiftum.Lorem.shortTweet
+    let lorem  = MockupUtilities.getShortLorem()
+    let lorem2 = MockupUtilities.getShortLorem()
     
-    let mockUser = UserAccount(username: firstName, password: "Password")
-    let mockPost = Post(body: tweet, postedBy: mockUser)
-    let mockComment = PostComment(body: "Parent: \(shortTweet)", postedBy: mockUser, attachedTo: mockPost)
-    let mockReplyToComment = PostComment(body: "Child: \(shortTweet)", postedBy: mockUser, attachedTo: mockPost, parentComment: mockComment)
+    let mockUser = MockupUtilities.getMockUser()
+    let mockPost = MockupUtilities.getMockPost(by: mockUser)
+    let mockComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost, under: nil, with: "Parent: \(lorem)")
+    let mockReplyToComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost, under: mockComment, with: "Child: \(lorem2)")
     
     return CommentTreeView(mockComment, children: [mockReplyToComment, mockReplyToComment, mockReplyToComment], mode: .collapsedAfterOne)
 }

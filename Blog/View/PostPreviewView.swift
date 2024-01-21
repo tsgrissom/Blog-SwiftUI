@@ -4,17 +4,19 @@ import SwiftData
 
 struct PostPreviewView: View {
     
+    // MARK: Environment
     @Environment(\.modelContext)
     private var modelContext
-    
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var users: [UserAccount]
     @Query
     private var comments: [PostComment]
     
+    // MARK: Initialization
     private let post: Post
     private let displayUser: Bool
     private let displayReplyCount: Bool
@@ -25,10 +27,12 @@ struct PostPreviewView: View {
         self.displayReplyCount = displayReplyCount
     }
     
+    // MARK: Helpers
     private var isOwnedByCurrentUser: Bool {
         return post.postedBy == accountManager.loggedInUser?.id
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -54,7 +58,12 @@ struct PostPreviewView: View {
             }
         }
     }
+}
+
+// MARK: Views
+extension PostPreviewView {
     
+    // MARK: Rows
     @ViewBuilder
     private var rowUserAtTime: some View {
         let createdDate = Date(timeIntervalSince1970: post.createdAt)
@@ -96,11 +105,10 @@ struct PostPreviewView: View {
     }
 }
 
+// MARK: Previews
 #Preview {
-    let firstName = LoremSwiftum.Lorem.firstName
-    let tweet     = LoremSwiftum.Lorem.tweet
-    let mockUser = UserAccount(username: firstName, password: "Password")
-    let mockPost = Post(body: tweet, postedBy: mockUser)
+    let mockUser = MockupUtilities.getMockUser()
+    let mockPost = MockupUtilities.getMockPost(by: mockUser)
     
     return VStack(spacing: 0) {
         Text("With User")

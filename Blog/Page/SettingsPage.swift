@@ -1,3 +1,4 @@
+import LoremSwiftum
 import SwiftUI
 import SwiftData
 
@@ -136,9 +137,8 @@ extension SettingsPage {
         }
     }
     
-    private func randomMockUsername() -> String {
-        let firstNames = ["George", "James", "Bill", "Jimmy", "Richard", "John", "Dwight", "Harry", "Franklin", "Calvin"]
-        var name = firstNames.randomElement() ?? "George"
+    private func randomUsername() -> String {
+        var name = LoremSwiftum.Lorem.firstName
         
         for _ in 1...4 {
             let random = Int.random(in: 0...9)
@@ -155,7 +155,7 @@ extension SettingsPage {
         
         func onConfirm() {
             for _ in 1...3 {
-                let randomName = randomMockUsername()
+                let randomName = randomUsername()
                 let new = UserAccount(username: randomName, password: "Password")
                 modelContext.insert(new)
             }

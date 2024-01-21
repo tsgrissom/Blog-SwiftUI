@@ -9,17 +9,19 @@ enum UserModifyProfileMode {
 
 struct UserModifyProfileFieldView: View {
     
+    // MARK: Environment
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
     private var modelContext
-    
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var users: [UserAccount]
     
+    // MARK: Initialization
     private let mode: UserModifyProfileMode
     
     init(mode: UserModifyProfileMode) {
@@ -27,6 +29,7 @@ struct UserModifyProfileFieldView: View {
         loadCurrents()
     }
     
+    // MARK: Load
     private func loadCurrents() {
         let currentUser = users.first { $0.id == accountManager.loggedInUser?.id }
         let currentValue = switch mode {
@@ -39,6 +42,7 @@ struct UserModifyProfileFieldView: View {
         fieldContentsOriginal = currentValue ?? ""
     }
     
+    // MARK: State
     /*
      * 0=Default
      * 1=Error
@@ -54,10 +58,12 @@ struct UserModifyProfileFieldView: View {
     @FocusState
     private var isFieldFocused: Bool
     
+    // MARK: Helpers
     private func flashAlert(_ text: String = "Cannot modify your profile") {
         UINotificationFeedbackGenerator().notificationOccurred(.warning)
     }
     
+    // MARK: Button Handlers
     private func onSubmit() {
         func flashButtonFeedback(_ animateTo: Int = 1) {
             buttonSubmitAnimate = animateTo
@@ -104,6 +110,7 @@ struct UserModifyProfileFieldView: View {
         }
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         let noun = switch mode {
             case .biography: "Biography"
@@ -132,7 +139,12 @@ struct UserModifyProfileFieldView: View {
             }
         }
     }
+}
+
+// MARK: Views
+extension UserModifyProfileFieldView {
     
+    // MARK: Buttons
     private var isButtonSubmitDisabled: Bool {
         return fieldContents.trimmed.isEmpty
     }
@@ -218,6 +230,7 @@ struct UserModifyProfileFieldView: View {
         .buttonStyle(.plain)
     }
     
+    // MARK: Text Fields
     private var fieldBiography: some View {
         let noun = switch mode {
             case .biography: "biography"
@@ -240,6 +253,7 @@ struct UserModifyProfileFieldView: View {
         }
     }
     
+    // MARK: Rows + Sections
     private var rowForm: some View {
         return HStack {
             fieldBiography
@@ -248,6 +262,7 @@ struct UserModifyProfileFieldView: View {
     }
 }
 
+// MARK: Previews
 #Preview("Biography") {
     UserModifyProfileFieldView(mode: .biography)
         .environmentObject(UserAccountManager())

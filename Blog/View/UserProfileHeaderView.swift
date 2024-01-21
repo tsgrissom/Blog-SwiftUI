@@ -3,16 +3,18 @@ import SwiftUI
 
 struct UserProfileHeaderView: View {
     
+    // MARK: Environment
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: Initialization
     private let user: UserAccount
     
     init(_ user: UserAccount) {
         self.user = user
     }
     
-    
+    // MARK: State
     @State
     private var isPresentingConfirmModifyUsername = false
     @State
@@ -22,6 +24,7 @@ struct UserProfileHeaderView: View {
     @State
     private var isPresentingModifyUsernameSheet = false
     
+    // MARK: Layout Declaration
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(user.displayName)
@@ -66,7 +69,12 @@ struct UserProfileHeaderView: View {
             }
         }
     }
+}
+
+// MARK: Views
+extension UserProfileHeaderView {
     
+    // MARK: Text
     @ViewBuilder
     private var textBiography: some View {
         if user.biography.isEmpty {
@@ -78,17 +86,14 @@ struct UserProfileHeaderView: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     func generateViewForMockUser() -> some View {
-        let firstName = LoremSwiftum.Lorem.firstName
-        let lastName  = LoremSwiftum.Lorem.lastName
-        let bio = LoremSwiftum.Lorem.shortTweet
+        let biography = LoremSwiftum.Lorem.shortTweet
+        let mockUser = MockupUtilities.getMockUser()
+        mockUser.biography = Bool.random() ? biography : ""
         
-        let user = UserAccount(username: firstName, password: "Password")
-        user.displayName = "\(firstName)\(lastName)"
-        user.biography = Bool.random() ? bio : ""
-        
-        return UserProfileHeaderView(user)
+        return UserProfileHeaderView(mockUser)
     }
     
     return ScrollView {

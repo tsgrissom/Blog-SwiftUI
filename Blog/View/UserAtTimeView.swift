@@ -3,6 +3,7 @@ import SwiftUI
 
 struct UserAtTimeView: View {
     
+    // MARK: Initialization
     private let user: UserAccount
     private let time: Date
     private let withProfilePicture: Bool
@@ -20,6 +21,7 @@ struct UserAtTimeView: View {
         self.profilePictureLength = profilePictureLength
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         HStack(spacing: 3) {
             navLinkUser
@@ -29,6 +31,10 @@ struct UserAtTimeView: View {
         }
         .font(.caption)
     }
+}
+
+// MARK: Views
+extension UserAtTimeView {
     
     private var navLinkUser: some View {
         HStack(spacing: 3) {
@@ -52,13 +58,11 @@ struct UserAtTimeView: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     func generateViewForMockUser() -> some View {
-        let firstName = LoremSwiftum.Lorem.firstName
-        let lastName = LoremSwiftum.Lorem.lastName
         let now = Date()
-        let mockUser = UserAccount(username: firstName, password: "Password")
-        mockUser.displayName = "\(firstName)\(lastName)"
+        let mockUser = MockupUtilities.getMockUser()
         
         return UserAtTimeView(user: mockUser, at: now, withProfilePicture: Bool.random())
     }

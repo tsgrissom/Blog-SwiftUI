@@ -294,10 +294,8 @@ extension DisplayPostPage {
 
 // MARK: Previews
 #Preview {
-    let firstName = LoremSwiftum.Lorem.firstName
-    let tweet     = LoremSwiftum.Lorem.tweet
-    let mockUser = UserAccount(username: firstName, password: "Password")
-    let mockPost = Post(body: tweet, postedBy: mockUser)
+    let mockUser = MockupUtilities.getMockUser()
+    let mockPost = MockupUtilities.getMockPost(by: mockUser)
     
     return NavigationStack {
         DisplayPostPage(mockPost)

@@ -94,15 +94,15 @@ struct AccountRegistrationView: View {
         let hashString = sha256.compactMap { String(format: "%02x", $0) }.joined()
         
         let permissionLevel = users.count<=0 ? 4 : 0 // If this is the first user registered, ->Superuser
-        let newUser = UserAccount(
+        let new = UserAccount(
             username: fieldUsernameContents,
             password: hashString,
             permissionLevel: permissionLevel
         )
-        modelContext.insert(newUser)
+        modelContext.insert(new)
         try? modelContext.save()
         
-        accountManager.setUserForSession(newUser)
+        accountManager.setUserForSession(new)
         
         flashAlert(text: "Registered account for user \"\(fieldUsernameContents)\"", bgColor: .green)
         

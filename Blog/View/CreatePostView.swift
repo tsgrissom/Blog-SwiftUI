@@ -79,8 +79,8 @@ struct CreatePostView: View {
             return
         }
         
-        let newPost = Post(body: trimmedBody, postedBy: accountManager.loggedInUser!)
-        modelContext.insert(newPost)
+        let new = Post(body: trimmedBody, postedBy: accountManager.loggedInUser!)
+        modelContext.insert(new)
         
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         flashAlert("Your new post has been submitted", color: .green)

@@ -4,12 +4,13 @@ import SwiftData
 
 struct CommentView: View {
     
+    // MARK: Environment
     @Environment(\.modelContext)
     private var modelContext
-    
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var comments: [PostComment]
     @Query
@@ -17,15 +18,18 @@ struct CommentView: View {
     @Query
     private var users: [UserAccount]
     
+    // MARK: Initialization
     private let comment: PostComment
     
     init(_ comment: PostComment) {
         self.comment = comment
     }
     
+    // MARK: State
     @State
     private var isPresentingConfirmDeleteComment = false
     
+    // MARK: Helpers
     private var isOwnedByCurrentUser: Bool {
         let current = accountManager.loggedInUser
         
@@ -36,6 +40,7 @@ struct CommentView: View {
         return false
     }
     
+    // MARK: Layout Declaration
     public var body: some View {
         VStack(alignment: .leading) {
             HStack(spacing: 3) {
@@ -69,7 +74,12 @@ struct CommentView: View {
             buttonShare
         })
     }
+}
+
+// MARK: Views
+extension CommentView {
     
+    // MARK: Buttons
     private var buttonEdit: some View {
         return Button(action: {}) {
             Image(systemName: "pencil")
@@ -93,6 +103,7 @@ struct CommentView: View {
             
     }
     
+    // MARK: Text
     private var textCommentBody: some View {
         return Text("\"\(comment.body)\"")
     }
@@ -114,16 +125,12 @@ struct CommentView: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     func generateViewForMockComment() -> some View {
-        let firstName  = LoremSwiftum.Lorem.firstName
-        let lastName   = LoremSwiftum.Lorem.lastName
-        let tweet      = LoremSwiftum.Lorem.tweet
-        
-        let mockUser = UserAccount(username: firstName, password: "Password")
-        mockUser.displayName = "\(firstName)\(lastName)"
-        let mockPost = Post(body: tweet, postedBy: mockUser)
-        let mockComment = PostComment(body: "String", postedBy: mockUser, attachedTo: mockPost)
+        let mockUser    = MockupUtilities.getMockUser()
+        let mockPost    = MockupUtilities.getMockPost(by: mockUser)
+        let mockComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost)
         
         return CommentView(mockComment)
     }

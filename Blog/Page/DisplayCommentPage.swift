@@ -103,13 +103,9 @@ extension DisplayCommentPage {
 
 // MARK: Previews
 #Preview {
-    let tweet = LoremSwiftum.Lorem.tweet
-    let shortTweet = LoremSwiftum.Lorem.shortTweet
-    let firstName = LoremSwiftum.Lorem.firstName
-    
-    let mockUser = UserAccount(username: firstName, password: "Password")
-    let mockPost = Post(body: tweet, postedBy: mockUser)
-    let mockComment = PostComment(body: shortTweet, postedBy: mockUser, attachedTo: mockPost)
+    let mockUser = MockupUtilities.getMockUser()
+    let mockPost = MockupUtilities.getMockPost(by: mockUser)
+    let mockComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost)
     
     return NavigationStack {
         DisplayCommentPage(mockComment)
