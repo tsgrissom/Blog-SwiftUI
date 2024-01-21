@@ -8,7 +8,6 @@ struct CreatePostView: View {
     private var dismiss
     @Environment(\.modelContext)
     private var modelContext
-    
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
@@ -103,40 +102,6 @@ struct CreatePostView: View {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
     
-    // MARK: Mini-Views
-    private var buttonSubmit: some View {
-        let stateColor: Color = switch buttonSubmitAnimate {
-        case 1: .red
-        case 2: .green
-        default: .blue
-        }
-        let color: Color = fieldContents.isEmpty ? .gray : stateColor
-        let symbol = buttonSubmitAnimate==1 ? "xmark" : "checkmark"
-        
-        return Button(action: onPressSubmit) {
-            Image(systemName: symbol)
-                .imageScale(.large)
-                .frame(height: 30)
-        }
-        .tint(color)
-    }
-    
-    private var buttonErase: some View {
-        return Button(action: onPressErase) {
-            Image(systemName: "eraser")
-                .imageScale(.large)
-                .frame(height: 30)
-        }
-        .tint(fieldContents.isEmpty ? .gray : .red)
-    }
-    
-    private var fieldPostBody: some View {
-        return TextField(text: $fieldContents, prompt: Text("Enter the body of your new post...")) {
-            Text("Enter the body of your new post")
-        }
-        .focused($isFocusingField)
-    }
-    
     // MARK: Layout Declaration
     public var body: some View {
         NavigationStack {
@@ -180,8 +145,47 @@ struct CreatePostView: View {
             }
         }
     }
+}
+
+// MARK: Views
+extension CreatePostView {
     
-    // MARK: Section Views
+    // MARK: Buttons
+    private var buttonSubmit: some View {
+        let stateColor: Color = switch buttonSubmitAnimate {
+        case 1: .red
+        case 2: .green
+        default: .blue
+        }
+        let color: Color = fieldContents.isEmpty ? .gray : stateColor
+        let symbol = buttonSubmitAnimate==1 ? "xmark" : "checkmark"
+        
+        return Button(action: onPressSubmit) {
+            Image(systemName: symbol)
+                .imageScale(.large)
+                .frame(height: 30)
+        }
+        .tint(color)
+    }
+    
+    private var buttonErase: some View {
+        return Button(action: onPressErase) {
+            Image(systemName: "eraser")
+                .imageScale(.large)
+                .frame(height: 30)
+        }
+        .tint(fieldContents.isEmpty ? .gray : .red)
+    }
+    
+    // MARK: Text Fields
+    private var fieldPostBody: some View {
+        return TextField(text: $fieldContents, prompt: Text("Enter the body of your new post...")) {
+            Text("Enter the body of your new post")
+        }
+        .focused($isFocusingField)
+    }
+    
+    // MARK: Sections
     private var sectionAlertBox: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)

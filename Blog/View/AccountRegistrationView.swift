@@ -4,17 +4,19 @@ import SwiftData
 
 struct AccountRegistrationView: View {
     
+    // MARK: Environment
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
     private var modelContext
-    
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private let users: [UserAccount]
     
+    // MARK: Alert State
     @State
     private var alertBoxVisible = false
     @State
@@ -28,6 +30,7 @@ struct AccountRegistrationView: View {
     @State
     private var alertBoxText = "Not prepared for submission"
     
+    // MARK: Text Field State
     @State
     private var fieldUsernameContents = ""
     @State
@@ -35,6 +38,7 @@ struct AccountRegistrationView: View {
     @State
     private var fieldConfirmPasswordContents = ""
     
+    // MARK: Helpers
     private var isFormPreparedForSubmission: Bool {
         fieldUsernameContents.trimmed.isNotEmpty && fieldPasswordContents.trimmed.isNotEmpty && fieldConfirmPasswordContents.trimmed.isNotEmpty
     }
@@ -47,6 +51,7 @@ struct AccountRegistrationView: View {
         }
     }
     
+    // MARK: Button Handlers
     private func onPressSubmit() {
         alertBoxDisplayUsernameText = fieldUsernameContents.trimmed.isEmpty
         alertBoxDisplayPasswordText = fieldPasswordContents.trimmed.isEmpty
@@ -106,24 +111,7 @@ struct AccountRegistrationView: View {
         }
     }
     
-    private var fieldUsername: some View {
-        TextField(text: $fieldUsernameContents, prompt: Text("Username")) {
-            Text("Enter your username")
-        }
-    }
-    
-    private var fieldPassword: some View {
-        SecureField(text: $fieldPasswordContents, prompt: Text("Password")) {
-            Text("Enter your password")
-        }
-    }
-    
-    private var fieldConfirmPassword: some View {
-        SecureField(text: $fieldConfirmPasswordContents, prompt: Text("Re-enter password")) {
-            Text("Re-enter your password")
-        }
-    }
-    
+    // MARK: Layout Declaration
     public var body: some View {
         NavigationStack {
             ScrollView {
@@ -152,7 +140,31 @@ struct AccountRegistrationView: View {
             .navigationTitle("Register Account")
         }
     }
+}
+
+// MARK: Views
+extension AccountRegistrationView {
     
+    // MARK: Text Fields
+    private var fieldUsername: some View {
+        TextField(text: $fieldUsernameContents, prompt: Text("Username")) {
+            Text("Enter your username")
+        }
+    }
+    
+    private var fieldPassword: some View {
+        SecureField(text: $fieldPasswordContents, prompt: Text("Password")) {
+            Text("Enter your password")
+        }
+    }
+    
+    private var fieldConfirmPassword: some View {
+        SecureField(text: $fieldConfirmPasswordContents, prompt: Text("Re-enter password")) {
+            Text("Re-enter your password")
+        }
+    }
+    
+    // MARK: Rows + Sections
     private var rowFormControls: some View {
         let tintColor = isFormPreparedForSubmission ? Color.green : Color.gray
         return HStack {

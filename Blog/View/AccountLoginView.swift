@@ -4,6 +4,7 @@ import SwiftData
 
 struct AccountLoginView: View {
     
+    // MARK: Environment
     @Environment(\.dismiss)
     private var dismiss
     @Environment(\.modelContext)
@@ -11,9 +12,11 @@ struct AccountLoginView: View {
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
+    // MARK: SwiftData Queries
     @Query
     private var users: [UserAccount]
     
+    // MARK: Alert State
     @State
     private var alertBoxVisible = false
     @State
@@ -25,11 +28,13 @@ struct AccountLoginView: View {
     @State
     private var alertBoxText = "Not prepared for submission"
     
+    // MARK: Text Field State
     @State
     private var fieldUsernameContents = ""
     @State
     private var fieldPasswordContents = ""
     
+    // MARK: Helpers
     private var isFormPreparedForSubmission: Bool {
         fieldUsernameContents.trimmed.isNotEmpty && fieldPasswordContents.trimmed.isNotEmpty
     }
@@ -45,6 +50,7 @@ struct AccountLoginView: View {
         }
     }
     
+    // MARK: Button Handlers
     private func onPressSubmit() {
         alertBoxDisplayUsernameText = fieldUsernameContents.trimmed.isEmpty
         alertBoxDisplayPasswordText = fieldPasswordContents.trimmed.isEmpty
@@ -97,22 +103,6 @@ struct AccountLoginView: View {
         }
     }
     
-    private var fieldUsername: some View {
-        let prompt = Text("Username")
-        let label  = Text("Enter your username")
-        return TextField(text: $fieldUsernameContents, prompt: prompt) {
-            label
-        }
-    }
-    
-    private var fieldPassword: some View {
-        let prompt = Text("Password")
-        let label  = Text("Enter your password")
-        return SecureField(text: $fieldPasswordContents, prompt: prompt) {
-            label
-        }
-    }
-    
     public var body: some View {
         NavigationStack {
             ScrollView {
@@ -140,7 +130,28 @@ struct AccountLoginView: View {
             .navigationTitle("Log In")
         }
     }
+}
+
+extension AccountLoginView {
     
+    // MARK: Text Field Views
+    private var fieldUsername: some View {
+        let prompt = Text("Username")
+        let label  = Text("Enter your username")
+        return TextField(text: $fieldUsernameContents, prompt: prompt) {
+            label
+        }
+    }
+    
+    private var fieldPassword: some View {
+        let prompt = Text("Password")
+        let label  = Text("Enter your password")
+        return SecureField(text: $fieldPasswordContents, prompt: prompt) {
+            label
+        }
+    }
+    
+    // MARK: Row + Section Views
     private var rowFormControls: some View {
         HStack {
             Button("Submit") {

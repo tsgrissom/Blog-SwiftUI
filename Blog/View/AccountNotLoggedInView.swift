@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AccountNotLoggedInView: View {
 
+    // MARK: Initialization
     private let withText: Bool
     private let verticalNavLinks: Bool
     
@@ -10,11 +11,13 @@ struct AccountNotLoggedInView: View {
         self.verticalNavLinks = verticalNavLinks
     }
     
+    // MARK: Sheet State
     @State
     private var isPresentingRegisterSheet = false
     @State
     private var isPresentingLoginSheet = false
     
+    // MARK: Layout Declarations
     public var body: some View {
         VStack {
             if withText {
@@ -25,7 +28,11 @@ struct AccountNotLoggedInView: View {
                 .buttonStyle(.bordered)
         }
     }
+}
+
+extension AccountNotLoggedInView {
     
+    // MARK: Navigation Link Views
     private var navLinkRegister: some View {
         func onPress() {
             isPresentingRegisterSheet.toggle()
@@ -66,6 +73,7 @@ struct AccountNotLoggedInView: View {
         }
     }
     
+    // MARK: Section Views
     @ViewBuilder
     private var sectionNavLinks: some View {
         if verticalNavLinks {
@@ -82,6 +90,7 @@ struct AccountNotLoggedInView: View {
     }
 }
 
+// MARK: Previews
 #Preview {
     ScrollView {
         VStack {

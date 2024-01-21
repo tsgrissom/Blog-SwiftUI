@@ -35,7 +35,7 @@ struct DisplayUserProfilePage: View {
             ZStack {
                 ZStack {
                     layerPageBackground
-                    NewFollowerCountView(user: user, followers: 0, following: 0)
+                    FollowerCountView(user: user, followers: 0, following: 0)
                         .offset(x: 75, y: -(metrics.size.height*0.56))
                 }
                 
@@ -118,16 +118,9 @@ extension DisplayUserProfilePage {
 
 // MARK: Previews
 #Preview {
-    let firstName = LoremSwiftum.Lorem.firstName
-    let lastName  = LoremSwiftum.Lorem.lastName
     let biography = LoremSwiftum.Lorem.shortTweet
-    let mockUser = UserAccount(
-        username: firstName,
-        password: "Password",
-        biography: biography
-    )
-    
-    mockUser.displayName = "\(firstName)\(lastName)"
+    let mockUser = MockupUtilities.getMockUser()
+    mockUser.biography = biography
     
     return NavigationStack {
         DisplayUserProfilePage(mockUser)

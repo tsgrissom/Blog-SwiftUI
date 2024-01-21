@@ -1,3 +1,4 @@
+import LoremSwiftum
 import SwiftUI
 
 private func shortenFollowerCount(_ n: Int) -> String {
@@ -12,38 +13,7 @@ private func shortenFollowerCount(_ n: Int) -> String {
 
 struct FollowerCountView: View {
     
-    @Environment(\.colorScheme)
-    private var systemColorScheme
-    
-    let followers: Int
-    let following: Int
-    
-    var body: some View {
-        return ZStack {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Material.ultraThin)
-                .frame(width: 180)
-                .frame(height: 50)
-            HStack {
-                VStack {
-                    Text("Followers")
-                        .fontWeight(.semibold)
-                    Text("\(shortenFollowerCount(followers))")
-                }
-                Divider()
-                    .frame(maxHeight: 35)
-                VStack {
-                    Text("Following")
-                        .fontWeight(.semibold)
-                    Text("\(shortenFollowerCount(following))")
-                }
-            }
-        }
-    }
-}
-
-struct NewFollowerCountView: View {
-    
+    // MARK: Initialization
     private let user: UserAccount
     private let followers: Int
     private let following: Int
@@ -54,11 +24,13 @@ struct NewFollowerCountView: View {
         self.following = following
     }
     
+    // MARK: State
     @State
     private var isSectionLeadingPressed = false
     @State
     private var isSectionTrailingPressed = false
     
+    // MARK: Layout Declaration
     public var body: some View {
         return HStack(spacing: 1) {
             sectionLeading
@@ -66,9 +38,13 @@ struct NewFollowerCountView: View {
         }
         .frame(minHeight: 45)
         .frame(maxWidth: 200, maxHeight: 55)
-//        .border(.red)
     }
+}
+
+// MARK: Views
+extension FollowerCountView {
     
+    // MARK: Sections
     private var sectionLeading: some View {
         return NavigationLink(destination: Text("\(user.username)'s followers page")) {
             ZStack {
@@ -105,31 +81,17 @@ struct NewFollowerCountView: View {
     }
 }
 
-private var mockUser: UserAccount {
-    UserAccount(
-        username: "Tyler",
-        password: "Password"
-    )
-}
-
 #Preview {
-    NavigationStack {
+    let mockUser = MockupUtilities.getMockUser()
+    
+    return NavigationStack {
         ZStack {
             Color.black.ignoresSafeArea()
             ScrollView {
-                Text("Old")
-                    .font(.largeTitle)
                 VStack {
-                    FollowerCountView(followers: 100, following: 1000)
-                    FollowerCountView(followers: 0, following: 10)
-                    FollowerCountView(followers: 69555, following: 5678)
-                }
-                Text("New")
-                    .font(.largeTitle)
-                VStack {
-                    NewFollowerCountView(user: mockUser, followers: 100, following: 1000)
-                    NewFollowerCountView(user: mockUser, followers: 0, following: 10)
-                    NewFollowerCountView(user: mockUser, followers: 69555, following: 5678)
+                    FollowerCountView(user: mockUser, followers: 100, following: 1000)
+                    FollowerCountView(user: mockUser, followers: 0, following: 10)
+                    FollowerCountView(user: mockUser, followers: 69555, following: 5678)
                 }
             }
         }
