@@ -1,9 +1,61 @@
 import SwiftUI
 import SwiftData
 
+private struct RecentPostAsListRow: View {
+    
+    @Environment(\.modelContext)
+    private var modelContext
+    @EnvironmentObject
+    private var accountManager: UserAccountManager
+    
+    private let post: Post
+    
+    init(_ post: Post) {
+        self.post = post
+    }
+    
+    @State
+    private var isPresentingConfirmDelete = false
+    
+    private func onConfirmDelete() {
+        modelContext.delete(post)
+        try? modelContext.save()
+    }
+    
+    public var body: some View {
+        NavigationLink(destination: DisplayPostPage(post)) {
+            PostPreviewView(post, displayUser: true)
+        }
+        .confirmationDialog("Delete your post? (cannot be undone)", isPresented: $isPresentingConfirmDelete, titleVisibility: .visible) {
+            Button("Delete", role: .destructive, action: onConfirmDelete)
+            Button("Cancel", role: .cancel, action: {})
+        }
+        .swipeActions(edge: .trailing) {
+            buttonSwipeTrailingEdge
+        }
+    }
+    
+    @ViewBuilder
+    var buttonSwipeTrailingEdge: some View {
+        if post.isOwnedBy(accountManager.loggedInUser) {
+            Button("Delete") {
+                isPresentingConfirmDelete = true
+            }
+            .tint(.red)
+        } else {
+            Button("Reply") {
+                
+            }
+            .tint(.blue)
+        }
+    }
+}
+
 struct RecentPostsFeedPage: View {
     
     // MARK: Environment
+    @Environment(\.modelContext)
+    private var modelContext
     @EnvironmentObject
     private var accountManager: UserAccountManager
     
@@ -72,9 +124,7 @@ extension RecentPostsFeedPage {
     private var listRecentPosts: some View {
         return List {
             ForEach(posts) { post in
-                NavigationLink(destination: DisplayPostPage(post)) {
-                    PostPreviewView(post, displayUser: true)
-                }
+                RecentPostAsListRow(post)
             }
         }
     }

@@ -25,4 +25,8 @@ final class Post: Identifiable {
             comment.attachedTo == self.id
         }
     }
+    
+    public func isOwnedBy(_ user: UserAccount?) -> Bool {
+        return postedBy == user?.id
+    }
 }
