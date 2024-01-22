@@ -53,9 +53,14 @@ struct DisplayCommentPage: View {
         let parentComment = comments.first { $0.id == comment.id }
         
         fieldNewReplyContents = ""
-        let reply = PostComment(body: body, postedBy: postedBy!, attachedTo: attachedTo!, parentComment: parentComment)
+        let new = PostComment(
+            body: body,
+            postedBy: postedBy!,
+            attachedTo: attachedTo!,
+            parentComment: parentComment
+        )
         
-        modelContext.insert(reply)
+        modelContext.insert(new)
         try? modelContext.save()
     }
     
@@ -91,7 +96,10 @@ extension DisplayCommentPage {
         let replyingTo = users.first { $0.id == self.comment.postedBy }
         
         return HStack {
-            TextField(text: $fieldNewReplyContents, prompt: Text("Your reply to \(replyingTo.getUsername())'s comment")) {
+            TextField(
+                text: $fieldNewReplyContents,
+                prompt: Text("Your reply to \(replyingTo.getUsername())'s comment")
+            ) {
                 Text("Reply to \(replyingTo.getUsername())'s comment")
             }
             .textFieldStyle(.roundedBorder)

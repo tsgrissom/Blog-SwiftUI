@@ -20,6 +20,8 @@ struct SettingsPage: View {
     private var comments: [PostComment]
     @Query
     private var users: [UserAccount]
+    @Query(sort: \UserAccount.permissionLevel, order: .reverse)
+    private var usersByPermissionLevel: [UserAccount]
     
     // MARK: Confirmation Dialog State
     @State
@@ -41,6 +43,40 @@ struct SettingsPage: View {
     @State
     private var isPresentingModifyUsernameSheet = false
     
+    // MARK: Helper Functions
+    private func resetPosts() {
+        for post in posts {
+            modelContext.delete(post)
+        }
+        for comment in comments {
+            modelContext.delete(comment)
+        }
+        try? modelContext.save()
+    }
+    
+    private func resetUsers() {
+        for user in users {
+            modelContext.delete(user)
+        }
+        for post in posts {
+            modelContext.delete(post)
+        }
+        for comment in comments {
+            modelContext.delete(comment)
+        }
+        try? modelContext.save()
+        
+        
+        accountManager.loggedInUser = nil
+    }
+    
+    private func resetComments() {
+        for comment in comments {
+            modelContext.delete(comment)
+        }
+        try? modelContext.save()
+    }
+    
     // MARK: Layout Declaration
     public var body: some View {
         return NavigationStack {
@@ -60,103 +96,126 @@ struct SettingsPage: View {
             }
         }
     }
+    
+    private var sectionRegisteredUsers: some View {
+        Section("Registered Users (\(users.count))") {
+            ForEach(usersByPermissionLevel) { user in
+                getViewForRegisteredUser(user)
+            }
+        }
+    }
+    
+    private var sectionDeveloperControls: some View {
+        Section("Developer Controls") {
+            ScrollView(.horizontal) {
+                HStack {
+                    buttonResetUsers
+                    buttonCreateMockUsers
+                }
+            }
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    buttonResetPosts
+                }
+            }
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    buttonResetComments
+                }
+            }
+        }
+        .buttonStyle(.bordered)
+        .tint(.red)
+        .listStyle(.plain)
+    }
 }
 
 extension SettingsPage {
     
     // MARK: Button Views
     private var buttonResetComments: some View {
-        func onPress() {
-            isPresentingConfirmResetComments = true
-        }
-        
-        func onConfirm() {
-            for comment in comments {
-                modelContext.delete(comment)
+        return Button(
+            "Reset Replies (\(comments.count))",
+            systemImage: "eraser",
+            action: {
+                isPresentingConfirmResetComments = true
             }
-            try? modelContext.save()
-        }
-        
-        let count = comments.count
-        
-        return Button("Reset Replies (\(count))", systemImage: "eraser") {
-            onPress()
-        }
+        )
         .foregroundStyle(.red)
-        .confirmationDialog("Erase \(count) replies? (Cannot be undone)", isPresented: $isPresentingConfirmResetComments, titleVisibility: .visible) {
-            Button("Confirm", role: .destructive, action: onConfirm)
+        .confirmationDialog(
+            "Erase \(comments.count) replies? (Cannot be undone)",
+            isPresented: $isPresentingConfirmResetComments,
+            titleVisibility: .visible
+        ) {
+            Button("Reset", role: .destructive, action: resetComments)
             Button("Cancel", role: .cancel, action: {})
         }
     }
     
     private var buttonResetPosts: some View {
-        func onPress() {
-            isPresentingConfirmResetPosts = true
-        }
-        
-        func onConfirm() {
-            for post in posts {
-                modelContext.delete(post)
+        return Button(
+            "Reset Posts (\(posts.count))",
+            systemImage: "eraser",
+            action: {
+                isPresentingConfirmResetPosts = true
             }
-            try? modelContext.save()
-        }
-        
-        let count = posts.count
-        
-        return Button("Reset Posts (\(count))", systemImage: "eraser") {
-            onPress()
-        }
+        )
         .foregroundStyle(.red)
-        .confirmationDialog("Erase \(count) posts? (Cannot be undone)", isPresented: $isPresentingConfirmResetPosts, titleVisibility: .visible) {
-            Button("Confirm", role: .destructive, action: onConfirm)
+        .confirmationDialog(
+            "Erase \(posts.count) posts? (Cannot be undone)",
+            isPresented: $isPresentingConfirmResetPosts,
+            titleVisibility: .visible
+        ) {
+            Button("Reset", role: .destructive, action: resetPosts)
             Button("Cancel", role: .cancel, action: {})
         }
     }
     
     private var buttonResetUsers: some View {
-        func onPress() {
-            isPresentingConfirmResetUsers = true
-        }
-        
-        func onConfirm() {
-            for account in users {
-                modelContext.delete(account)
+        return Button(
+            "Reset Users (\(users.count))",
+            systemImage: "eraser",
+            action: {
+                isPresentingConfirmResetUsers = true
             }
-            try? modelContext.save()
-        }
-        
-        let count = users.count
-        
-        return Button("Reset Users (\(users.count))", systemImage: "eraser") {
-            onPress()
-        }
+        )
         .foregroundStyle(.red)
-        .confirmationDialog("Erase \(count) users? (Cannot be undone)", isPresented: $isPresentingConfirmResetUsers, titleVisibility: .visible) {
-            Button("Confirm", role: .destructive, action: onConfirm)
+        .confirmationDialog(
+            "Erase \(users.count) users? (Cannot be undone)",
+            isPresented: $isPresentingConfirmResetUsers,
+            titleVisibility: .visible
+        ) {
+            Button("Reset", role: .destructive, action: resetUsers)
             Button("Cancel", role: .cancel, action: {})
         }
     }
     
-    private func randomUsername() -> String {
-        var name = LoremSwiftum.Lorem.firstName
-        
-        for _ in 1...4 {
-            let random = Int.random(in: 0...9)
-            name += "\(random)"
+    private var buttonCreateMockUsers: some View {
+        func getRandomUsername() -> String {
+            var name = LoremSwiftum.Lorem.firstName
+            
+            if Bool.random() {
+                for _ in 1...4 {
+                    let random = Int.random(in: 0...9)
+                    name += "\(random)"
+                }
+            }
+            
+            return name
         }
         
-        return name
-    }
-    
-    private var buttonCreateMockUsers: some View {
         func onPress() {
             isPresentingConfirmCreateMockUsers = true
         }
         
         func onConfirm() {
             for _ in 1...3 {
-                let randomName = randomUsername()
-                let new = UserAccount(username: randomName, password: "Password")
+                let new = UserAccount(
+                    username: getRandomUsername(),
+                    password: "Password"
+                )
                 modelContext.insert(new)
             }
             try? modelContext.save()
@@ -167,7 +226,11 @@ extension SettingsPage {
         }
         .foregroundStyle(.blue)
         .tint(.blue)
-        .confirmationDialog("Create three mock users?", isPresented: $isPresentingConfirmCreateMockUsers, titleVisibility: .visible) {
+        .confirmationDialog(
+            "Create three mock users?",
+            isPresented: $isPresentingConfirmCreateMockUsers,
+            titleVisibility: .visible
+        ) {
             Button("Confirm", role: .destructive, action: onConfirm)
             Button("Cancel", role: .cancel, action: {})
         }
@@ -189,8 +252,12 @@ extension SettingsPage {
             Text("Log Out")
         }
         .tint(.red)
-        .confirmationDialog("Log out of your account? (\(username))", isPresented: $isPresentingConfirmLogOut, titleVisibility: .visible) {
-            Button("Confirm", role: .destructive, action: onConfirm)
+        .confirmationDialog(
+            "Log out of your account? (\(username))",
+            isPresented: $isPresentingConfirmLogOut,
+            titleVisibility: .visible
+        ) {
+            Button("Log Out", role: .destructive, action: onConfirm)
             Button("Cancel", role: .cancel, action: {})
         }
     }
@@ -256,8 +323,12 @@ extension SettingsPage {
     private func getViewForRegisteredUser(_ user: UserAccount) -> some View {
         let thisUser = accountManager.loggedInUser
         
+        var prefix: some View {
+            Text("[\(user.permissionLevel)]")
+        }
+        
         @ViewBuilder
-        var tag: some View {
+        var postfix: some View {
             if thisUser != nil {
                 if thisUser!.id == user.id {
                     Text("(You)")
@@ -269,46 +340,13 @@ extension SettingsPage {
         
         return NavigationLink(destination: DisplayUserAsAdminPage(user)) {
             HStack(spacing: 3) {
+                prefix
                 Text("@\(user.username)")
                     .foregroundStyle(.blue)
-                tag
+                postfix
             }
         }
         .tint(.primary)
-    }
-    
-    private var sectionRegisteredUsers: some View {
-        Section("Registered Users (\(users.count))") {
-            ForEach(users) { user in
-                getViewForRegisteredUser(user)
-            }
-        }
-    }
-    
-    private var sectionDeveloperControls: some View {
-        Section("Developer Controls") {
-            ScrollView(.horizontal) {
-                HStack {
-                    buttonResetUsers
-                    buttonCreateMockUsers
-                }
-            }
-            
-            ScrollView(.horizontal) {
-                HStack {
-                    buttonResetPosts
-                }
-            }
-            
-            ScrollView(.horizontal) {
-                HStack {
-                    buttonResetComments
-                }
-            }
-        }
-        .buttonStyle(.bordered)
-        .tint(.red)
-        .listStyle(.plain)
     }
 }
 

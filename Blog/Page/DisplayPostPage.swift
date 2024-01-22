@@ -73,7 +73,11 @@ struct DisplayPostPage: View {
             buttonSubmitReplyAnimate = 0
         }
         
-        let new = PostComment(body: fieldReplyContents, postedBy: accountManager.loggedInUser!, attachedTo: post)
+        let new = PostComment(
+            body: fieldReplyContents,
+            postedBy: accountManager.loggedInUser!,
+            attachedTo: post
+        )
         modelContext.insert(new)
         try? modelContext.save()
         

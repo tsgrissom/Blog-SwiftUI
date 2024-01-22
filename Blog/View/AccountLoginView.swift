@@ -132,9 +132,10 @@ struct AccountLoginView: View {
     }
 }
 
+// MARK: Views
 extension AccountLoginView {
     
-    // MARK: Text Field Views
+    // MARK: Text Fields
     private var fieldUsername: some View {
         let prompt = Text("Username")
         let label  = Text("Enter your username")
@@ -151,7 +152,7 @@ extension AccountLoginView {
         }
     }
     
-    // MARK: Row + Section Views
+    // MARK: Rows + Sections
     private var rowFormControls: some View {
         HStack {
             Button("Submit") {

@@ -40,7 +40,9 @@ struct AccountRegistrationView: View {
     
     // MARK: Helpers
     private var isFormPreparedForSubmission: Bool {
-        fieldUsernameContents.trimmed.isNotEmpty && fieldPasswordContents.trimmed.isNotEmpty && fieldConfirmPasswordContents.trimmed.isNotEmpty
+        fieldUsernameContents.trimmed.isNotEmpty &&
+        fieldPasswordContents.trimmed.isNotEmpty &&
+        fieldConfirmPasswordContents.trimmed.isNotEmpty
     }
     
     private func flashAlert(text: String, bgColor: Color = .red) {

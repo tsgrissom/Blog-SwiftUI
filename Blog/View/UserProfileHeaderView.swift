@@ -27,21 +27,23 @@ struct UserProfileHeaderView: View {
     // MARK: Layout Declaration
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(user.displayName)
-                .font(.title)
-                .bold()
+            textDisplayNameAsTitle
                 .onTapGesture {
                     isPresentingModifyDisplayNameSheet.toggle()
                 }
                 .sheet(isPresented: $isPresentingModifyDisplayNameSheet, content: {
                     UserModifyProfileFieldView(mode: .displayName)
                 })
-            Text("@\(user.username)")
-                .font(.title3)
+            
+            textUsernameAsSubtitle
                 .onTapGesture {
                     isPresentingConfirmModifyUsername.toggle()
                 }
-                .confirmationDialog("Are you sure you want to change your username? (@username)", isPresented: $isPresentingConfirmModifyUsername, titleVisibility: .visible) {
+                .confirmationDialog(
+                    "Are you sure you want to change your username? (@username)",
+                    isPresented: $isPresentingConfirmModifyUsername,
+                    titleVisibility: .visible
+                ) {
                     Button(role: .destructive, action: {
                         isPresentingConfirmModifyUsername = false
                         isPresentingModifyUsernameSheet = true
@@ -83,6 +85,17 @@ extension UserProfileHeaderView {
         } else {
             Text(user.biography)
         }
+    }
+    
+    private var textDisplayNameAsTitle: some View {
+        Text(user.displayName)
+            .font(.title)
+            .bold()
+    }
+    
+    private var textUsernameAsSubtitle: some View {
+        Text("@\(user.username)")
+            .font(.title3)
     }
 }
 

@@ -47,14 +47,27 @@ struct PostPreviewView: View {
             Spacer()
         }
         .contextMenu {
-            Button("Reply", systemImage: "arrowshape.turn.up.forward", action: {})
-            Button("Share", systemImage: "square.and.arrow.up", action: {})
+            Button(
+                "Reply",
+                systemImage: "arrowshape.turn.up.forward",
+                action: {}
+            )
+            Button(
+                "Share",
+                systemImage: "square.and.arrow.up",
+                action: {}
+            )
             
             if isOwnedByCurrentUser {
-                Button("Delete", systemImage: "trash", role: .destructive, action: {
-                    modelContext.delete(post)
-                    try? modelContext.save()
-                })
+                Button(
+                    "Delete",
+                    systemImage: "trash",
+                    role: .destructive,
+                    action: {
+                        modelContext.delete(post)
+                        try? modelContext.save()
+                    }
+                )
             }
         }
     }

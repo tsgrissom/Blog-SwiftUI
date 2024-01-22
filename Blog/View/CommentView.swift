@@ -53,7 +53,11 @@ struct CommentView: View {
             
             textCommentBody
         }
-        .confirmationDialog("Are you sure you want to delete your comment?", isPresented: $isPresentingConfirmDeleteComment, titleVisibility: .visible) {
+        .confirmationDialog(
+            "Are you sure you want to delete your comment?",
+            isPresented: $isPresentingConfirmDeleteComment,
+            titleVisibility: .visible
+        ) {
             Button(role: .destructive, action: {
                 modelContext.delete(comment)
                 try? modelContext.save()
@@ -99,8 +103,12 @@ extension CommentView {
             isPresentingConfirmDeleteComment = true
         }
         
-        return Button("Delete", systemImage: "trash", role: .destructive, action: onPress)
-            
+        return Button(
+            "Delete",
+            systemImage: "trash",
+            role: .destructive,
+            action: onPress
+        )
     }
     
     // MARK: Text
