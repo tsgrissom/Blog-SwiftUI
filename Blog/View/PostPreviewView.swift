@@ -35,10 +35,10 @@ struct PostPreviewView: View {
     // MARK: Layout Declaration
     public var body: some View {
         HStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("\(post.body)")
                     .truncationMode(.tail)
-                    .lineLimit(2)
+                    .lineLimit(1)
                 rowUserAtTime
                     .font(.caption)
                 rowReplyCount
