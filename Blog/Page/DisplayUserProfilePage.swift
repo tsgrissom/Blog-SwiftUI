@@ -94,7 +94,6 @@ extension DisplayUserProfilePage {
                 }
             }
         }
-        .listStyle(.plain)
     }
     
     private var sectionControls: some View {

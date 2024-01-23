@@ -274,6 +274,9 @@ extension DisplayPostPage {
             }
             .textFieldStyle(.roundedBorder)
             .focused($isFieldReplyFocused)
+            .onSubmit {
+                onPressSubmitReplyButton()
+            }
             
             buttonSubmitReply
         }
@@ -282,7 +285,7 @@ extension DisplayPostPage {
     private func getCommentTreeView(_ comment: PostComment) -> some View {
         let children = comment.getChildComments(allComments: comments)
         return NavigationLink(destination: DisplayCommentPage(comment)) {
-            CommentTreeView(comment, children: children, mode: .collapsedAfterOne)
+            CommentTreeView(comment, children: children, mode: .collapseAfterOne)
         }
     }
     
@@ -291,7 +294,6 @@ extension DisplayPostPage {
             textRepliesHeader
             
             listPostReplies
-                .listStyle(.plain)
         }
     }
 }

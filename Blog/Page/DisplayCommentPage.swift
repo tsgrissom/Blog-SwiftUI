@@ -2,6 +2,42 @@ import LoremSwiftum
 import SwiftUI
 import SwiftData
 
+private struct CommentAsListRow: View {
+    
+    @Environment(\.modelContext)
+    private var modelContext
+    @EnvironmentObject
+    private var accountManager: UserAccountManager
+    
+    @Query
+    private var comments: [PostComment]
+    
+    private let comment: PostComment
+    private let descendant: Bool
+    
+    init(_ comment: PostComment, descendant: Bool = false) {
+        self.comment = comment
+        self.descendant = descendant
+    }
+    
+    private var children: [PostComment] {
+        return comment.getChildComments(allComments: comments)
+    }
+    
+    public var body: some View {
+        NavigationLink(destination: DisplayCommentPage(comment)) {
+            HStack(spacing: 3) {
+                if descendant {
+                    Image(systemName: "arrow.turn.down.right")
+                    CommentTreeView(comment, children: children, mode: .collapseAll)
+                } else {
+                    CommentView(comment)
+                }
+            }
+        }
+    }
+}
+
 struct DisplayCommentPage: View {
     
     // MARK: Environment
@@ -29,6 +65,10 @@ struct DisplayCommentPage: View {
     // MARK: State
     @State
     private var fieldNewReplyContents = ""
+    
+    private var children: [PostComment] {
+        return self.comment.getChildComments(allComments: comments)
+    }
     
     // MARK: Button Handlers
     private func onSubmitNewReply() {
@@ -69,27 +109,57 @@ struct DisplayCommentPage: View {
         let postedBy = users.first { $0.id == comment.postedBy }
         let title = "Comment by \(postedBy.getUsername())"
         
-        return HStack {
-            VStack {
-                sectionCommentTree
+        return VStack {
+            if children.isEmpty {
+                CommentView(comment)
+                    .padding(.horizontal, 25)
+                Spacer()
                 sectionAddReply
+                    .padding(.horizontal)
+            } else {
+                sectionCommentTreeAsList
+                sectionAddReply
+                    .padding([.horizontal, .top])
                 Spacer()
             }
-            .buttonStyle(.bordered)
-            .padding(.horizontal)
-            
-            Spacer()
         }
+        .buttonStyle(.bordered)
         .navigationTitle(title)
     }
 }
 
 extension DisplayCommentPage {
     
+    @ViewBuilder
+    private func getSwipeActionsForComment(_ that: PostComment) -> some View {
+        if that.isOwnedBy(accountManager.loggedInUser) {
+            Button("Delete") {
+                modelContext.delete(comment)
+                try? modelContext.save()
+            }
+            .tint(.red)
+        }
+        
+        Button("Reply") {
+            print("Reply screen") // TODO
+        }
+        .tint(.blue)
+    }
+    
     // MARK: Section Views
-    private var sectionCommentTree: some View {
-        let children = self.comment.getChildComments(allComments: comments)
-        return CommentTreeView(comment, children: children)
+    private var sectionCommentTreeAsList: some View {
+        List {
+            CommentAsListRow(comment)
+                .swipeActions(edge: .trailing, content: {
+                    getSwipeActionsForComment(comment)
+                })
+            ForEach(children) { child in
+                CommentAsListRow(child, descendant: true)
+                    .swipeActions(edge: .trailing, content: {
+                        getSwipeActionsForComment(child)
+                    })
+            }
+        }
     }
     
     private var sectionAddReply: some View {
@@ -103,6 +173,9 @@ extension DisplayCommentPage {
                 Text("Reply to \(replyingTo.getUsername())'s comment")
             }
             .textFieldStyle(.roundedBorder)
+            .onSubmit {
+                onSubmitNewReply()
+            }
             
             Button("Reply", action: onSubmitNewReply)
         }

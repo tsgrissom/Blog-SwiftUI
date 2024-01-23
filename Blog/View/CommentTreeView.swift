@@ -3,7 +3,8 @@ import SwiftUI
 
 enum CommentTreeDisplayMode: CaseIterable {
     case all
-    case collapsedAfterOne
+    case collapseAfterOne
+    case collapseAll
 }
 
 struct CommentTreeView: View {
@@ -66,8 +67,8 @@ struct CommentTreeView: View {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         switch mode {
         case .all:
-            self.mode = .collapsedAfterOne
-        case .collapsedAfterOne:
+            self.mode = .collapseAfterOne
+        default:
             self.mode = .all
         }
     }
@@ -79,7 +80,8 @@ struct CommentTreeView: View {
             
             switch mode {
                 case .all: childrenDisplayModeAll
-                case .collapsedAfterOne: childrenDisplayModeCollapsedAfterOne
+                case .collapseAfterOne: childrenDisplayModeCollapseAfterOne
+                case .collapseAll: childrenDisplayModeCollapseAll
             }
         }
     }
@@ -96,13 +98,21 @@ extension CommentTreeView {
     }
     
     @ViewBuilder
-    private var childrenDisplayModeCollapsedAfterOne: some View {
+    private var childrenDisplayModeCollapseAfterOne: some View {
         if children.count > 0 {
             getViewForChildComment(children[0], action: cycleMode)
         }
         
         if children.count > 1 {
             getViewForChild(text: "... \(children.count-1) more", action: cycleMode)
+                .foregroundStyle(Color.accentColor)
+        }
+    }
+    
+    @ViewBuilder
+    private var childrenDisplayModeCollapseAll: some View {
+        if children.count > 0 {
+            getViewForChild(text: "... \(children.count) more", action: {})
                 .foregroundStyle(Color.accentColor)
         }
     }
@@ -130,5 +140,5 @@ extension CommentTreeView {
     let mockComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost, under: nil, with: "Parent: \(lorem)")
     let mockReplyToComment = MockupUtilities.getMockComment(by: mockUser, to: mockPost, under: mockComment, with: "Child: \(lorem2)")
     
-    return CommentTreeView(mockComment, children: [mockReplyToComment, mockReplyToComment, mockReplyToComment], mode: .collapsedAfterOne)
+    return CommentTreeView(mockComment, children: [mockReplyToComment, mockReplyToComment, mockReplyToComment], mode: .collapseAfterOne)
 }
