@@ -20,9 +20,11 @@ struct CommentView: View {
     
     // MARK: Initialization
     private let comment: PostComment
+    private let displayControls: Bool
     
-    init(_ comment: PostComment) {
+    init(_ comment: PostComment, displayControls: Bool = true) {
         self.comment = comment
+        self.displayControls = displayControls
     }
     
     // MARK: State
@@ -52,6 +54,13 @@ struct CommentView: View {
             .font(.caption)
             
             textCommentBody
+            
+            if displayControls {
+                HStack {
+                    ButtonLike()
+                }
+                .padding(.horizontal, 5)
+            }
         }
         .confirmationDialog(
             "Are you sure you want to delete your comment?",

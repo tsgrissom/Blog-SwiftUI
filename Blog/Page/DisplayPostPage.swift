@@ -18,7 +18,7 @@ struct DisplayPostPage: View {
     // MARK: SwiftData Queries
     @Query
     private var posts: [Post]
-    @Query
+    @Query(sort: \PostComment.createdAt, order: .reverse)
     private var comments: [PostComment]
     @Query
     private var users: [UserAccount]
@@ -256,6 +256,9 @@ extension DisplayPostPage {
             }
             
             buttonShare
+            
+            ButtonLike()
+                .buttonStyle(.bordered)
             
             Spacer()
         }

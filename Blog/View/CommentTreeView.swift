@@ -57,7 +57,7 @@ struct CommentTreeView: View {
             }
             .buttonStyle(.plain)
             
-            CommentView(comment)
+            CommentView(comment, displayControls: false)
                 .font(.caption)
             Spacer()
         }
