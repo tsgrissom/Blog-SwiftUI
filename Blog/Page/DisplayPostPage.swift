@@ -95,8 +95,12 @@ struct DisplayPostPage: View {
             rowPostedBy
                 .padding(.top, 4)
                 .padding(.horizontal)
+            sectionInteractions
+                .padding(.top, 12)
+                .padding(.horizontal)
+                .padding(.horizontal, 1)
             sectionUserDependentControls
-                .padding(.top)
+                .padding(.top, 6)
                 .padding(.horizontal)
             sectionNewReply
                 .padding(.top)
@@ -144,8 +148,12 @@ extension DisplayPostPage {
     private var buttonShare: some View {
         return Button(action: {}) {
             Image(systemName: "square.and.arrow.up")
+                .bold()
+                .imageScale(.large)
+                .offset(y: -3.4)
         }
-        .tint(.secondary)
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
     }
     
     @ViewBuilder
@@ -243,6 +251,15 @@ extension DisplayPostPage {
         }
     }
     
+    private var sectionInteractions: some View {
+        HStack {
+            ButtonLike()
+            ButtonRepost()
+            buttonShare
+            Spacer()
+        }
+    }
+    
     private var sectionUserDependentControls: some View {
         HStack {
             if isSelfOwned {
@@ -254,11 +271,6 @@ extension DisplayPostPage {
             if isSelfOwned {
                 buttonDelete
             }
-            
-            buttonShare
-            
-            ButtonLike()
-                .buttonStyle(.bordered)
             
             Spacer()
         }

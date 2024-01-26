@@ -58,8 +58,10 @@ struct CommentView: View {
             if displayControls {
                 HStack {
                     ButtonLike()
+                    ButtonRepost()
                 }
                 .padding(.horizontal, 5)
+                .padding(.top, 1)
             }
         }
         .confirmationDialog(
