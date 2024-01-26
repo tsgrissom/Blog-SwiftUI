@@ -13,13 +13,13 @@ struct CreatePostView: View {
     
     // MARK: Alert State
     @State
-    private var alertBoxVisible = false
+    private var alertVisible = false
     @State
-    private var alertBoxColor = Color.red
+    private var alertColor = Color.red
     @State
-    private var alertBoxDebounce = false
+    private var alertDebounce = false
     @State
-    private var alertBoxText = "Not prepared for submission"
+    private var alertText = "Not prepared for submission"
     
     // MARK: Button State
     @State
@@ -29,7 +29,7 @@ struct CreatePostView: View {
     @State
     private var fieldContents = ""
     @FocusState
-    private var isFocusingField: Bool
+    private var fieldIsFocused: Bool
     
     // MARK: Helper Functions
     private func flashAlert(
@@ -37,23 +37,23 @@ struct CreatePostView: View {
         color: Color = .red
     ) {
         // TODO Haptics
-        if alertBoxDebounce {
+        if alertDebounce {
             return
         }
         
-        alertBoxDebounce = true
-        alertBoxText = text
-        alertBoxColor = color
+        alertDebounce = true
+        alertText = text
+        alertColor = color
         withAnimation {
-            alertBoxVisible = true
+            alertVisible = true
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             withAnimation {
-                alertBoxVisible = false
+                alertVisible = false
             }
-            alertBoxText = "Alert Box"
-            alertBoxColor = .red
-            alertBoxDebounce = false
+            alertText = "Alert Box"
+            alertColor = .red
+            alertDebounce = false
         }
     }
     
@@ -124,13 +124,13 @@ struct CreatePostView: View {
                     .textFieldStyle(.roundedBorder)
                 }
                 
-                if alertBoxVisible { // Alert box
-                    sectionAlertBox
+                if alertVisible { // Alert box
+                    sectionAlert
                         .transition(.scale)
                         .padding(.top, 8)
                         .onTapGesture {
                             withAnimation {
-                                alertBoxVisible = false
+                                alertVisible = false
                             }
                         }
                 }
@@ -140,7 +140,7 @@ struct CreatePostView: View {
             .navigationTitle("New Post")
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    isFocusingField = true
+                    fieldIsFocused = true
                 }
             }
         }
@@ -182,18 +182,18 @@ extension CreatePostView {
         return TextField(text: $fieldContents, prompt: Text("Enter the body of your new post...")) {
             Text("Enter the body of your new post")
         }
-        .focused($isFocusingField)
+        .focused($fieldIsFocused)
     }
     
     // MARK: Sections
-    private var sectionAlertBox: some View {
+    private var sectionAlert: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(alertBoxColor)
+                .fill(alertColor)
                 .frame(minHeight: 35, maxHeight: 55)
                 .padding(.horizontal)
             VStack {
-                Text(alertBoxText)
+                Text(alertText)
                     .foregroundStyle(.white)
             }
         }

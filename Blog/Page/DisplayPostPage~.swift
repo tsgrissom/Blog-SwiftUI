@@ -34,7 +34,7 @@ struct DisplayPostPage: View {
     @State
     private var fieldReplyContents = ""
     @FocusState
-    private var fieldReplyIsFocused: Bool
+    private var isFieldReplyFocused: Bool
     // 0=default,1=error,2=success
     @State
     private var buttonSubmitReplyAnimate = 0
@@ -50,7 +50,7 @@ struct DisplayPostPage: View {
     
     // MARK: Button Handlers
     private func onPressReplyButton() {
-        fieldReplyIsFocused = true
+        isFieldReplyFocused = true
     }
     
     private func onPressSubmitReplyButton() {
@@ -288,7 +288,7 @@ extension DisplayPostPage {
                 Text("Enter your new reply")
             }
             .textFieldStyle(.roundedBorder)
-            .focused($fieldReplyIsFocused)
+            .focused($isFieldReplyFocused)
             .onSubmit {
                 onPressSubmitReplyButton()
             }

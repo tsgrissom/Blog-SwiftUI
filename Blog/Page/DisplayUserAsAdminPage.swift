@@ -36,13 +36,13 @@ struct DisplayUserAsAdminPage: View {
     
     // MARK: Alert State
     @State
-    private var alertBoxColor = Color.red
+    private var alertColor = Color.red
     @State
-    private var alertBoxVisible = false
+    private var alertDebounce = false
     @State
-    private var alertBoxText = "Alert Box"
+    private var alertText = "Alert Box"
     @State
-    private var alertBoxDebounce = false
+    private var alertVisible = false
     
     // MARK: Helpers
     private var isOwnAccount: Bool {
@@ -54,23 +54,23 @@ struct DisplayUserAsAdminPage: View {
         color: Color = .red
     ) {
         // TODO Haptics
-        if alertBoxDebounce {
+        if alertDebounce {
             return
         }
         
-        alertBoxDebounce = true
-        alertBoxText = text
-        alertBoxColor = color
+        alertDebounce = true
+        alertText = text
+        alertColor = color
         withAnimation {
-            alertBoxVisible = true
+            alertVisible = true
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             withAnimation {
-                alertBoxVisible = false
+                alertVisible = false
             }
-            alertBoxText = "Alert Box"
-            alertBoxColor = .red
-            alertBoxDebounce = false
+            alertText = "Alert Box"
+            alertColor = .red
+            alertDebounce = false
         }
     }
     
@@ -80,13 +80,13 @@ struct DisplayUserAsAdminPage: View {
             ZStack {
                 sectionList
                 
-                if alertBoxVisible {
+                if alertVisible {
                     sectionAlertBox
                         .offset(x: 0, y: -(geometry.size.width*0.80))
                         .transition(.move(edge: .top))
                         .onTapGesture {
                             withAnimation {
-                                alertBoxVisible = false
+                                alertVisible = false
                             }
                         }
                 }
@@ -343,10 +343,10 @@ extension DisplayUserAsAdminPage {
     private var sectionAlertBox: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(alertBoxColor)
+                .fill(alertColor)
                 .padding(.horizontal)
             VStack {
-                Text(alertBoxText)
+                Text(alertText)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 20)
             }

@@ -18,15 +18,15 @@ struct AccountLoginView: View {
     
     // MARK: Alert State
     @State
-    private var alertBoxVisible = false
+    private var alertVisible = false
     @State
-    private var alertBoxDisplayUsernameText = false
+    private var alertDisplayUsernameText = false
     @State
-    private var alertBoxDisplayPasswordText = false
+    private var alertDisplayPasswordText = false
     @State
-    private var alertBoxBgColor = Color.red
+    private var alertColor = Color.red
     @State
-    private var alertBoxText = "Not prepared for submission"
+    private var alertText = "Not prepared for submission"
     
     // MARK: Text Field State
     @State
@@ -43,20 +43,20 @@ struct AccountLoginView: View {
         text: String,
         bgColor: Color = .red
     ) {
-        alertBoxBgColor = bgColor
-        alertBoxText = text
+        alertColor = bgColor
+        alertText = text
         withAnimation {
-            alertBoxVisible = true
+            alertVisible = true
         }
     }
     
     // MARK: Button Handlers
     private func onPressSubmit() {
-        alertBoxDisplayUsernameText = fieldUsernameContents.trimmed.isEmpty
-        alertBoxDisplayPasswordText = fieldPasswordContents.trimmed.isEmpty
+        alertDisplayUsernameText = fieldUsernameContents.trimmed.isEmpty
+        alertDisplayPasswordText = fieldPasswordContents.trimmed.isEmpty
         
         if !isFormPreparedForSubmission {
-            if !alertBoxVisible {
+            if !alertVisible {
                 flashAlert(text: "Please fill out all fields")
             }
             
@@ -112,12 +112,12 @@ struct AccountLoginView: View {
                     
                     rowFormControls
                     
-                    if alertBoxVisible {
+                    if alertVisible {
                         sectionAlertBox
                             .transition(.scale)
                             .onTapGesture {
                                 withAnimation {
-                                    alertBoxVisible = false
+                                    alertVisible = false
                                 }
                             }
                     }
@@ -172,15 +172,15 @@ extension AccountLoginView {
     private var sectionAlertBox: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(alertBoxBgColor)
+                .fill(alertColor)
                 .frame(minHeight: 35)
             HStack {
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(alertBoxText)
-                    if alertBoxDisplayUsernameText {
+                    Text(alertText)
+                    if alertDisplayUsernameText {
                         Text("• Fill in the username field")
                     }
-                    if alertBoxDisplayPasswordText {
+                    if alertDisplayPasswordText {
                         Text("• Fill in the password field")
                     }
                 }
