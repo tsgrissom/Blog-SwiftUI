@@ -13,15 +13,13 @@ struct ContentView: View {
     private var users: [UserAccount]
 
     private func handleAutomaticLogin() {
-        let savedUser = UserDefaults.standard.string(forKey: "LoggedInUser") ?? "None"
-        if savedUser != "None" {
-            let fetchUser = users.first(where: { acc in
-                acc.username == savedUser
-            })
+        let savedUser = UserDefaults.standard.string(forKey: "LoggedInUser")
+        if savedUser != nil {
+            let fetchUser = users.first { $0.id == savedUser }
             
             if fetchUser != nil {
-                accountManager.loggedInUser = fetchUser
-                print("Automatically logged in as \"\(savedUser)\"")
+                accountManager.setUserForSession(fetchUser)
+                print("Automatically logged in as \"\(fetchUser!.username)\"")
             }
         }
     }

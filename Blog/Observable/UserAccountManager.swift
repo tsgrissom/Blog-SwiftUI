@@ -5,6 +5,7 @@ import SwiftData
 
 final class UserAccountManager: ObservableObject {
     
+    private let currentUserKey = "LoggedInUser"
     private let defaults = UserDefaults.standard
     
     @Published
@@ -28,13 +29,18 @@ final class UserAccountManager: ObservableObject {
     
     public func clearUserForSession() {
         loggedInUser = nil
-        defaults.removeObject(forKey: "LoggedInUser")
-        print("Cleared Default User")
+        defaults.removeObject(forKey: currentUserKey)
+        print("Cleared current session UserAccount")
     }
     
-    public func setUserForSession(_ user: UserAccount) {
+    public func setUserForSession(_ user: UserAccount?) {
+        if user == nil {
+            print("Could not set session UserAccount to nil")
+            return
+        }
+        
         loggedInUser = user
-        defaults.setValue(user.username, forKey: "LoggedInUser")
-        print("Default User set to \"\(user.username)\"")
+        defaults.setValue(user!.id, forKey: currentUserKey)
+        print("Logged in as \(user!.username)")
     }
 }

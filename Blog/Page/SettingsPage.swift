@@ -12,6 +12,8 @@ struct SettingsPage: View {
     
     @EnvironmentObject
     private var accountManager: UserAccountManager
+    @EnvironmentObject
+    private var settings: SettingsManager
     
     // MARK: SwiftData Queries
     @Query
@@ -307,6 +309,10 @@ extension SettingsPage {
                         UserModifyProfileFieldView(mode: .biography)
                     })
                     
+                    Toggle(isOn: $settings.shouldAutoLikeOwnPosts) {
+                        Text("Auto-Like Own Posts")
+                    }
+                    
                     HStack {
                         buttonLogOut
                     }
@@ -354,4 +360,5 @@ extension SettingsPage {
 #Preview {
     SettingsPage()
         .environmentObject(UserAccountManager())
+        .environmentObject(SettingsManager())
 }

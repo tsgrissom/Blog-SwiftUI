@@ -4,6 +4,13 @@ import SwiftData
 @main
 struct BlogApp: App {
     
+    @StateObject
+    private var settings = SettingsManager()
+    @StateObject
+    private var accounts = UserAccountManager()
+    @StateObject
+    private var posts = PostManager()
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             UserAccount.self,
@@ -27,7 +34,8 @@ struct BlogApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
-        .environmentObject(UserAccountManager())
-        .environmentObject(PostManager())
+        .environmentObject(accounts)
+        .environmentObject(posts)
+        .environmentObject(settings)
     }
 }
