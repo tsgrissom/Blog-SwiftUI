@@ -130,40 +130,11 @@ struct AccountLoginView: View {
             .navigationTitle("Log In")
         }
     }
-}
-
-// MARK: Views
-extension AccountLoginView {
     
-    // MARK: Text Fields
-    private var fieldUsername: some View {
-        let prompt = Text("Username")
-        let label  = Text("Enter your username")
-        return TextField(text: $fieldUsernameContents, prompt: prompt) {
-            label
-        }
-    }
-    
-    private var fieldPassword: some View {
-        let prompt = Text("Password")
-        let label  = Text("Enter your password")
-        return SecureField(text: $fieldPasswordContents, prompt: prompt) {
-            label
-        }
-    }
-    
-    // MARK: Rows + Sections
     private var rowFormControls: some View {
         HStack {
-            Button("Submit") {
-                onPressSubmit()
-            }
-            .buttonStyle(.bordered)
-            .tint(isFormPreparedForSubmission ? .green : .gray)
-            
-            NavigationLink(destination: AccountRegistrationView()) {
-                Text("Create account")
-            }
+            buttonSubmit
+            navLinkRegister
             
             Spacer()
         }
@@ -188,6 +159,41 @@ extension AccountLoginView {
             }
             .foregroundStyle(.white)
             .padding()
+        }
+    }
+}
+
+// MARK: Views
+extension AccountLoginView {
+    
+    private var buttonSubmit: some View {
+        return Button("Submit") {
+            onPressSubmit()
+        }
+        .buttonStyle(.bordered)
+        .tint(isFormPreparedForSubmission ? .green : .gray)
+    }
+    
+    private var navLinkRegister: some View {
+        return NavigationLink(destination: AccountRegistrationView()) {
+            Text("Create account")
+        }
+    }
+    
+    // MARK: Text Fields
+    private var fieldUsername: some View {
+        let prompt = Text("Username")
+        let label  = Text("Enter your username")
+        return TextField(text: $fieldUsernameContents, prompt: prompt) {
+            label
+        }
+    }
+    
+    private var fieldPassword: some View {
+        let prompt = Text("Password")
+        let label  = Text("Enter your password")
+        return SecureField(text: $fieldPasswordContents, prompt: prompt) {
+            label
         }
     }
 }

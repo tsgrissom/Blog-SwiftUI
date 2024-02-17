@@ -4,87 +4,64 @@ struct ButtonRepost: View {
     
     @State
     private var reposted: Bool
-    // 0=default,1=unliked,2=liked
     @State
-    private var animateScale: Int
-    @State
-    private var debounce: Bool
-    @State
-    private var isPresentingConfirmUndoRepost: Bool
+    private var isPresentingConfirmUndo: Bool
     
-    init(reposted: Bool = false) {
+    private let requireConfirmUndo: Bool
+    
+    init(reposted: Bool = false, requireConfirmation: Bool = true) {
         self.reposted = reposted
-        self.animateScale = 0
-        self.debounce = false
-        self.isPresentingConfirmUndoRepost = false
+        self.isPresentingConfirmUndo = false
+        self.requireConfirmUndo = requireConfirmation
     }
     
     private func onPress() {
-        if debounce {
-            UINotificationFeedbackGenerator().notificationOccurred(.warning)
-            return
-        }
-        
-        if reposted {
-            isPresentingConfirmUndoRepost = true
+        if requireConfirmUndo && reposted {
+            isPresentingConfirmUndo.toggle()
         } else {
             onConfirm()
         }
     }
     
     private func onConfirm() {
-        debounce = true
-        if reposted {
-            withAnimation(.easeInOut(duration: 0.15)) {
-                animateScale = 1
-            } completion: {
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    animateScale = 0
-                }
-                debounce = false
-            }
-        } else {
-            withAnimation(.easeInOut(duration: 0.25)) {
-                animateScale = 2
-            } completion: {
-                withAnimation {
-                    animateScale = 0
-                }
-                debounce = false
-            }
-        }
-        
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
         reposted.toggle()
     }
     
     public var body: some View {
         let tint: Color = reposted ? .accentColor : .secondary
-        let symbolScale = switch animateScale {
-            case 1:  0.95
-            case 2:  1.1
-            default: 1.0
-        }
         
         return Button(action: onPress) {
             Image(systemName: "arrow.rectanglepath")
                 .bold()
                 .imageScale(.large)
-                .scaleEffect(symbolScale)
-                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+//                .rotation3DEffect(.degrees(180.0), axis: (x: 0, y: 1, z: 0))
                 .offset(y: -1.5)
+                .symbolEffect(reposted ? .bounce.wholeSymbol.up  : .bounce.wholeSymbol.down, value: reposted)
+                .foregroundStyle(tint)
         }
         .buttonStyle(.plain)
-        .foregroundStyle(tint)
-        .confirmationDialog("Are you sure you want to undo your repost?", isPresented: $isPresentingConfirmUndoRepost, titleVisibility: .visible) {
-            Button("Undo", role: .destructive, action: {
-                isPresentingConfirmUndoRepost = false
-                onConfirm()
-            })
-            Button("Cancel", role: .cancel, action: {
-                isPresentingConfirmUndoRepost = false
-            })
+        .tint(tint)
+        .confirmationDialog("Are you sure you want to undo your repost?", isPresented: $isPresentingConfirmUndo, titleVisibility: .visible) {
+            buttonConfirm
+            buttonCancel
         }
+    }
+}
+
+extension ButtonRepost {
+    
+    private var buttonConfirm: some View {
+        Button("Undo Repost", role: .destructive, action: {
+            isPresentingConfirmUndo = false
+            onConfirm()
+        })
+    }
+    
+    private var buttonCancel: some View { 
+        Button("Cancel", role: .cancel, action: {
+            isPresentingConfirmUndo = false
+        })
     }
 }
 
@@ -92,11 +69,11 @@ struct ButtonRepost: View {
     HStack {
         VStack {
             Text("Not Reposted")
-            ButtonRepost(reposted: false)
+            ButtonRepost(reposted: false, requireConfirmation: false)
         }
         VStack {
             Text("Reposted")
-            ButtonRepost(reposted: true)
+            ButtonRepost(reposted: true, requireConfirmation: false)
         }
     }
 }
